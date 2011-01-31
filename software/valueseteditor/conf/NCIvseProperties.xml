@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>
+
+    <ConfigurableItems>
+        <ConfigurableItem>
+                 <key>DEBUG_ON</key>
+                 <value>@debug.on@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
+                 <key>BUILD_INFO</key>
+                 <value>@build.info@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
+                 <key>APPLICATION_VERSION</key>
+                 <value>@application.version@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
+                 <key>ANTHILL_BUILD_TAG_BUILT</key>
+                 <value>@app.build.tag@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
+                 <key>EVS_SERVICE_URL</key>
+                 <value>@lex.evs.api.url@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
+                 <key>LG_CONFIG_FILE</key>
+                 <value>@lg.config.file@</value>
+        </ConfigurableItem>
+
+    </ConfigurableItems>
+
+</root>
