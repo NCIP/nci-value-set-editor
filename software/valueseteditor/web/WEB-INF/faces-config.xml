@@ -12,6 +12,7 @@
       <supported-locale>fr</supported-locale>
       <supported-locale>es</supported-locale>
     </locale-config>
+    <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
   </application>
 
   <factory>
@@ -20,10 +21,5 @@
     <lifecycle-factory>com.sun.faces.lifecycle.LifecycleFactoryImpl</lifecycle-factory>
     <render-kit-factory>com.sun.faces.renderkit.RenderKitFactoryImpl</render-kit-factory>
   </factory>
-
-  <navigation-rule>
-    <from-view-id>/pages/home.jsp</from-view-id>
-
-  </navigation-rule>
 
 </faces-config>
