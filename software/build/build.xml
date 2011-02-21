@@ -44,7 +44,6 @@
     <property name="webapp.build.dir" value="${bda.software.dir}/${project.name}/build/web" />
     <property name="webapp.classes.dir" value="${webapp.build.dir}/WEB-INF/classes" />
     <property name="webapp.dir" value="${bda.software.dir}/${project.name}/web" />
-    <property name="webapp.log4j" value="${bda.software.dir}/${project.name}/web" />
     <property name="exploded.dir" value="${bda.dist.dir}/exploded/${project.name}-webapp" />
 
     <!-- Ant Task definitions -->
@@ -153,15 +152,6 @@
 
         <echo message="Tag: ${anthill.build.tag_built}" />
 
-        <!-- Setup Ehcache property file -->
-
-        <copy todir="${bda.dist.dir}/exploded/${project.name}-webapp/deploy" overwrite="true"
-              flatten="true" includeEmptyDirs="no" filtering="false">
-            <resources>
-                <file file="${bda.conf.dir}/ehcache.xml"/>
-            </resources>
-        </copy>
-
         <!-- Setup application property file with defaults, balance of which is set on deployment -->
 
         <copy todir="${bda.dist.dir}/exploded/${project.name}-webapp/deploy" overwrite="true"
@@ -171,17 +161,6 @@
                 <filter token="build.info" value="Built: ${BUILD_DATE}"/>
                 <filter token="application.version" value="${application.version}"/>
                 <filter token="debug.on" value="${debug.on}"/>
-                <filter token="ehcache.xml.file" value="@application.data.path@/${web.app.conf.path}/${ehcache.xml.file}"/>
-                <filter token="maximum.return" value="${maximum.return}"/>
-                <filter token="maximum.tree.level" value="${maximum.tree.level}"/>
-                <filter token="pagination_time_out" value="${pagination_time_out}"/>
-                <filter token="sliding_window_half_width" value="${sliding_window_half_width}"/>
-                <filter token="minimum_search_string_length" value="${minimum_search_string_length}"/>
-                <filter token="source_hierarchies" value="${source_hierarchies}"/>
-                <filter token="secured_vocabularies" value="${secured_vocabularies}"/>
-                <filter token="subconcept_page_size" value="${subconcept_page_size}"/>
-                <filter token="max_search_iteration" value="${max_search_iteration}"/>
-                <filter token="max_search_time_limit" value="${max_search_time_limit}"/>
             </filterset>
             <resources>
                 <file file="${bda.conf.dir}/${webapp.prop.file}"/>
@@ -202,7 +181,6 @@
         <copy todir="${bda.dist.dir}/exploded/${project.name}-webapp/deploy" overwrite="true"
              flatten="true" includeEmptyDirs="no" filtering="true">
             <filterset>
-                <filter token="search.log.dir" value="@application.data.path@/${search.log.dir}/${project.short.name}-search.log"/>
                 <filter token="log.package" value="${log.package}"/>
                 <filter token="log4j.dtd.path" value="@application.data.path@/${web.app.conf.path}"/>
             </filterset>
@@ -268,18 +246,6 @@
             </resources>
         </copy>
 
-        <!-- Generate Ehcache property file -->
-
-        <copy todir="${bda.dist.dir}/exploded/${project.name}-webapp/install" overwrite="true"
-              flatten="true" includeEmptyDirs="no" filtering="true">
-            <filterset>
-                <filter token="ehcache.cache.path" value="${application.data.path}/${ehcache.cache.path}"/>
-            </filterset>
-            <resources>
-                <file file="${exploded.dir}/deploy/ehcache.xml"/>
-            </resources>
-        </copy>
-
         <!-- Generate lexevs remote config file -->
 
         <copy todir="${exploded.dir}/install" overwrite="true"
@@ -315,7 +281,6 @@
         <copy todir="${application.data.path}/conf" overwrite="true"
               flatten="true" includeEmptyDirs="no" filtering="false">
             <resources>
-                <file file="${exploded.dir}/install/ehcache.xml"/>
                 <file file="${exploded.dir}/install/${webapp.prop.file}"/>
                 <file file="${exploded.dir}/install/${project.short.name}-log4j.xml"/>
                 <file file="${exploded.dir}/install/log4j.dtd"/>
@@ -334,8 +299,6 @@
             tofile="${jboss.server.path}/server/default/deploy/${webapp.war.name}"
             overwrite="true"
         />
-
-        <mkdir dir="${application.data.path}/log" />
 
         <antcall target="jboss:start" />
 
