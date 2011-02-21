@@ -376,6 +376,7 @@
                 <include name="**/*.gif" />
                 <include name="**/*.png" />
                 <include name="**/*.faces" />
+                <include name="**/*.xhtml" />
                 <include name="**/*.tag" />
                 <include name="**/*.tagf" />
             </fileset>
