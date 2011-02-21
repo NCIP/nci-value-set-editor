@@ -65,7 +65,7 @@ public class Log4JServlet extends HttpServlet {
      */
     public void init() throws ServletException {
 
-        String logfile = System.getProperty("gov.nih.nci.evs.browser.NCIvselog4jProperties");
+        String logfile = System.getProperty("NCIvselog4jProperties");
         System.out.println("VSE Logger prop file = [" + logfile + "]");
 
         if(!isInit) {

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="software/valueseteditor/src/java"/>
+	<classpathentry kind="var" path="JRE_LIB" sourcepath="JRE_SRC"/>
+	<classpathentry kind="lib" path="software/valueseteditor/extlib/jsf-api.jar"/>
+	<classpathentry kind="lib" path="software/valueseteditor/extlib/jsf-impl.jar"/>
+	<classpathentry kind="lib" path="software/valueseteditor/extlib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="software/valueseteditor/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="output" path="software/valueseteditor/build/web/WEB-INF/classes"/>
+</classpath>
