@@ -1,5 +1,7 @@
 package gov.nih.nci.evs.valueseteditor.beans;
 
+import gov.nih.nci.evs.valueseteditor.properties.ApplicationProperties;
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -48,20 +50,24 @@ package gov.nih.nci.evs.valueseteditor.beans;
  */
 public class UserSession {
 
-	public String getBuilddate(){
-	    return "aaa";
+	public String getBuilddate() throws Exception {
+		return ApplicationProperties.getBuilddate();
 	}  	
 
-	public String getAppversion(){
-	    return "bbb";
+	public String getAppversion() throws Exception {
+		return ApplicationProperties.getAppversion();
 	} 
 	
-	public String getBuildtag(){
-	    return "ccc";
+	public String getBuildtag() throws Exception {
+	    return ApplicationProperties.getAppbuildtag();
 	} 	
 
-	public String getEvsserviceurl(){
-	    return "ddd";
+	public String getEvsserviceurl() throws Exception {
+	    return ApplicationProperties.getServiceurl();
+	} 	
+
+	public boolean getDebug() throws Exception {
+	    return ApplicationProperties.getDebug();
 	} 	
 	
 }

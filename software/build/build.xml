@@ -27,7 +27,6 @@
     <property name="project.name" value="ncivalueseteditor"/>
     <property name="project.short.name" value="vse" />
     <property name="webapp.war.name" value="${project.name}.war" />
-    <property name="webapp.prop.file" value="NCI${project.short.name}Properties.xml" />
 
     <path id="classpath">
         <fileset dir="../${project.name}/extlib">
@@ -158,12 +157,12 @@
              flatten="true" includeEmptyDirs="no" filtering="true">
             <filterset>
                 <filter token="app.build.tag" value="${anthill.build.tag_built}"/>
-                <filter token="build.info" value="Built: ${BUILD_DATE}"/>
+                <filter token="build.date" value="Built: ${BUILD_DATE}"/>
                 <filter token="application.version" value="${application.version}"/>
-                <filter token="debug.on" value="${debug.on}"/>
+                <filter token="debug" value="${debug}"/>
             </filterset>
             <resources>
-                <file file="${bda.conf.dir}/${webapp.prop.file}"/>
+                <file file="${bda.conf.dir}/NCI${project.short.name}Properties.xml"/>
             </resources>
         </copy>
 
@@ -242,7 +241,7 @@
                 <filter token="meddra_security_token" value="${meddra_security_token}"/>
             </filterset>
             <resources>
-                <file file="${exploded.dir}/deploy/${webapp.prop.file}"/>
+                <file file="${exploded.dir}/deploy/NCI${project.short.name}Properties.xml"/>
             </resources>
         </copy>
 
@@ -267,8 +266,8 @@
         <bda:AddJBossProperty
             deploydir="${jboss.server.path}/server/default/deploy"
             backup="true"
-            name="${webapp.prop.file}"
-            value="${application.data.path}/${web.app.conf.path}/${webapp.prop.file}"
+            name="NCI${project.short.name}Properties"
+            value="${application.data.path}/${web.app.conf.path}/NCI${project.short.name}Properties.xml"
         />
 
         <bda:AddJBossProperty
@@ -281,7 +280,7 @@
         <copy todir="${application.data.path}/conf" overwrite="true"
               flatten="true" includeEmptyDirs="no" filtering="false">
             <resources>
-                <file file="${exploded.dir}/install/${webapp.prop.file}"/>
+                <file file="${exploded.dir}/install/NCI${project.short.name}Properties.xml"/>
                 <file file="${exploded.dir}/install/${project.short.name}-log4j.xml"/>
                 <file file="${exploded.dir}/install/log4j.dtd"/>
             </resources>
@@ -318,7 +317,7 @@
                  <bda:RemoveJBossProperty
                     deploydir="${jboss.server.path}/server/default/deploy"
                     backup="true"
-                    name="${webapp.prop.file}"
+                    name="NCI${project.short.name}Properties"
                 />
 
                 <bda:RemoveJBossProperty
