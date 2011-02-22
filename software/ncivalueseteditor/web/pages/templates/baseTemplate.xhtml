@@ -12,6 +12,12 @@
 	<script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/js/dropdown.js"></script>
 </head>
 <body>
+<!--
+   Build info: #{UserSession.builddate}
+ Version info: #{UserSession.appversion}
+          Tag: #{UserSession.buildtag}
+   LexEVS URL: #{UserSession.evsserviceurl}
+  -->
 	<ui:insert name="header"><ui:include src="header.xhtml" /></ui:insert>
 	<div class="center-page">
 		<ui:insert name="sub_header"><ui:include src="subHeader.xhtml" /></ui:insert>

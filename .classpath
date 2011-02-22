@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="software/valueseteditor/src/java"/>
+	<classpathentry kind="src" path="software/ncivalueseteditor/src/java"/>
 	<classpathentry kind="var" path="JRE_LIB" sourcepath="JRE_SRC"/>
 	<classpathentry kind="lib" path="software/ncivalueseteditor/extlib/jsf-api.jar"/>
 	<classpathentry kind="lib" path="software/ncivalueseteditor/extlib/jsf-impl.jar"/>
