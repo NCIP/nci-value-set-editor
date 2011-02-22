@@ -1,11 +1,11 @@
 <div class="bluebar">
   <div id="quicklinksholder">
     <ul id="quicklinks"
-        onmouseover="document.quicklinksimg.src='../images/quicklinks-active.gif';"
-        onmouseout="document.quicklinksimg.src='../images/quicklinks-inactive.gif';">
+        onmouseover="document.quicklinksimg.src='${facesContext.externalContext.requestContextPath}/images/quicklinks-active.gif';"
+        onmouseout="document.quicklinksimg.src='${facesContext.externalContext.requestContextPath}/images/quicklinks-inactive.gif';">
       <li>
         <a href="#">
-          <img src="../images/quicklinks-inactive.gif" width="162"
+          <img src="${facesContext.externalContext.requestContextPath}/images/quicklinks-inactive.gif" width="162"
             height="18" border="0" name="quicklinksimg" alt="Quick Links" />
         </a>
         <ul>
