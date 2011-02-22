@@ -24,9 +24,9 @@
     <fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist." />
 
     <!-- Application values -->
-    <property name="project.name" value="valueseteditor"/>
+    <property name="project.name" value="ncivalueseteditor"/>
     <property name="project.short.name" value="vse" />
-    <property name="webapp.war.name" value="nci${project.name}.war" />
+    <property name="webapp.war.name" value="${project.name}.war" />
     <property name="webapp.prop.file" value="NCI${project.short.name}Properties.xml" />
 
     <path id="classpath">
