@@ -7,15 +7,15 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>NCI ValueSet Editor</title>
-	<link rel="stylesheet" type="text/css" href="../css/styleSheet.css" />
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-	<script type="text/javascript" src="../js/dropdown.js"></script>
+	<link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/css/styleSheet.css" />
+	<link rel="shortcut icon" href="${facesContext.externalContext.requestContextPath}/favicon.ico" type="image/x-icon" />
+	<script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/js/dropdown.js"></script>
 </head>
 <body>
-	<ui:insert name="header"><ui:include src="/pages/templates/header.xhtml" /></ui:insert>
+	<ui:insert name="header"><ui:include src="header.xhtml" /></ui:insert>
 	<div class="center-page">
-		<ui:insert name="sub_header"><ui:include src="/pages/templates/subHeader.xhtml" /></ui:insert>
-		<div class="mainbox-top"><img src="../images/mainbox-top.gif" width="745" height="5" alt="Mainbox Top" /></div>
+		<ui:insert name="sub_header"><ui:include src="subHeader.xhtml" /></ui:insert>
+		<div class="mainbox-top"><img src="${facesContext.externalContext.requestContextPath}/images/mainbox-top.gif" width="745" height="5" alt="Mainbox Top" /></div>
         <div id="main-area">
         	<ui:insert name="appBanner"><ui:include src="/pages/templates/application_banner.xhtml" /></ui:insert>
         	<ui:insert name="quickLinks"><ui:include src="/pages/templates/quickLinks.xhtml" /></ui:insert>
@@ -24,7 +24,7 @@
 				<ui:insert name="footer"><ui:include src="/pages/templates/footer.xhtml" /></ui:insert>
         	</div>
         </div>
-        <div class="mainbox-bottom"><img src="../images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>		
+        <div class="mainbox-bottom"><img src="${facesContext.externalContext.requestContextPath}/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>		
 	</div>
 	<br/>
 </body>
