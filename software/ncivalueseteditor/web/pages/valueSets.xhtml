@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Value Sets</title>
+</head>
+<body>
+  <ui:composition template="/pages/templates/baseTemplate.xhtml">  
+     <h:form id="valueSetFormId">
+     <table class="dataTable" summary="" border="0" width="100%">  
+  		<tr>
+  		 <td></td>
+    	 <td align="right" valign="bottom" width="80px">          	  	
+            <h:commandLink action="#{CartActionBean.selectAllInCart}">
+            	<h:graphicImage value="../images/selectall.gif" alt="Select All" title="Select all concepts" style="border: none" />
+            </h:commandLink>
+         </td>
+         <td align="right" valign="bottom" width="110px">
+            <h:commandLink action="#{CartActionBean.unselectAllInCart}">
+            	<h:graphicImage value="../images/clearselections.gif" alt="Unselect" title="Unselect all concepts" style="border: none" />
+            </h:commandLink>
+         </td>
+         <td align="right" valign="bottom" width="70px">   
+            <h:commandLink action="#{CartActionBean.removeFromCart}">
+            	<h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove concepts from the cart" style="border: none" />
+            </h:commandLink>
+		  </td>    
+  		</tr>	
+  	  </table>  
+  	  </h:form>
+      <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">      
+         <tr>
+           <th class="dataTableHeader" scope="col" align="left" width="20px">&nbsp;</th>
+           <th class="dataTableHeader" scope="col" align="left">URI</th>
+           <th class="dataTableHeader" scope="col" align="left">Description</th>
+         </tr>
+      </table>
+  </ui:composition>
+  <ui:debug />
+</body>
+</html>
