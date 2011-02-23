@@ -27,6 +27,13 @@
         	<ui:insert name="appBanner"><ui:include src="/pages/templates/applicationBanner.xhtml" /></ui:insert>
         	<ui:insert name="quickLinks"><ui:include src="/pages/templates/quickLinks.xhtml" /></ui:insert>
         	<div class="pagecontent">
+        	    <table cellpadding="0" cellspacing="0" border="0" height="20">
+        	    	<tr bgcolor="#5C5C5C">
+        	    		<td height="20" class="mainMenuItem">
+        	    			<h:outputLink value="${facesContext.externalContext.requestContextPath}/pages/valueSets.xhtml" styleClass="mainMenuLink"><h:outputText value="Your Value Sets"/></h:outputLink>
+        	    		</td>
+        	    	</tr>
+        	    </table>
         		<ui:insert />
 				<ui:insert name="footer"><ui:include src="/pages/templates/footer.xhtml" /></ui:insert>
         	</div>

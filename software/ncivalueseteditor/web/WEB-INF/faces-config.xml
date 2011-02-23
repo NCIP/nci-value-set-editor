@@ -5,7 +5,7 @@
               version="1.2">
 
     <application>
-        <message-bundle>gov.nih.nci.evs.valueseteditor.resources</message-bundle>
+        <message-bundle>gov.nih.nci.evs.valueseteditor.resources.Resources</message-bundle>
         <locale-config>
             <default-locale>en</default-locale>
             <supported-locale>en-us</supported-locale>
@@ -25,6 +25,12 @@
     <managed-bean>
         <managed-bean-name>UserSession</managed-bean-name>
         <managed-bean-class>gov.nih.nci.evs.valueseteditor.beans.UserSession</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>CartActionBean</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.evs.valueseteditor.beans.CartActionBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 
