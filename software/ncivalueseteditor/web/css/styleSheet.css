@@ -360,6 +360,8 @@ DATA TABLE BEGINS
   color:#000000; /* constant: black */
   border-top:1px solid #5C5C5C; /* constant: dark gray */
   border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
 }
 .dataRowLight{ /* for the light color of alternating rows */
   background-color:#FFFFFF; /* constant: white */
