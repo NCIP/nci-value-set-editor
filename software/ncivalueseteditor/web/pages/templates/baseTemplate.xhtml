@@ -11,6 +11,15 @@
 	<link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/css/styleSheet.css" />
 	<link rel="shortcut icon" href="${facesContext.externalContext.requestContextPath}/favicon.ico" type="image/x-icon" />
 	<script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/js/dropdown.js"></script>
+    <script type="text/javascript">
+		function newPopup(url) {
+		    var centerWidth = (window.screen.width - 500) / 2;
+		    var centerHeight = (window.screen.height - 400) / 2;
+			popupWindow = window.open(url,'popUpWindow',
+				'left=' + centerWidth + ',top=' + centerHeight + 
+				',height=400,width=500,resizable=yes,scrollbars=yes,toolbar=no,status=no,menubar=no,location=no,directories=no');
+		}
+	</script>
 </head>
 <body>
 <!--
@@ -42,7 +51,7 @@
         	    			</h:outputLink>
         	    		</td>
         	    	</tr>
-        	    	<tr height="10px">&#xA0;</tr>
+        	    	<tr height="10px"><td>&#xA0;</td></tr>
         	    </table>        	    
         		<ui:insert />
 				<ui:insert name="footer"><ui:include src="/pages/templates/footer.xhtml" /></ui:insert>

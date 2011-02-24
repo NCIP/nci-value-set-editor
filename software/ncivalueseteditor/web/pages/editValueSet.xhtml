@@ -8,11 +8,15 @@
 </head>
 <body>
   <ui:composition template="/pages/templates/baseTemplate.xhtml">  
+     <font size="4"><b>Edit Value Set</b></font>
      <h:form id="valueSetFormId">
      <table class="dataTable" summary="" border="0" width="100%">  
   		<tr>
   		 <td></td>
-    	 <td align="right" valign="bottom" width="70px">  
+    	 <td align="right" valign="bottom">
+      		<h:outputLink value="javascript:newPopup('${facesContext.externalContext.requestContextPath}/pages/addMetedataPopup.xhtml');" styleClass="mainMenuLink">
+				&#xA0;<h:graphicImage value="../images/addMetadata.gif" alt="Add metadata" title="Add metadata to value set definition" style="border: none" />&#xA0;
+			</h:outputLink>     	   
       		<h:outputLink value="${facesContext.externalContext.requestContextPath}/pages/editValueSet.xhtml" styleClass="mainMenuLink">
 				&#xA0;<h:graphicImage value="../images/addComponent.gif" alt="Add component" title="Add component to value set definition" style="border: none" />&#xA0;
 			</h:outputLink>     	         	  	

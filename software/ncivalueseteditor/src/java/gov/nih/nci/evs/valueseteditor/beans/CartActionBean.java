@@ -62,6 +62,7 @@ public class CartActionBean {
     private HashMap<String, ValueSetObject> _cart = null;
     private boolean _messageflag = false;
     private String _message = null;
+    private String _uri = null;
     
     // Error messages
     
@@ -87,6 +88,22 @@ public class CartActionBean {
         if (_cart == null) _init();
         return _cart.values();
     }    
+
+    /**
+     * Set a new URI
+     * @return
+     */
+    public void setUri(String uri) {
+        _uri = uri;
+    }     
+
+    /**
+     * Get a new URI
+     * @return
+     */
+    public String getUri() {
+        return _uri;
+    }     
     
     // ******************** Class methods ************************
     
