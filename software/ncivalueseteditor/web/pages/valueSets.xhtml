@@ -12,20 +12,19 @@
      <table class="dataTable" summary="" border="0" width="100%">  
   		<tr>
   		 <td></td>
-    	 <td align="right" valign="bottom" width="70px">          	  	
-            <h:commandLink action="#{CartActionBean.addToCart}">
-            	<h:graphicImage value="../images/add.gif" alt="Add to cart" title="Add a value set definition" style="border: none" />
+    	 <td align="right" valign="bottom"> 
+      		<h:outputLink value="${facesContext.externalContext.requestContextPath}/pages/editValueSet.xhtml" styleClass="mainMenuLink">
+				&#xA0;<h:graphicImage value="../images/add.gif" alt="Add to cart" title="Add a value set definition" style="border: none" />
+			</h:outputLink>     	          	  	
+            <h:commandLink action="#{CartActionBean.editValueSet}" styleClass="mainMenuLink">
+            	&#xA0;<h:graphicImage value="../images/edit.gif" alt="Edit value set" title="Edit value set definition" style="border: none" />
+            </h:commandLink> 
+            <h:commandLink action="#{CartActionBean.removeFromCart}" styleClass="mainMenuLink">
+            	&#xA0;<h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove value set definition" style="border: none" />
             </h:commandLink>
-         </td>
-         <td align="right" valign="bottom" width="70px">
-            <h:commandLink action="#{CartActionBean.editValueSet}">
-            	<h:graphicImage value="../images/edit.gif" alt="Edit value set" title="Edit value set definition" style="border: none" />
-            </h:commandLink>
-         </td>
-         <td align="right" valign="bottom" width="70px">   
-            <h:commandLink action="#{CartActionBean.removeFromCart}">
-            	<h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove value set definition" style="border: none" />
-            </h:commandLink>
+            <h:commandLink action="#{CartActionBean.removeFromCart}" styleClass="mainMenuLink">
+            	&#xA0;<h:graphicImage value="../images/preview.gif" alt="Preview" title="Preview value set definition" style="border: none" />
+            </h:commandLink>            
 		 </td>	           
   		</tr>	
   	  </table>  
