@@ -28,9 +28,16 @@
         	<ui:insert name="quickLinks"><ui:include src="/pages/templates/quickLinks.xhtml" /></ui:insert>
         	<div class="pagecontent">
         	    <table cellpadding="0" cellspacing="0" border="0" height="20">
-        	    	<tr bgcolor="#5C5C5C">
-        	    		<td height="20" class="mainMenuItem">
-        	    			<h:outputLink value="${facesContext.externalContext.requestContextPath}/pages/valueSets.xhtml" styleClass="mainMenuLink"><h:outputText value="Your Value Sets"/></h:outputLink>
+        	    	<tr bgcolor="#5C5C5C" height="20" class="mainMenuItem">
+        	    		<td>
+        	    			<h:outputLink value="${facesContext.externalContext.requestContextPath}/" styleClass="mainMenuLink">
+        	    				&#xA0;<h:outputText styleClass="mainMenuItem" value="Home" />&#xA0;|
+        	    			</h:outputLink>   
+        	    		</td>
+        	    		<td>	     	    		
+        	    			<h:outputLink value="${facesContext.externalContext.requestContextPath}/pages/valueSets.xhtml" styleClass="mainMenuLink">
+        	    				&#xA0;<h:outputText value="Your Value Sets" />&#xA0;
+        	    			</h:outputLink>
         	    		</td>
         	    	</tr>
         	    </table>

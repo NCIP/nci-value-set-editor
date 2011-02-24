@@ -12,21 +12,21 @@
      <table class="dataTable" summary="" border="0" width="100%">  
   		<tr>
   		 <td></td>
-    	 <td align="right" valign="bottom" width="80px">          	  	
-            <h:commandLink action="#{CartActionBean.selectAllInCart}">
-            	<h:graphicImage value="../images/selectall.gif" alt="Select All" title="Select all concepts" style="border: none" />
+    	 <td align="right" valign="bottom" width="70px">          	  	
+            <h:commandLink action="#{CartActionBean.addToCart}">
+            	<h:graphicImage value="../images/add.gif" alt="Add to cart" title="Add a value set definition" style="border: none" />
             </h:commandLink>
          </td>
-         <td align="right" valign="bottom" width="110px">
-            <h:commandLink action="#{CartActionBean.unselectAllInCart}">
-            	<h:graphicImage value="../images/clearselections.gif" alt="Unselect" title="Unselect all concepts" style="border: none" />
+         <td align="right" valign="bottom" width="70px">
+            <h:commandLink action="#{CartActionBean.editValueSet}">
+            	<h:graphicImage value="../images/edit.gif" alt="Edit value set" title="Edit value set definition" style="border: none" />
             </h:commandLink>
          </td>
          <td align="right" valign="bottom" width="70px">   
             <h:commandLink action="#{CartActionBean.removeFromCart}">
-            	<h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove concepts from the cart" style="border: none" />
+            	<h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove value set definition" style="border: none" />
             </h:commandLink>
-		  </td>    
+		 </td>	           
   		</tr>	
   	  </table>  
   	  </h:form>

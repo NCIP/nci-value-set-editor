@@ -98,43 +98,22 @@ public class CartActionBean {
     }
 
     /**
-     * Unselect all value sets in the Cart
+     * Add value set definition to cart
      * @return
      */
-    public String selectAllInCart() {
+    public String addToCart() {
         _messageflag = false;
         
-    	if (getCount() < 1) {
-        	_messageflag = true;
-        	_message = NO_VALUE_SETS;    	 
-    	} else {
-            for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
-            	ValueSetObject item = (ValueSetObject)i.next();                
-                item.setSelected(true);
-            }
-        }
         return null;
     }      
     
     /**
-     * Unselect all concept(s) in the Cart
+     * Edit value set
      * @return
      */
-    public String unselectAllInCart() {
+    public String editValueSet() {
         _messageflag = false;
         
-    	if (getCount() < 1) {
-        	_messageflag = true;
-        	_message = NO_VALUE_SETS;    		
-    	} else if (!hasSelected()) {
-        	_messageflag = true;
-        	_message = NOTHING_SELECTED;        	
-    	} else {
-            for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
-            	ValueSetObject item = (ValueSetObject)i.next();
-                item.setSelected(false);
-            }
-        }
         return null;
     }      
  
