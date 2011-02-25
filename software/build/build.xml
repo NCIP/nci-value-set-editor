@@ -110,7 +110,7 @@
         <mkdir dir="${webapp.classes.dir}" />
 
         <!-- Compile java classes -->
-        <javac srcdir="${bda.src.dir}" destdir="${webapp.classes.dir}" debug="true" includeantruntime="false">
+        <javac srcdir="${bda.src.dir}" destdir="${webapp.classes.dir}" debug="true" includeantruntime="false" target="1.6">
             <classpath refid="bda.project.compile.classpath" />
             <classpath path ="${webapp.classes.dir}"/>
         </javac>
