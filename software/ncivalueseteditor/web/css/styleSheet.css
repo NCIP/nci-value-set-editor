@@ -448,8 +448,8 @@ p,.p{ /* for paragraphs */
   font-size:0.8em;
   font-weight:bold;
   padding-left:1em;
-  background-color:#CAD9DF; /* constant: dark gray */
-  border-top:1px solid #CCCCCC; /* constant: medium gray */
+  background-color:#BDBDBD; /* constant: dark gray */
+  border-top:1px solid #848484; /* constant: medium gray */
 }
 .welcomeContent{ /* for the area below the title content of the home page */
   font-family:arial,helvetica,verdana,sans-serif;

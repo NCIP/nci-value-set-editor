@@ -1,3 +1,4 @@
+<f:loadBundle basename="gov.nih.nci.evs.valueseteditor.resources.Resources.properties" var="msg"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns:h="http://java.sun.com/jsf/html"
@@ -6,10 +7,28 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Add Metadata</title>
 </head>
-<body>
+<body onLoad="document.f1.uri.focus();">
   <ui:composition template="/pages/templates/popupTemplate.xhtml">
-  <font size="4"><b>Add Metadata</b></font>
-	<h:inputText id="uri" value="#{CartActionBean.uri}" />
+	<font size="4"><b>Add Metadata</b></font><br/>
+	<h:form id="f1">	
+		<table border="0">
+		  <tr>
+		  	<td valign="right">
+		    	<h:outputLabel for="uri" value="#{label.uri}:" />
+		    </td>
+		    <td valign="left">
+				<h:inputText id="uri" value="#{CartActionBean.uri}" />
+			</td>
+		  </tr>	
+	  	</table>
+	  	<hr />
+        <h:commandButton value="Save" action="#{CartActionBean.addMetadataAction}"
+          accesskey="13"
+          onclick="javascript:cursor_wait();"
+          image="#{requestContextPath}/images/save.gif"
+          alt="Save">
+        </h:commandButton>	  	
+	  </h:form>	
   </ui:composition>
   <ui:debug />
 </body>

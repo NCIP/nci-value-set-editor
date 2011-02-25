@@ -69,7 +69,7 @@ public class CartActionBean {
     static public final String NO_VALUE_SETS = "No value sets in cart.";
     static public final String NOTHING_SELECTED = "No value sets selected.";
     
-    // Getters & Setters
+    // ******************** Getters & Setters ************************
 
     /**
      * Return number of items in cart
@@ -105,14 +105,12 @@ public class CartActionBean {
         return _uri;
     }     
     
-    // ******************** Class methods ************************
+    // ******************** Action Methods ************************
     
-    /**
-     * Initialize the cart container
-     */
-    private void _init() {
-        if (_cart == null) _cart = new HashMap<String, ValueSetObject>();
-    }
+    public String addMetadataAction() {
+    	
+    	return null;
+    }    
 
     /**
      * Add value set definition to cart
@@ -122,8 +120,8 @@ public class CartActionBean {
         _messageflag = false;
         
         return null;
-    }      
-    
+    }    
+
     /**
      * Edit value set
      * @return
@@ -132,8 +130,8 @@ public class CartActionBean {
         _messageflag = false;
         
         return null;
-    }      
- 
+    }    
+
     /**
      * Remove concept(s) from the Cart
      * @return
@@ -158,7 +156,16 @@ public class CartActionBean {
     	}
 	        
         return null;
-    }    
+    }     
+    
+    // ******************** Class methods ************************
+    
+    /**
+     * Initialize the cart container
+     */
+    private void _init() {
+        if (_cart == null) _cart = new HashMap<String, ValueSetObject>();
+    }
 
     /**
      * Subclass to hold contents of the cart
