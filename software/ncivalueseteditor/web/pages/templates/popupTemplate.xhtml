@@ -10,33 +10,24 @@
 	<title>NCI ValueSet Editor Popup</title>
 	<link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/css/styleSheet.css" />
 	<link rel="shortcut icon" href="${facesContext.externalContext.requestContextPath}/favicon.ico" type="image/x-icon" />
-    <script type="text/javascript">
-		function windowResize() {
-	       var width = document.getElementById("resizeDiv").offsetWidth;
-	       var height = document.getElementById("resizeDiv").offsetHeight;
-	       window.resizeTo(width+20,height+100);
-		}
-	</script>
 </head>
-<body onload="javascript:windowResize();">
-<!--
-   Build info: #{UserSession.builddate}
- Version info: #{UserSession.appversion}
-          Tag: #{UserSession.buildtag}
-   LexEVS URL: #{UserSession.evsserviceurl}
-        Debug: #{UserSession.debug}
-  -->  
-	<div id="resizeDiv">
-		<div id="popupContentArea">
-			<div id="closeWindow">
-			    <h:outputLink value="javascript:window.close();">		    
-			    	<h:graphicImage value="../images/close_icon.gif" alt="Close window" title="Close window" style="border: none" />&#xA0;CLOSE WINDOW
-			    </h:outputLink>			    
-		    </div>   	
-		    <hr/>
-	    	<ui:insert />
-	    	<br/>
-    	</div>    	
-	</div>	
+<body>
+	<!--
+	   Build info: #{UserSession.builddate}
+	 Version info: #{UserSession.appversion}
+	          Tag: #{UserSession.buildtag}
+	   LexEVS URL: #{UserSession.evsserviceurl}
+	        Debug: #{UserSession.debug}
+	  -->  
+	<div id="popupContentArea">
+		<div id="closeWindow">
+		    <h:outputLink value="javascript:window.close();">		    
+		    	<h:graphicImage value="../images/close_icon.gif" alt="Close window" title="Close window" style="border: none" />&#xA0;CLOSE WINDOW
+		    </h:outputLink>			    
+	    </div>   	
+	    <hr/>
+    	<ui:insert />
+    	<br/>
+   	</div>	
 </body>
 </html>
