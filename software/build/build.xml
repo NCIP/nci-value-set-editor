@@ -113,6 +113,7 @@
         <javac srcdir="${bda.src.dir}" destdir="${webapp.classes.dir}" debug="true" includeantruntime="false" target="1.6">
             <classpath refid="bda.project.compile.classpath" />
             <classpath path ="${webapp.classes.dir}"/>
+            <exclude name="**/junits/*.java"/>
         </javac>
 
         <!-- Copy internal property files -->
@@ -123,6 +124,34 @@
                 </patternset>
             </fileset>
         </copy>
+
+    </target>
+
+    <target name="junits" depends="compile:application-code" description="Compile and run JUnits">
+
+        <mkdir dir="${bda.target.dir}/junits" />
+
+        <!-- Compile Junit java classes -->
+
+        <javac srcdir="${bda.src.dir}" destdir="${bda.target.dir}/junits" debug="true" includeantruntime="false" target="1.6">
+            <classpath refid="bda.project.compile.classpath" />
+            <classpath path ="${webapp.classes.dir}"/>
+            <include name="**/junits/*.java"/>
+        </javac>
+
+        <!-- Run JUnits -->
+
+        <junit printsummary="yes" haltonfailure="yes" showoutput="yes" >
+            <classpath refid="bda.project.compile.classpath" />
+            <classpath path ="${webapp.classes.dir}"/>
+            <classpath path ="${bda.target.dir}/junits"/>
+            <batchtest fork="yes" todir="${bda.target.dir}/junits/">
+                <formatter type="xml"/>
+                <fileset dir="${bda.src.dir}/java">
+                    <include name="**/*Test*.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
 
     </target>
 

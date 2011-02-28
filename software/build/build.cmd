@@ -22,6 +22,7 @@ if "%1" == "" (
     echo   uninstall    -- Uninstall the web application
     echo   deploy       -- Hot deploy application
     echo   jsp          -- Hot deploy JSP files
+    echo   test         -- Compile and run junits
     echo   config       -- Generates configuration files for a target environment
     echo   stop         -- Shutdown JBoss
     echo   start        -- Start JBoss
@@ -55,6 +56,11 @@ if "%1" == "deploy" (
 
 if "%1" == "jsp" (
     ant %DEBUG% deploy:hot:jsp
+    goto DONE
+)
+
+if "%1" == "test" (
+    ant %DEBUG% junits
     goto DONE
 )
 

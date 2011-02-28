@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="software/ncivalueseteditor/extlib/jsf-impl.jar"/>
 	<classpathentry kind="lib" path="software/ncivalueseteditor/extlib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="software/ncivalueseteditor/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="output" path="software/ncivalueseteditor/build/web/WEB-INF/classes"/>
 </classpath>

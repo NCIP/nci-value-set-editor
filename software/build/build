@@ -20,6 +20,7 @@ if [ -z "$1" ]; then
     echo "  install      -- Installs JBoss locally"
     echo "  uninstall    -- Uninstall the web application"
     echo "  deploy       -- Hot deploy application"
+    echo "  test         -- Compile and run junits"
     echo "  jsp          -- Hot deploy JSP files"
     echo "  config       -- Generates configuration files for a target environment"
     echo "  stop         -- Shutdown JBoss"
@@ -47,6 +48,10 @@ case $1 in
 
     deploy)
         ant $TAG $DEBUG deploy:hot
+        ;;
+
+    test)
+        ant $TAG $DEBUG junits
         ;;
 
     jsp)
