@@ -15,9 +15,10 @@
 		function newPopup(url) {
 		    var centerWidth = (window.screen.width - 500) / 2;
 		    var centerHeight = (window.screen.height - 400) / 2;
-			popupWindow = window.open(url,'popUpWindow',
-				'left=' + centerWidth + ',top=' + centerHeight + 
-				',resizable=yes,scrollbars=yes,toolbar=no,status=no,menubar=no,location=no,directories=no');
+			popupWindow = window.open(url,'_blank',
+				'top=' + centerHeight +
+				',left=' + centerWidth + 
+				', height=200, width=300, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no'); 
 		}
 	</script>
 </head>

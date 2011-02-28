@@ -3,6 +3,7 @@ package gov.nih.nci.evs.valueseteditor.beans;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.ResourceBundle;
 
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
@@ -59,19 +60,24 @@ public class CartActionBean {
 
     // Local class variables
     private static Logger _logger = Logger.getLogger(CartActionBean.class);
+    private ResourceBundle resource = ResourceBundle.getBundle("gov.nih.nci.evs.valueseteditor.resources.Resources");
     private HashMap<String, ValueSetObject> _cart = null;
-    private boolean _messageflag = false;
     private String _message = null;
     private String _uri = null;
-    
+    private String _domain = null;
+    private String _scheme = null;
+    private String _sources = null; 
+        
     // Error messages
     
     static public final String NO_VALUE_SETS = "No value sets in cart.";
     static public final String NOTHING_SELECTED = "No value sets selected.";
     
-    // ******************** Getters & Setters ************************
+    // ========================================================
+    // ====               Getters & Setters                 ===
+    // ========================================================
 
-    /**
+	/**
      * Return number of items in cart
      * @return
      */
@@ -88,37 +94,92 @@ public class CartActionBean {
         if (_cart == null) _init();
         return _cart.values();
     }    
+    
+    /**
+     * Get message
+     * @return
+     */
+    public String getMessage() {
+    	String text = _message;
+    	_message = null;		// Clear last message
+        return text;
+    }     
+
+    // ****************  Metadata Entries  ******************
+    
+    /**
+     * Get metadata URI
+     * @return
+     */
+    public String getUri() {
+        return _uri;
+    }     
 
     /**
-     * Set a new URI
-     * @return
+     * Set metadata URI
+     * @param uri
      */
     public void setUri(String uri) {
         _uri = uri;
     }     
 
     /**
-     * Get a new URI
+     * Get metadata concept domain
      * @return
      */
-    public String getUri() {
-        return _uri;
+    public String getDomain() {
+        return _domain;
+    }       
+    
+    /**
+     * Set metadata concept domain
+     * @param domain
+     */
+    public void setDomain(String domain) {
+        _domain = domain;
     }     
+
+    /**
+     * Get metadata coding scheme
+     * @return
+     */
+    public String getScheme() {
+        return _scheme;
+    }       
     
-    // ******************** Action Methods ************************
+    /**
+     * Set metadata coding scheme
+     * @param scheme
+     */
+    public void setScheme(String scheme) {
+    	_scheme = scheme;
+    }      
+
+    /**
+     * Get metadata sources
+     * @return
+     */
+    public String getSources() {
+        return _sources;
+    }       
     
-    public String addMetadataAction() {
-    	
-    	return null;
+    /**
+     * Set metadata sources
+     * @param sources
+     */
+    public void setSources(String sources) {
+    	_sources = sources;
     }    
+    
+    // ========================================================
+    // ====                 Action Methods                  ===
+    // ========================================================    
 
     /**
      * Add value set definition to cart
      * @return
      */
     public String addToCart() {
-        _messageflag = false;
-        
         return null;
     }    
 
@@ -127,8 +188,6 @@ public class CartActionBean {
      * @return
      */
     public String editValueSet() {
-        _messageflag = false;
-        
         return null;
     }    
 
@@ -137,28 +196,33 @@ public class CartActionBean {
      * @return
      */
     public String removeFromCart() {
-    	_messageflag = false;
-    	
-    	if (getCount() < 1) {
-        	_messageflag = true;
-        	_message = NO_VALUE_SETS;    		
-    	} else if (!hasSelected()) {
-        	_messageflag = true;
-        	_message = NOTHING_SELECTED;        	
-    	} else {    	
-            for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
-            	ValueSetObject item = (ValueSetObject)i.next();
-                if (item.getCheckbox().isSelected()) {
-                    if (_cart.containsKey(item.code))
-                        i.remove();
-                }
+
+        for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
+        	ValueSetObject item = (ValueSetObject)i.next();
+            if (item.getCheckbox().isSelected()) {
+                if (_cart.containsKey(item.code))
+                    i.remove();
             }
-    	}
-	        
+        }
+
         return null;
     }     
     
-    // ******************** Class methods ************************
+    public String addMetadataAction() {
+	
+    	_logger.debug("Adding metadata to cart.");
+        // Validate input        
+        if (_uri == null || _uri.length() < 1) {
+        	_message = resource.getString("error_missing_uri");
+        	return null;
+        }       	
+    	
+        _message = resource.getString("action_saved");
+        
+    	return null;
+    }      
+    
+    // ******************** Internal Class Methods ************************
     
     /**
      * Initialize the cart container

@@ -9,36 +9,57 @@
 <body>
   <ui:composition template="/pages/templates/popupTemplate.xhtml">   
   <script type="text/javascript">
-  	window.resizeTo(500,400);	
+  	window.resizeTo(500,350);	
   </script>
   <div id="resizeDiv">     
 	<font size="4"><b>Add Metadata</b></font><br/>
 	<h:form id="f1">	
 		<table border="0">
 		  <tr>
-		  	<td valign="right">
+		  	<td align="right">
 		    	<h:outputLabel for="uri" value="#{msg.label_uri}:" />
 		    </td>
-		    <td valign="left">
+		    <td align="left">
 				<h:inputText id="uri" value="#{CartActionBean.uri}" width="300"/>
 			</td>
 		  </tr>	
 		  <tr>
-		  	<td valign="right">
-		    	<h:outputLabel for="uri2" value="#{msg.label_uri}:" />
+		  	<td align="right">
+		    	<h:outputLabel for="domain" value="#{msg.label_domain}:" />
 		    </td>
-		    <td valign="left">
-				<h:inputText id="uri2" value="#{CartActionBean.uri}" width="300"/>
+		    <td align="left">
+				<h:inputText id="domain" value="#{CartActionBean.domain}" width="300"/>
 			</td>
-		  </tr>		  
+		  </tr>
+		  <tr>
+		  	<td align="right">
+		    	<h:outputLabel for="dcs" value="#{msg.label_default_cs}:" />
+		    </td>
+		    <td align="left">
+				<h:inputText id="dcs" value="#{CartActionBean.scheme}" width="300"/>
+			</td>
+		  </tr>	
+		  <tr>
+		  	<td align="right">
+		    	<h:outputLabel for="sources" value="#{msg.label_sources}:" />
+		    </td>
+		    <td align="left">
+				<h:inputText id="sources" value="#{CartActionBean.sources}" width="300"/>
+			</td>
+		  </tr>			  		  		  
 	  	</table>
 	  	<hr />
+	  	<div class="inputMessage"><h:outputText value="#{CartActionBean.message}&#xA0;" /></div>
         <h:commandButton value="Save" action="#{CartActionBean.addMetadataAction}"
           accesskey="13"
           onclick="javascript:cursor_wait();"
           image="#{requestContextPath}/images/save.gif"
           alt="Save">
-        </h:commandButton>	  	
+        </h:commandButton>
+        &#xA0;
+	    <h:outputLink value="javascript:window.close();">		    
+	    	<h:graphicImage value="../images/close.gif" alt="Close window" title="Close window" style="border: none" />
+	   	</h:outputLink>		        	  	
 	  </h:form>	
 	  </div>
   </ui:composition>
