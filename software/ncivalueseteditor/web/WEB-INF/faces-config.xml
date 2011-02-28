@@ -8,8 +8,6 @@
         <locale-config>
             <default-locale>en</default-locale>
             <supported-locale>en-us</supported-locale>
-            <supported-locale>fr</supported-locale>
-            <supported-locale>es</supported-locale>
         </locale-config>
         <resource-bundle>
             <base-name>gov.nih.nci.evs.valueseteditor.resources.Resources</base-name>
