@@ -4,35 +4,42 @@
 
     <ConfigurableItems>
         <ConfigurableItem>
-                 <key>DEBUG</key>
-                 <value>@debug@</value>
+             <name>DEBUG</name>
+             <value>@debug@</value>
         </ConfigurableItem>
 
         <ConfigurableItem>
-                 <key>BUILD_DATE</key>
-                 <value>@build.date@</value>
+             <name>BUILD_DATE</name>
+             <value>@build.date@</value>
         </ConfigurableItem>
 
         <ConfigurableItem>
-                 <key>APPLICATION_VERSION</key>
-                 <value>@application.version@</value>
+             <name>APPLICATION_VERSION</name>
+             <value>@application.version@</value>
         </ConfigurableItem>
 
         <ConfigurableItem>
-                 <key>APP_BUILD_TAG</key>
-                 <value>@app.build.tag@</value>
+             <name>APP_BUILD_TAG</name>
+             <value>@app.build.tag@</value>
         </ConfigurableItem>
 
         <ConfigurableItem>
-                 <key>EVS_SERVICE_URL</key>
-                 <value>@lex.evs.api.url@</value>
+             <name>EVS_SERVICE_URL</name>
+             <value>@lex.evs.api.url@</value>
         </ConfigurableItem>
 
         <ConfigurableItem>
-                 <key>LG_CONFIG_FILE</key>
-                 <value>@lg.config.file@</value>
+             <name>LG_CONFIG_FILE</name>
+             <value>@lg.config.file@</value>
         </ConfigurableItem>
 
     </ConfigurableItems>
+
+    <SecurityTokenHolders>
+        <SecurityTokenHolder>
+             <name>MedDRA (Medical Dictionary for Regulatory Activities Terminology)</name>
+             <value>@meddra_security_token@</value>
+        </SecurityTokenHolder>
+    </SecurityTokenHolders>
 
 </root>
