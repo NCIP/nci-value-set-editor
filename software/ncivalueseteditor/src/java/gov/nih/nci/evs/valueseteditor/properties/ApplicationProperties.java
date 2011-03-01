@@ -58,24 +58,27 @@ public class ApplicationProperties {
     private static Logger _logger =
         Logger.getLogger(ApplicationProperties.class);
 
+    // Public Constants
+    public static final String LG_CONFIG_FILE = "LG_CONFIG_FILE";    
+    
+    // Private Constants
     private static final String PROP_FILE = "NCIvseProperties";    
     private static final String DEBUG = "DEBUG";
     private static final String BUILD_DATE = "BUILD_DATE";
     private static final String APP_VERSION = "APPLICATION_VERSION";    
-    private static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
-    private static final String LG_CONFIG_FILE = "LG_CONFIG_FILE";
+    private static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";    
     private static final String APP_BUILD_TAG = "APP_BUILD_TAG";
 
+    // Private Variables
     private static ApplicationProperties appProperties = null;
-
     private static boolean _debug = false;
     private static String _service_url = null;
     private static String _build_date = null;
     private static String _app_version = null;
     private static String _lg_config_file = null;
     private static String _app_build_tag = null;
-
-    private static HashMap _configurableItemMap;
+    private static HashMap<String,String> _configurableItemMap;
+    private static HashMap<String,String> _securityTokenMap;
     
     /**
      * Private constructor for singleton pattern.
@@ -151,6 +154,11 @@ public class ApplicationProperties {
         return _app_build_tag;
     }    
    
+    public static HashMap<String,String> getSecurityTokenMap() throws Exception {
+    	if (appProperties == null) getInstance();
+        return _securityTokenMap;
+    }    
+    
     // ***************** Internal methods *******************
     
     /**
@@ -180,6 +188,7 @@ public class ApplicationProperties {
         parser.run();
         
         _configurableItemMap = parser.getConfigurableItemMap();
+        _securityTokenMap = parser.getSecurityTokenMap();
     }
 
-}
+} // End of ApplicationProperties

@@ -1,13 +1,9 @@
 package gov.nih.nci.evs.valueseteditor.properties;
 
-import java.io.*;
 import java.util.*;
-
 import javax.xml.parsers.*;
-
 import org.apache.log4j.*;
 import org.w3c.dom.*;
-import org.xml.sax.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -55,34 +51,44 @@ import org.xml.sax.*;
  * @author EVS Team
  * @version 1.0
  * 
- *          Modification history Initial implementation kim.ong@ngc.com
+ *     Modification history Initial implementation kim.ong@ngc.com
  * 
  */
 public class PropertyFileParser {
     private static Logger _logger = Logger.getLogger(PropertyFileParser.class);
-    private HashMap _configurableItemMap;
+    private HashMap<String,String> _configurableItemMap;
+    private HashMap<String,String> _securityTokenHashMap;
     private String _xmlfile;
-    private Document _dom;
+    private Document _dom;    
+
+    /**
+     * Initialize lists
+     */
+    private void init() {
+        _configurableItemMap = new HashMap<String,String>();
+        _securityTokenHashMap = new HashMap<String,String>();    	
+    }
+    
+    /**
+     * @param xmlfile
+     */
+    public PropertyFileParser(String xmlfile) {
+    	init();
+        _xmlfile = xmlfile;
+    }
 
     /**
      * Constructor
      */
     public PropertyFileParser() {
-        _configurableItemMap = new HashMap();
-    }
-
-    /**
-     * @param xmlfile
-     */
-    public PropertyFileParser(String xmlfile) {
-        _configurableItemMap = new HashMap();
-        _xmlfile = xmlfile;
-    }
-
+        init();
+    }    
+    
     /**
      * Parse XML file
+     * @throws Exception 
      */
-    public void run() {
+    public void run() throws Exception {
         parseXmlFile(_xmlfile);
         parseDocument();
     }
@@ -90,25 +96,24 @@ public class PropertyFileParser {
     /**
      * @return
      */
-    public HashMap getConfigurableItemMap() {
+    public HashMap<String,String> getConfigurableItemMap() {
         return _configurableItemMap;
     }
 
     /**
+     * @return
+     */
+    public HashMap<String,String> getSecurityTokenMap() {
+        return _securityTokenHashMap;
+    }    
+    
+    /**
      * @param xmlfile
      */
-    private void parseXmlFile(String xmlfile) {
+    private void parseXmlFile(String xmlfile) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        try {
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            _dom = db.parse(xmlfile);
-        } catch (ParserConfigurationException pce) {
-        	_logger.error(pce.getMessage());        	
-        } catch (SAXException se) {
-        	_logger.error(se.getMessage());       
-        } catch (IOException ioe) {
-        	_logger.error(ioe.getMessage());       
-        }
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        _dom = db.parse(xmlfile);
     }
 
     /**
@@ -117,22 +122,36 @@ public class PropertyFileParser {
     private void parseDocument() {
         Element docEle = _dom.getDocumentElement();
 
-        NodeList list2 = docEle.getElementsByTagName("ConfigurableItem");
-        if (list2 != null && list2.getLength() > 0) {
-            for (int i = 0; i < list2.getLength(); i++) {
-                Element el = (Element) list2.item(i);
-                getConfigurableItem(el);
+        NodeList items = docEle.getElementsByTagName("ConfigurableItem");
+        if (items != null && items.getLength() > 0) {
+            for (int i = 0; i < items.getLength(); i++) {
+                Element el = (Element) items.item(i);
+                setNameValueItem(_configurableItemMap,el);
             }
+        } else {
+        	_logger.debug("Warning! 'ConfigurableItem' tag not found in property file!");
         }
+        
+        NodeList tokens = docEle.getElementsByTagName("SecurityTokenHolder");
+        if (tokens != null && tokens.getLength() > 0) {
+            for (int i = 0; i < tokens.getLength(); i++) {
+                Element el = (Element) tokens.item(i);
+                setNameValueItem(_securityTokenHashMap,el);
+            }
+        } else {
+        	_logger.debug("Warning! 'SecurityTokenHolder' tag not found in property file!");
+        }      
+
     }
 
     /**
+     * @param map
      * @param displayItemElement
      */
-    private void getConfigurableItem(Element displayItemElement) {
-        String key = getTextValue(displayItemElement, "key");
+    private void setNameValueItem(HashMap<String,String> map, Element displayItemElement) {
+        String key = getTextValue(displayItemElement, "name");
         String value = getTextValue(displayItemElement, "value");
-        _configurableItemMap.put(key, value);
+        map.put(key, value);
     }
 
     /**
