@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.valueseteditor.junits;
 
+import gov.nih.nci.evs.valueseteditor.utilities.ValueSetUtil;
 import junit.framework.TestCase;
 
 /**
@@ -50,13 +51,11 @@ import junit.framework.TestCase;
  */
 public class TestSearchUtil extends TestCase {
 
-	  public void testAdd() {
-	        int num1 = 3;
-	        int num2 = 2;
-	        int total = 5;
-	        int sum = 0;
-	        sum = num1 + num2;
-	        assertEquals(sum, total);
+	  public void testListConceptDomains() throws Exception {
+
+		  ValueSetUtil util = new ValueSetUtil();
+		  util.getConceptDomainNames();
+		  
 	  }	
 	
 }
