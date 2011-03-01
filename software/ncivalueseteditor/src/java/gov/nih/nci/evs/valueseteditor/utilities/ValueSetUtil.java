@@ -1,6 +1,6 @@
 package gov.nih.nci.evs.valueseteditor.utilities;
 
-import java.util.Vector;
+import java.util.HashMap; 
 
 import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
 import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
@@ -84,7 +84,7 @@ public class ValueSetUtil {
 	 * Get list all of all concept domains loaded
 	 * @return
 	 */
-	public Vector getConceptDomainNames() {
+	public HashMap<String,String> getConceptDomainNames() {
 		String scheme = "conceptDomainCodingScheme";
 		//scheme = "NCI Thesaurus";
 /*
@@ -100,7 +100,8 @@ public class ValueSetUtil {
         //if (version != null)
           //  csvt.setVersion(version);
 
-		Vector conceptDomainName_vec = new Vector();
+		HashMap<String,String> hmap = new HashMap<String,String>();
+		
 		try {
 			LexBIGService lbSvc = null;
 			lbSvc = new RemoteServerUtil().createLexBIGService();
@@ -122,13 +123,13 @@ public class ValueSetUtil {
             for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
 				ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
 				Entity entity = rcr.getReferencedEntry();
-				conceptDomainName_vec.add(entity.getEntityDescription().getContent());
+				//conceptDomainName_vec.add(entity.getEntityDescription().getContent());
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		//conceptDomainName_vec = SortUtils.quickSort(conceptDomainName_vec);
-		return conceptDomainName_vec;
+
+		return hmap;
 	}
  
     
