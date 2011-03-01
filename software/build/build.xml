@@ -127,7 +127,7 @@
 
     </target>
 
-    <target name="junits" depends="compile:application-code" description="Compile and run JUnits">
+    <target name="junits" depends="build:all,build:config" description="Compile and run JUnits">
 
         <mkdir dir="${bda.target.dir}/junits" />
 
@@ -139,14 +139,21 @@
             <include name="**/junits/*.java"/>
         </javac>
 
+        <antcall target="-deploy:configfiles" />
+
         <!-- Run JUnits -->
 
-        <junit printsummary="yes" haltonfailure="yes" showoutput="yes" >
+        <junit printsummary="on" haltonfailure="yes" showoutput="yes" dir="${bda.target.dir}/junits">
             <classpath refid="bda.project.compile.classpath" />
             <classpath path ="${webapp.classes.dir}"/>
             <classpath path ="${bda.target.dir}/junits"/>
-            <batchtest fork="yes" todir="${bda.target.dir}/junits/">
-                <formatter type="xml"/>
+            <classpath path ="${jboss.server.path}/server/default/conf"/>
+            <sysproperty key="NCI${project.short.name}Properties"
+                value="${application.data.path}/${web.app.conf.path}/NCI${project.short.name}Properties.xml"/>
+            <sysproperty key="NCI${project.short.name}log4jProperties"
+                value="${application.data.path}/${web.app.conf.path}/${project.short.name}-log4j.xml"/>
+            <batchtest fork="yes" todir="${bda.target.dir}/junits">
+                <formatter type="brief"/>
                 <fileset dir="${bda.src.dir}/java">
                     <include name="**/*Test*.java"/>
                 </fileset>
@@ -189,6 +196,7 @@
                 <filter token="build.date" value="Built: ${BUILD_DATE}"/>
                 <filter token="application.version" value="${application.version}"/>
                 <filter token="debug" value="${debug}"/>
+                <filter token="meddra_security_token" value="${meddra_security_token}"/>
             </filterset>
             <resources>
                 <file file="${bda.conf.dir}/NCI${project.short.name}Properties.xml"/>
@@ -288,7 +296,7 @@
 
     </target>
 
-    <target name="deploy:local:upgrade" depends="build:all,build:config" description="Build and upgrade application">
+    <target name="deploy:local:upgrade" depends="build:all" description="Build and upgrade application">
 
         <antcall target="jboss:stop" />
 
@@ -305,6 +313,13 @@
             name="NCI${project.short.name}log4jProperties"
             value="${application.data.path}/${web.app.conf.path}/${project.short.name}-log4j.xml"
         />
+
+        <antcall target="-deploy:configfiles" />
+        <antcall target="jboss:start" />
+
+    </target>
+
+    <target name="-deploy:configfiles" depends="build:config" description="Deploy configuration files.">
 
         <copy todir="${application.data.path}/conf" overwrite="true"
               flatten="true" includeEmptyDirs="no" filtering="false">
@@ -327,8 +342,6 @@
             tofile="${jboss.server.path}/server/default/deploy/${webapp.war.name}"
             overwrite="true"
         />
-
-        <antcall target="jboss:start" />
 
     </target>
 
