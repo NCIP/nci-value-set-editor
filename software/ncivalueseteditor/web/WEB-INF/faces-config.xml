@@ -24,8 +24,8 @@
     </factory>
 
     <managed-bean>
-        <managed-bean-name>UserSession</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.evs.valueseteditor.beans.UserSession</managed-bean-class>
+        <managed-bean-name>UserSessionBean</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.evs.valueseteditor.beans.UserSessionBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 

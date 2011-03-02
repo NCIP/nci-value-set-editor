@@ -48,26 +48,26 @@ import gov.nih.nci.evs.valueseteditor.properties.ApplicationProperties;
  * @author garciawa2
  * User session bean
  */
-public class UserSession {
+public class UserSessionBean {
 
-	public String getBuilddate() throws Exception {
-		return ApplicationProperties.getBuilddate();
-	}  	
+    public String getBuilddate() throws Exception {
+        return ApplicationProperties.getBuilddate();
+    }
 
-	public String getAppversion() throws Exception {
-		return ApplicationProperties.getAppversion();
-	} 
-	
-	public String getBuildtag() throws Exception {
-	    return ApplicationProperties.getAppbuildtag();
-	} 	
+    public String getAppversion() throws Exception {
+        return ApplicationProperties.getAppversion();
+    }
 
-	public String getEvsserviceurl() throws Exception {
-	    return ApplicationProperties.getServiceurl();
-	} 	
+    public String getBuildtag() throws Exception {
+        return ApplicationProperties.getAppbuildtag();
+    }
 
-	public boolean getDebug() throws Exception {
-	    return ApplicationProperties.getDebug();
-	} 	
-	
-}
+    public String getEvsserviceurl() throws Exception {
+        return ApplicationProperties.getServiceurl();
+    }
+
+    public boolean getDebug() throws Exception {
+        return ApplicationProperties.getDebug();
+    }
+
+} // End of UserSessionBean
