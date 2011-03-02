@@ -1,6 +1,6 @@
 package gov.nih.nci.evs.valueseteditor.utilities;
 
-import java.util.HashMap; 
+import java.util.HashMap;
 
 import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
 import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
@@ -62,101 +62,101 @@ import org.apache.log4j.Logger;
  *
  * @author garciawa2
  */
-public class ValueSetUtil {
+public class ValueSetSearchUtil {
 
     // Local variables
-    private static Logger _logger = Logger.getLogger(ValueSetUtil.class);
+    private static Logger _logger = Logger.getLogger(ValueSetSearchUtil.class);
     private static LexBIGService lbSvc = null;
     private static LexBIGServiceConvenienceMethods lbscm = null;
-    
+
     /**
      * Constructor
-     * @throws Exception 
+     * @throws Exception
      */
-	public ValueSetUtil() throws Exception {
-		// Setup lexevs service
-		if (lbSvc == null) {
-			lbSvc = RemoteServerUtil.createLexBIGService();
-		}
-	}
+    public ValueSetSearchUtil() throws Exception {
+        // Setup lexevs service
+        if (lbSvc == null) {
+            lbSvc = RemoteServerUtil.createLexBIGService();
+        }
+    }
 
-	/**
-	 * Get list all of all concept domains loaded
-	 * @return
-	 */
-	public HashMap<String,String> getConceptDomainNames() {
-		String scheme = "conceptDomainCodingScheme";
-		//scheme = "NCI Thesaurus";
+    /**
+     * Get list all of all concept domains loaded
+     * @return
+     */
+    public HashMap<String,String> getConceptDomainNames() {
+        String scheme = "conceptDomainCodingScheme";
+        //scheme = "NCI Thesaurus";
 /*
-	      CodingScheme cs = getCodingScheme(scheme, null);
-	        String uri = cs.getCodingSchemeURI();
-	        String version = cs.getRepresentsVersion();		
-		
-	        System.out.println("Hey!!!!!!!!!!!! " +  uri);
-	        System.out.println("Hey!!!!!!!!!!!! " +  version);
-	*/	
-		
+          CodingScheme cs = getCodingScheme(scheme, null);
+            String uri = cs.getCodingSchemeURI();
+            String version = cs.getRepresentsVersion();
+
+            System.out.println("Hey!!!!!!!!!!!! " +  uri);
+            System.out.println("Hey!!!!!!!!!!!! " +  version);
+    */
+
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
         //if (version != null)
           //  csvt.setVersion(version);
 
-		HashMap<String,String> hmap = new HashMap<String,String>();
-		try {
-			LexBIGService lbSvc = null;
-			lbSvc = new RemoteServerUtil().createLexBIGService();
+        HashMap<String,String> hmap = new HashMap<String,String>();
+        try {
+            LexBIGService lbSvc = null;
+            lbSvc = new RemoteServerUtil().createLexBIGService();
 
-			LocalNameList entityTypes = new LocalNameList();
-			entityTypes.addEntry("conceptDomain");
+            LocalNameList entityTypes = new LocalNameList();
+            entityTypes.addEntry("conceptDomain");
 
-			CodedNodeSet cns = lbSvc.getNodeSet(scheme, csvt, entityTypes);
+            CodedNodeSet cns = lbSvc.getNodeSet(scheme, csvt, entityTypes);
 
-			SortOptionList sortOptions = null;
-			LocalNameList filterOptions = null;
-			LocalNameList propertyNames = null;
-			CodedNodeSet.PropertyType[] propertyTypes = null;
-			boolean resolveObjects = true;
-			int maxToReturn = 1000;
+            SortOptionList sortOptions = null;
+            LocalNameList filterOptions = null;
+            LocalNameList propertyNames = null;
+            CodedNodeSet.PropertyType[] propertyTypes = null;
+            boolean resolveObjects = true;
+            int maxToReturn = 1000;
             ResolvedConceptReferenceList rcrl = cns.resolveToList(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects, maxToReturn);
 
             System.out.println("Number of concept domains: " + rcrl.getResolvedConceptReferenceCount());
             for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
-				ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
-				Entity entity = rcr.getReferencedEntry();
-				//conceptDomainName_vec.add(entity.getEntityDescription().getContent());
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+                ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
+                Entity entity = rcr.getReferencedEntry();
+                //conceptDomainName_vec.add(entity.getEntityDescription().getContent());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
-		return hmap;
-	}
- 
-    
+        return hmap;
+    }
+
+
     // -----------------------------------------------------
     // Internal utility methods
     // -----------------------------------------------------
 
-	/**
-	 * @param codingScheme
-	 * @param version
-	 * @return
-	 */
-	@SuppressWarnings("unused")
-	private static CodingScheme getCodingScheme(String codingScheme,
-			String version) {
-		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-		if (version != null)
-			versionOrTag.setVersion(version);
-		CodingScheme cs = null;
-		LexBIGService lbSvc =null;
-		try {
-			lbSvc = RemoteServerUtil.createLexBIGService();
-			cs = lbSvc.resolveCodingScheme(codingScheme, versionOrTag);
-		} catch (Exception e) {
-			_logger.error(e.getStackTrace());
-			return null;
-		}
-		return cs;
-	}
+    /**
+     * @param codingScheme
+     * @param version
+     * @return
+     */
+    @SuppressWarnings("unused")
+    private static CodingScheme getCodingScheme(String codingScheme,
+            String version) {
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        if (version != null)
+            versionOrTag.setVersion(version);
+        CodingScheme cs = null;
+        LexBIGService lbSvc =null;
+        try {
+            lbSvc = RemoteServerUtil.createLexBIGService();
+            cs = lbSvc.resolveCodingScheme(codingScheme, versionOrTag);
+        } catch (Exception e) {
+            _logger.error(e.getStackTrace());
+            return null;
+        }
+        return cs;
+    }
 
-} // End of ValueSetUtil
+} // End of ValueSetSearchUtil

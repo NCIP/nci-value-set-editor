@@ -1,6 +1,6 @@
 package gov.nih.nci.evs.valueseteditor.junits;
 
-import gov.nih.nci.evs.valueseteditor.utilities.ValueSetUtil;
+import gov.nih.nci.evs.valueseteditor.utilities.ValueSetSearchUtil;
 import junit.framework.TestCase;
 
 /**
@@ -51,11 +51,11 @@ import junit.framework.TestCase;
  */
 public class TestSearchUtil extends TestCase {
 
-	  public void testListConceptDomains() throws Exception {
+      public void testListConceptDomains() throws Exception {
 
-		  ValueSetUtil util = new ValueSetUtil();
-		  util.getConceptDomainNames();
-		  
-	  }	
-	
+          ValueSetSearchUtil util = new ValueSetSearchUtil();
+          util.getConceptDomainNames();
+
+      }
+
 }
