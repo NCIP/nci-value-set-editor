@@ -101,7 +101,6 @@ public class ValueSetUtil {
           //  csvt.setVersion(version);
 
 		HashMap<String,String> hmap = new HashMap<String,String>();
-		
 		try {
 			LexBIGService lbSvc = null;
 			lbSvc = new RemoteServerUtil().createLexBIGService();
@@ -142,6 +141,7 @@ public class ValueSetUtil {
 	 * @param version
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private static CodingScheme getCodingScheme(String codingScheme,
 			String version) {
 		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();

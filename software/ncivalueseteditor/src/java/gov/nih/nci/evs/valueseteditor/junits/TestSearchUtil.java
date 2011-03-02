@@ -46,7 +46,7 @@ import junit.framework.TestCase;
  */
 
 /**
- * Search Util JUnits
+ * Search Utility JUnits
  * @author garciawa2
  */
 public class TestSearchUtil extends TestCase {
