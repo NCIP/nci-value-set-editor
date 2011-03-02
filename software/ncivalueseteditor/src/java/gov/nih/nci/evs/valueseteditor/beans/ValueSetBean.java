@@ -56,36 +56,36 @@ import org.apache.log4j.Logger;
  *
  * @author garciawa2
  */
-public class CartActionBean {
+public class ValueSetBean {
 
     // Local class variables
-    private static Logger _logger = Logger.getLogger(CartActionBean.class);
+    private static Logger _logger = Logger.getLogger(ValueSetBean.class);
     private ResourceBundle resource = ResourceBundle.getBundle("gov.nih.nci.evs.valueseteditor.resources.Resources");
     private HashMap<String, ValueSetObject> _cart = null;
     private String _message = null;
     private String _uri = null;
     private String _domain = null;
     private String _scheme = null;
-    private String _sources = null; 
-        
+    private String _sources = null;
+
     // Error messages
-    
+
     static public final String NO_VALUE_SETS = "No value sets in cart.";
     static public final String NOTHING_SELECTED = "No value sets selected.";
-    
+
     // ========================================================
     // ====               Getters & Setters                 ===
     // ========================================================
 
-	/**
+    /**
      * Return number of items in cart
      * @return
      */
     public int getCount() {
         if (_cart == null) return 0;
         return _cart.size();
-    }    
-   
+    }
+
     /**
      * Return the value set collection
      * @return
@@ -93,27 +93,27 @@ public class CartActionBean {
     public Collection<ValueSetObject> getValuesets() {
         if (_cart == null) _init();
         return _cart.values();
-    }    
-    
+    }
+
     /**
      * Get message
      * @return
      */
     public String getMessage() {
-    	String text = _message;
-    	_message = null;		// Clear last message
+        String text = _message;
+        _message = null;        // Clear last message
         return text;
-    }     
+    }
 
     // ****************  Metadata Entries  ******************
-    
+
     /**
      * Get metadata URI
      * @return
      */
     public String getUri() {
         return _uri;
-    }     
+    }
 
     /**
      * Set metadata URI
@@ -121,7 +121,7 @@ public class CartActionBean {
      */
     public void setUri(String uri) {
         _uri = uri;
-    }     
+    }
 
     /**
      * Get metadata concept domain
@@ -129,15 +129,15 @@ public class CartActionBean {
      */
     public String getDomain() {
         return _domain;
-    }       
-    
+    }
+
     /**
      * Set metadata concept domain
      * @param domain
      */
     public void setDomain(String domain) {
         _domain = domain;
-    }     
+    }
 
     /**
      * Get metadata coding scheme
@@ -145,15 +145,15 @@ public class CartActionBean {
      */
     public String getScheme() {
         return _scheme;
-    }       
-    
+    }
+
     /**
      * Set metadata coding scheme
      * @param scheme
      */
     public void setScheme(String scheme) {
-    	_scheme = scheme;
-    }      
+        _scheme = scheme;
+    }
 
     /**
      * Get metadata sources
@@ -161,19 +161,19 @@ public class CartActionBean {
      */
     public String getSources() {
         return _sources;
-    }       
-    
+    }
+
     /**
      * Set metadata sources
      * @param sources
      */
     public void setSources(String sources) {
-    	_sources = sources;
-    }    
-    
+        _sources = sources;
+    }
+
     // ========================================================
     // ====                 Action Methods                  ===
-    // ========================================================    
+    // ========================================================
 
     /**
      * Add value set definition to cart
@@ -181,7 +181,7 @@ public class CartActionBean {
      */
     public String addToCart() {
         return null;
-    }    
+    }
 
     /**
      * Edit value set
@@ -189,7 +189,7 @@ public class CartActionBean {
      */
     public String editValueSet() {
         return null;
-    }    
+    }
 
     /**
      * Remove concept(s) from the Cart
@@ -198,7 +198,7 @@ public class CartActionBean {
     public String removeFromCart() {
 
         for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
-        	ValueSetObject item = (ValueSetObject)i.next();
+            ValueSetObject item = (ValueSetObject)i.next();
             if (item.getCheckbox().isSelected()) {
                 if (_cart.containsKey(item.code))
                     i.remove();
@@ -206,24 +206,24 @@ public class CartActionBean {
         }
 
         return null;
-    }     
-    
+    }
+
     public String addMetadataAction() {
-	
-    	_logger.debug("Adding metadata to cart.");
-        // Validate input        
+
+        _logger.debug("Adding metadata to cart.");
+        // Validate input
         if (_uri == null || _uri.length() < 1) {
-        	_message = resource.getString("error_missing_uri");
-        	return null;
-        }       	
-    	
+            _message = resource.getString("error_missing_uri");
+            return null;
+        }
+
         _message = resource.getString("action_saved");
-        
-    	return null;
-    }      
-    
+
+        return null;
+    }
+
     // ******************** Internal Class Methods ************************
-    
+
     /**
      * Initialize the cart container
      */
@@ -243,7 +243,7 @@ public class CartActionBean {
         private String version = null;
         private String url = null;
         private String semanticType = null;
-        private HtmlSelectBooleanCheckbox _checkbox = null; 
+        private HtmlSelectBooleanCheckbox _checkbox = null;
 
         // Getters & setters
 
@@ -301,26 +301,26 @@ public class CartActionBean {
 
         public void setSemanticType(String semanticType) {
             this.semanticType = semanticType;
-        }        
-      
+        }
+
         public HtmlSelectBooleanCheckbox getCheckbox() {
             return _checkbox;
         }
-        
+
         public void setCheckbox(HtmlSelectBooleanCheckbox checkbox) {
             _checkbox = checkbox;
         }
 
         // *** Private Methods ***
-        
+
         private void setSelected(boolean selected) {
-        	_checkbox.setSelected(selected);
+            _checkbox.setSelected(selected);
         }
-        
+
         private boolean getSelected() {
-        	return _checkbox.isSelected();
-        }        
-        
+            return _checkbox.isSelected();
+        }
+
     } // End of Concept
 
     //**
@@ -334,13 +334,13 @@ public class CartActionBean {
     private boolean hasSelected() {
         if (_cart != null && _cart.size() > 0) {
             for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
-            	ValueSetObject item = (ValueSetObject)i.next();
+                ValueSetObject item = (ValueSetObject)i.next();
                 if (item.getSelected()) return true;
             }
         }
         return false;
-    }    
-    
+    }
+
     /**
      * Dump contents of cart object
      * (non-Javadoc)
@@ -353,7 +353,7 @@ public class CartActionBean {
         if (_cart != null && _cart.size() > 0) {
             sb.append("\tCart:\n");
             for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
-            	ValueSetObject item = (ValueSetObject)i.next();
+                ValueSetObject item = (ValueSetObject)i.next();
                 sb.append("\t         Code = " + item.code + "\n");
                 sb.append("\tCoding scheme = " + item.codingScheme + "\n");
                 sb.append("\t      Version = " + item.version + "\n");
@@ -361,7 +361,7 @@ public class CartActionBean {
                 sb.append("\t         Name = " + item.name + "\n");
                 sb.append("\t     Selected = " + item.getSelected() + "\n");
                 sb.append("\t          URL = " + item.url + "\n");
-                sb.append("\tSemantic Type = " + item.semanticType + "\n");                
+                sb.append("\tSemantic Type = " + item.semanticType + "\n");
             }
         } else {
             sb.append("Cart is empty.");
@@ -380,4 +380,4 @@ public class CartActionBean {
         return tmpStr;
     }
 
-} // End of CartActionBean
+} // End of ValueSetBean

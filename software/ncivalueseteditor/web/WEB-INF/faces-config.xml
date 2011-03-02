@@ -30,8 +30,8 @@
     </managed-bean>
 
     <managed-bean>
-        <managed-bean-name>CartActionBean</managed-bean-name>
-        <managed-bean-class>gov.nih.nci.evs.valueseteditor.beans.CartActionBean</managed-bean-class>
+        <managed-bean-name>ValueSetBean</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.evs.valueseteditor.beans.ValueSetBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 

@@ -8,44 +8,44 @@
   <title>Value Sets</title>
 </head>
 <body>
-  <ui:composition template="/pages/templates/baseTemplate.xhtml">  
+  <ui:composition template="/pages/templates/baseTemplate.xhtml">
      <font size="4"><b>Value Sets</b></font>
      <h:form id="valueSetFormId">
-	     <table class="dataTable" summary="" border="0" width="100%">  
-	  		<tr>
-	  		 <td></td>
-	    	 <td align="right" valign="bottom"> 
-	      		<h:outputLink value="${facesContext.externalContext.requestContextPath}/pages/editValueSet.xhtml" styleClass="mainMenuLink">
-					&#xA0;<h:graphicImage value="../images/add.gif" alt="Add to cart" title="Add a value set definition" style="border: none" />
-				</h:outputLink>     	          	  	
-	            <h:commandLink action="#{CartActionBean.editValueSet}" styleClass="mainMenuLink">
-	            	&#xA0;<h:graphicImage value="../images/edit.gif" alt="Edit value set" title="Edit value set definition" style="border: none" />
-	            </h:commandLink> 
-	            <h:commandLink action="#{CartActionBean.removeFromCart}" styleClass="mainMenuLink">
-	            	&#xA0;<h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove value set definition" style="border: none" />
-	            </h:commandLink>
-	            <h:commandLink action="#{CartActionBean.removeFromCart}" styleClass="mainMenuLink">
-	            	&#xA0;<h:graphicImage value="../images/preview.gif" alt="Preview" title="Preview value set definition" style="border: none" />
-	            </h:commandLink>            
-			 </td>	           
-	  		</tr>	
-	  	 </table>		  	 
-	     <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">      
-	         <tr height="15px">
-	           <th class="dataTableHeader" scope="col" align="left" width="20px">&#xA0;</th>
-	           <th class="dataTableHeader" scope="col" align="left">URI</th>
-	           <th class="dataTableHeader" scope="col" align="left">Description</th>
-	         </tr>
-	         <c:choose>
-     			<c:when test="${sessionScope.CartActionBean.count>0}">
-	     		</c:when>
-				<c:otherwise>
-					<tr valign="top">
-						<td colspan="3">No value sets in cart.</td>
-					</tr>
-				</c:otherwise>	     
-			 </c:choose>	         
-	     </table>
+       <table class="dataTable" summary="" border="0" width="100%">
+        <tr>
+         <td></td>
+         <td align="right" valign="bottom">
+            <h:outputLink value="${facesContext.externalContext.requestContextPath}/pages/editValueSet.xhtml" styleClass="mainMenuLink">
+          &#xA0;<h:graphicImage value="../images/add.gif" alt="Add to cart" title="Add a value set definition" style="border: none" />
+        </h:outputLink>
+              <h:commandLink action="#{ValueSetBean.editValueSet}" styleClass="mainMenuLink">
+                &#xA0;<h:graphicImage value="../images/edit.gif" alt="Edit value set" title="Edit value set definition" style="border: none" />
+              </h:commandLink>
+              <h:commandLink action="#{ValueSetBean.removeFromCart}" styleClass="mainMenuLink">
+                &#xA0;<h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove value set definition" style="border: none" />
+              </h:commandLink>
+              <h:commandLink action="#{ValueSetBean.removeFromCart}" styleClass="mainMenuLink">
+                &#xA0;<h:graphicImage value="../images/preview.gif" alt="Preview" title="Preview value set definition" style="border: none" />
+              </h:commandLink>
+       </td>
+        </tr>
+       </table>
+       <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+           <tr height="15px">
+             <th class="dataTableHeader" scope="col" align="left" width="20px">&#xA0;</th>
+             <th class="dataTableHeader" scope="col" align="left">URI</th>
+             <th class="dataTableHeader" scope="col" align="left">Description</th>
+           </tr>
+           <c:choose>
+          <c:when test="${sessionScope.ValueSetBean.count>0}">
+          </c:when>
+        <c:otherwise>
+          <tr valign="top">
+            <td colspan="3">No value sets in cart.</td>
+          </tr>
+        </c:otherwise>
+       </c:choose>
+       </table>
      </h:form>
   </ui:composition>
   <ui:debug />
