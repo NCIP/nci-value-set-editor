@@ -40,4 +40,18 @@
        <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <!-- Internal server error -->
+
+    <error-page>
+       <error-code>500</error-code>
+       <location>/pages/errorPage.xhtml</location>
+    </error-page>
+
+    <!-- All exceptions -->
+
+    <error-page>
+       <exception-type>java.lang.Throwable</exception-type>
+       <location>/pages/errorPage.xhtml</location>
+    </error-page>
+
 </web-app>

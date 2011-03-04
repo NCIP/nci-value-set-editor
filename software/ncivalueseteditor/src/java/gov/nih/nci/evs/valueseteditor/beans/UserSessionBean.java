@@ -1,5 +1,7 @@
 package gov.nih.nci.evs.valueseteditor.beans;
 
+import javax.faces.context.FacesContext;
+
 import gov.nih.nci.evs.valueseteditor.properties.ApplicationProperties;
 
 /**
@@ -50,7 +52,9 @@ import gov.nih.nci.evs.valueseteditor.properties.ApplicationProperties;
  */
 public class UserSessionBean {
 
-    public String getBuilddate() throws Exception {
+    private Throwable _exception = null;
+    
+	public String getBuilddate() throws Exception {
         return ApplicationProperties.getBuilddate();
     }
 
@@ -69,5 +73,33 @@ public class UserSessionBean {
     public boolean getDebug() throws Exception {
         return ApplicationProperties.getDebug();
     }
+    
+	private static final String SERVLET_EXCEPTION_KEY = "javax.servlet.error.exception";
 
+	public Throwable getException() {
+		initializeException();
+		if (_exception == null) return new Throwable("Unknown error."); 
+		return _exception;
+	}
+
+    // -----------------------------------------------------
+    // Internal utility methods
+    // -----------------------------------------------------	
+	
+	/**
+	 * Find the exception method
+	 */
+	private void initializeException() {
+		FacesContext ctx = FacesContext.getCurrentInstance();
+		if (ctx.getExternalContext().getRequestMap()
+				.containsKey(SERVLET_EXCEPTION_KEY)) {
+			this._exception = (Throwable) ctx.getExternalContext()
+					.getRequestMap().remove(SERVLET_EXCEPTION_KEY);
+		} else if (ctx.getExternalContext().getSessionMap()
+				.containsKey(SERVLET_EXCEPTION_KEY)) {
+			this._exception = (Throwable) ctx.getExternalContext()
+					.getSessionMap().remove(SERVLET_EXCEPTION_KEY);
+		}
+	}   	
+	
 } // End of UserSessionBean

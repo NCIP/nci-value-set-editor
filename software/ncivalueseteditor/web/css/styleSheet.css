@@ -739,7 +739,7 @@ body
 .inputMessage {
   font-family: arial,helvetica,verdana,sans-serif;
   font-size:14px;
-  text-align:center;
+  text-align:left;
   color: blue;
   padding-top:5px;
   padding-bottom:5px;

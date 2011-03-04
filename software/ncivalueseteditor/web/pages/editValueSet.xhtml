@@ -10,7 +10,9 @@
 <body>
   <ui:composition template="/pages/templates/baseTemplate.xhtml">  
   	 <ui:define name="menuBar">
-     	<ui:include src="/pages/include/menuBar.xhtml" />
+     	<ui:include src="/pages/include/menuBar.xhtml">
+     		<ui:param name="activeTab" value="valueset" />
+     	</ui:include>
      </ui:define>	
      <font size="4"><b>#{msg.label_editvalueset}</b></font>
      <h:form id="valueSetFormId">

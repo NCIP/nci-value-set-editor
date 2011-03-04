@@ -1,26 +1,15 @@
 package gov.nih.nci.evs.valueseteditor.utilities;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
-import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
-import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
 import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
-import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 import org.LexGrid.codingSchemes.CodingScheme;
-import org.LexGrid.concepts.Entity;
 
 import org.apache.log4j.Logger;
 
@@ -76,7 +65,6 @@ public class ValueSetSearchUtil {
     // Local variables
     private static Logger _logger = Logger.getLogger(ValueSetSearchUtil.class);
     private static LexBIGService lbSvc = null;
-    private static LexBIGServiceConvenienceMethods lbscm = null;
 
     /**
      * Constructor
@@ -105,11 +93,11 @@ public class ValueSetSearchUtil {
      * @return
      * @throws LBInvocationException 
      */
-    public Map<String,CodingSchemeSummary> getOntologyList() throws LBInvocationException {
+    public Map<String,CodingSchemeSummary> getOntologyList() throws Exception {
     	Map<String,CodingSchemeSummary> hmap = new HashMap<String,CodingSchemeSummary>();    	
     	CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
         CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
-        
+  
         for (int i = 0; i < csrs.length; i++) {
         	CodingSchemeRendering csr = csrs[i];
         	CodingSchemeSummary css = csr.getCodingSchemeSummary();
