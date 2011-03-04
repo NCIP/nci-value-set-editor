@@ -11,6 +11,10 @@
   <ui:composition template="/pages/templates/popupTemplate.xhtml">
   <script type="text/javascript">
     window.resizeTo(600,327);
+    function closePopup() {
+    	window.opener.location.href = window.opener.location.href;
+    	window.close();
+    }
   </script>
   <div id="resizeDiv">
   <font size="4"><b>Add Metadata</b></font><br/>
@@ -62,7 +66,7 @@
           alt="Save">
         </h:commandButton>
         &#xA0;
-        <h:outputLink value="javascript:window.close();">
+        <h:outputLink value="javascript:closePopup();">
           <h:graphicImage value="../images/close.gif" alt="Close window" title="Close window" style="border: none" />
         </h:outputLink>
     </h:form>

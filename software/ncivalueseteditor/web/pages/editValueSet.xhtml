@@ -1,16 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:ui="http://java.sun.com/jsf/facelets">
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:f="http://java.sun.com/jsf/core">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Value Sets</title>
 </head>
 <body>
   <ui:composition template="/pages/templates/baseTemplate.xhtml">  
+  	 <ui:define name="menuBar">
+     	<ui:include src="/pages/include/menuBar.xhtml" />
+     </ui:define>	
      <font size="4"><b>#{msg.label_editvalueset}</b></font>
      <h:form id="valueSetFormId">
-     <table class="dataTable" summary="" border="0" width="100%">  
+     <table class="dataTable" border="0" width="100%">  
   		<tr>
   		 <td></td>
     	 <td align="right" valign="bottom">
@@ -22,8 +26,26 @@
 			</h:outputLink>     	         	  	
 		  </td>    
   		</tr>	
-  	  </table>  
+  	  </table> 
   	  </h:form>
+     <table border="0">  
+  		<tr>
+  			<td><h:outputLabel for="uri" value="#{msg.label_uri}:" /></td>
+  			<td><b><h:outputText id="uri" value="#{ValueSetBean.uri}" /></b></td>
+  		</tr>
+   		<tr>
+  			<td><h:outputLabel for="domain" value="#{msg.label_domain}:" /></td>
+  			<td><b><h:outputText id="domain" value="#{ValueSetBean.selectedConceptDomain}" /></b></td>
+  		</tr>
+   		<tr>
+  			<td><h:outputLabel for="dcs" value="#{msg.label_default_cs}:" /></td>
+  			<td><b><h:outputText id="dcs" value="#{ValueSetBean.uri}" /></b></td>
+  		</tr> 	
+  		<tr>
+  			<td><h:outputLabel for="sources" value="#{msg.label_sources}:" /></td>
+  			<td><b><h:outputText id="sources" value="#{ValueSetBean.sources}" /></b></td>
+  		</tr>  			 		
+     </table>		   	  
   </ui:composition>
   <ui:debug />
 </body>

@@ -8,6 +8,11 @@
 </head>
 <body>
   <ui:composition template="/pages/templates/baseTemplate.xhtml">
+  	<ui:define name="menuBar">
+    	<ui:include src="/pages/include/menuBar.xhtml">
+    		<ui:param name="activeTab" value="welcome" />    		
+    	</ui:include>
+    </ui:define>  
 	<table summary="" cellpadding="0" cellspacing="0" border="0" width="715">
 	  <tr>
 	    <td class="welcomeTitle" height="20px">WELCOME TO NCI EVS Value Set Editor</td>
