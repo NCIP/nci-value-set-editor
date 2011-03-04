@@ -70,12 +70,11 @@ public class ValueSetBean {
     
     // Set metadata variables
     private String _uri = null;
-    private String _scheme = null;
     private String _sources = null;
     private String _selectedConceptDomain = null;
     private Map<String,String> _selectedConceptDomainList = null;    
     private String _selectedOntology = null;
-    private Map<String,CodingSchemeSummary> _selectedOntologyList = null; 
+    private Map<String,String> _selectedOntologyList = null; 
     
     // Error messages
     static public final String NO_VALUE_SETS = "No value sets in cart.";
@@ -129,12 +128,14 @@ public class ValueSetBean {
 		return _selectedConceptDomain;
 	}
 
+	public String getSelectedConceptDomainText() {		
+		return _selectedConceptDomainList.get(_selectedConceptDomain);
+	}	
+	
 	public void setSelectedConceptDomain(String selectedConceptDomain) {		
 		this._selectedConceptDomain = selectedConceptDomain;
 	}	
-	
-	// =======================
-	
+
 	public Map<String,String> getConceptDomainList() {
 		return _selectedConceptDomainList;
 	}	
@@ -145,13 +146,15 @@ public class ValueSetBean {
 		return _selectedOntology;
 	}
 
+	public String getSelectedOntologyText() {
+		return _selectedOntologyList.get(_selectedOntology);
+	}	
+	
 	public void setSelectedOntology(String selectedOntology) {		
 		this._selectedOntology = selectedOntology;
 	}	
-
-	// =======================
 	
-	public Map<String,CodingSchemeSummary> getOntologyList() {
+	public Map<String,String> getOntologyList() {
 		return _selectedOntologyList;
 	}		
 	

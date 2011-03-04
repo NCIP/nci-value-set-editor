@@ -13,38 +13,38 @@
      	<ui:include src="/pages/include/menuBar.xhtml">
      		<ui:param name="activeTab" value="valueset" />
      	</ui:include>
-     </ui:define>	
-     <font size="4"><b>#{msg.label_editvalueset}</b></font>
-     <h:form id="valueSetFormId">
-     <table class="dataTable" border="0" width="100%">  
+     </ui:define>     
+     <h:form id="valueSetFormId">     
+     <table border="0" width="100%">  
   		<tr>
-  		 <td></td>
+  		 <td align="left"><font size="4"><b>#{msg.label_editvalueset}</b></font></td>
     	 <td align="right" valign="bottom">
       		<h:outputLink value="javascript:newPopup('${facesContext.externalContext.requestContextPath}/pages/addMetedataPopup.xhtml');" styleClass="mainMenuLink">
-				&#xA0;<h:graphicImage value="../images/addMetadata.gif" alt="Add metadata" title="Add metadata to value set definition" style="border: none" />&#xA0;
-			</h:outputLink>     	   
-      		<h:outputLink value="${facesContext.externalContext.requestContextPath}/pages/editValueSet.xhtml" styleClass="mainMenuLink">
+				&#xA0;<h:graphicImage value="../images/editMetadata.gif" alt="Edit metadata" title="Edit metadata of the value set definition" style="border: none" />&#xA0;
+			</h:outputLink>     
+      		<h:outputLink value="javascript:newPopup('${facesContext.externalContext.requestContextPath}/pages/addComponentPopup.xhtml');" styleClass="mainMenuLink">
 				&#xA0;<h:graphicImage value="../images/addComponent.gif" alt="Add component" title="Add component to value set definition" style="border: none" />&#xA0;
 			</h:outputLink>     	         	  	
 		  </td>    
   		</tr>	
-  	  </table> 
-  	  </h:form>
+  	 </table> 
+  	 </h:form>
+  	 <hr />
      <table border="0">  
   		<tr>
-  			<td><h:outputLabel for="uri" value="#{msg.label_uri}:" /></td>
+  			<td align="right"><h:outputLabel for="uri" value="#{msg.label_uri}:" /></td>
   			<td><b><h:outputText id="uri" value="#{ValueSetBean.uri}" /></b></td>
   		</tr>
    		<tr>
-  			<td><h:outputLabel for="domain" value="#{msg.label_domain}:" /></td>
-  			<td><b><h:outputText id="domain" value="#{ValueSetBean.selectedConceptDomain}" /></b></td>
+  			<td align="right"><h:outputLabel for="domain" value="#{msg.label_domain}:" /></td>
+  			<td><b><h:outputText id="domain" value="#{ValueSetBean.selectedConceptDomainText}" /></b></td>
   		</tr>
    		<tr>
-  			<td><h:outputLabel for="dcs" value="#{msg.label_default_cs}:" /></td>
-  			<td><b><h:outputText id="dcs" value="#{ValueSetBean.uri}" /></b></td>
+  			<td align="right"><h:outputLabel for="dcs" value="#{msg.label_default_cs}:" /></td>
+  			<td><b><h:outputText id="dcs" value="#{ValueSetBean.selectedOntologyText}" /></b></td>
   		</tr> 	
   		<tr>
-  			<td><h:outputLabel for="sources" value="#{msg.label_sources}:" /></td>
+  			<td align="right"><h:outputLabel for="sources" value="#{msg.label_sources}:" /></td>
   			<td><b><h:outputText id="sources" value="#{ValueSetBean.sources}" /></b></td>
   		</tr>  			 		
      </table>		   	  

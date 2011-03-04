@@ -1,33 +1,33 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>NCI ValueSet Editor</title>
-	<link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/css/styleSheet.css" />
-	<link rel="shortcut icon" href="${facesContext.externalContext.requestContextPath}/favicon.ico" type="image/x-icon" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>NCI ValueSet Editor</title>
+  <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/css/styleSheet.css" />
+    <link rel="shortcut icon" href="${facesContext.externalContext.requestContextPath}/favicon.ico" type="image/x-icon" />
 </head>
 <body>
-	<!--
-	   Build info: #{UserSession.builddate}
-	 Version info: #{UserSession.appversion}
-	          Tag: #{UserSession.buildtag}
-	   LexEVS URL: #{UserSession.evsserviceurl}
-	        Debug: #{UserSession.debug}
-	  -->  
-	<div id="popupContentArea">
-		<div id="closeWindow">
-		    <h:outputLink value="javascript:window.close();">		    
-		    	<h:graphicImage value="../images/close_icon.gif" alt="Close window" title="Close window" style="border: none" />&#xA0;CLOSE WINDOW
-		    </h:outputLink>			    
-	    </div>   	
-	    <hr/>
-    	<ui:insert />
-    	<br/>
-   	</div>	
+<!--
+   Build info: #{UserSessionBean.builddate}
+ Version info: #{UserSessionBean.appversion}
+          Tag: #{UserSessionBean.buildtag}
+   LexEVS URL: #{UserSessionBean.evsserviceurl}
+        Debug: #{UserSessionBean.debug}
+  -->
+  <div id="popupContentArea">
+    <div id="closeWindow">
+        <h:outputLink value="javascript:window.close();">
+          <h:graphicImage value="../images/close_icon.gif" alt="Close window" title="Close window" style="border: none" />&#xA0;CLOSE WINDOW
+        </h:outputLink>
+      </div>
+      <hr/>
+      <ui:insert />
+      <br/>
+    </div>
 </body>
 </html>

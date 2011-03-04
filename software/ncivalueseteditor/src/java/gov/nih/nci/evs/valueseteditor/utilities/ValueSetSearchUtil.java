@@ -84,7 +84,11 @@ public class ValueSetSearchUtil {
     public Map<String,String> getConceptDomainNames() {
     	/* TODO: Add lexevs data retrieval code here. */
     	Map<String,String> hmap = new HashMap<String,String>();
-    	hmap.put("AcknowledgementCondition","1");
+    	hmap.put("1","AcknowledgementCondition");
+    	hmap.put("2","AcknowledgementDetailCode");
+    	hmap.put("3","AcknowledgementDetailType");
+    	hmap.put("4","AcknowledgementMessageCode");
+    	hmap.put("5","AcknowledgementType");
         return hmap;
     }
     
@@ -93,8 +97,8 @@ public class ValueSetSearchUtil {
      * @return
      * @throws LBInvocationException 
      */
-    public Map<String,CodingSchemeSummary> getOntologyList() throws Exception {
-    	Map<String,CodingSchemeSummary> hmap = new HashMap<String,CodingSchemeSummary>();    	
+    public Map<String,String> getOntologyList() throws Exception {
+    	Map<String,String> hmap = new HashMap<String,String>();    	
     	CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
         CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
   
@@ -104,7 +108,7 @@ public class ValueSetSearchUtil {
         	String representsVersion = css.getRepresentsVersion();
         	String name = css.getLocalName();
         	String key = name + " (" + representsVersion + ")";
-        	hmap.put(key,css);	
+        	hmap.put(key,name);	
         }
     	return hmap;
     }    
