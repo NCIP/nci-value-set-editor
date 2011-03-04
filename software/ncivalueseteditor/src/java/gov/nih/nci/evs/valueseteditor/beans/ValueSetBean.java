@@ -1,12 +1,16 @@
 package gov.nih.nci.evs.valueseteditor.beans;
 
+import gov.nih.nci.evs.valueseteditor.utilities.ValueSetSearchUtil;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
 import org.apache.log4j.Logger;
 
 /**
@@ -58,47 +62,51 @@ import org.apache.log4j.Logger;
  */
 public class ValueSetBean {
 
-    // Local class variables
+	// Local class variables
     private static Logger _logger = Logger.getLogger(ValueSetBean.class);
     private ResourceBundle resource = ResourceBundle.getBundle("gov.nih.nci.evs.valueseteditor.resources.Resources");
     private HashMap<String, ValueSetObject> _cart = null;
     private String _message = null;
+    
+    // Set metadata variables
     private String _uri = null;
-    private String _domain = null;
     private String _scheme = null;
     private String _sources = null;
-
+    private String _selectedConceptDomain = null;
+    private Map<String,String> _selectedConceptDomainList = null;    
+    private String _selectedOntology = null;
+    private Map<String,CodingSchemeSummary> _selectedOntologyList = null; 
+    
     // Error messages
-
     static public final String NO_VALUE_SETS = "No value sets in cart.";
     static public final String NOTHING_SELECTED = "No value sets selected.";
 
+    /**
+     * Class constructor
+     * @throws Exception
+     */
+    public ValueSetBean() throws Exception {
+    	ValueSetSearchUtil util = new ValueSetSearchUtil();
+    	if (_selectedConceptDomainList == null)
+    		_selectedConceptDomainList = util.getConceptDomainNames();
+    	if (_selectedOntologyList == null)
+    		_selectedOntologyList = util.getOntologyList();
+	}    
+    
     // ========================================================
     // ====               Getters & Setters                 ===
     // ========================================================
 
-    /**
-     * Return number of items in cart
-     * @return
-     */
     public int getCount() {
         if (_cart == null) return 0;
         return _cart.size();
     }
 
-    /**
-     * Return the value set collection
-     * @return
-     */
     public Collection<ValueSetObject> getValuesets() {
         if (_cart == null) _init();
         return _cart.values();
     }
 
-    /**
-     * Get message
-     * @return
-     */
     public String getMessage() {
         String text = _message;
         _message = null;        // Clear last message
@@ -107,54 +115,48 @@ public class ValueSetBean {
 
     // ****************  Metadata Entries  ******************
 
-    /**
-     * Get metadata URI
-     * @return
-     */
-    public String getUri() {
+     public String getUri() {
         return _uri;
     }
 
-    /**
-     * Set metadata URI
-     * @param uri
-     */
     public void setUri(String uri) {
         _uri = uri;
     }
+    
+    // =======================
+   
+	public String getSelectedConceptDomain() {		
+		return _selectedConceptDomain;
+	}
 
-    /**
-     * Get metadata concept domain
-     * @return
-     */
-    public String getDomain() {
-        return _domain;
-    }
+	public void setSelectedConceptDomain(String selectedConceptDomain) {		
+		this._selectedConceptDomain = selectedConceptDomain;
+	}	
+	
+	// =======================
+	
+	public Map<String,String> getConceptDomainList() {
+		return _selectedConceptDomainList;
+	}	
+	
+	// =======================
+	
+	public String getSelectedOntology() {		
+		return _selectedOntology;
+	}
 
-    /**
-     * Set metadata concept domain
-     * @param domain
-     */
-    public void setDomain(String domain) {
-        _domain = domain;
-    }
+	public void setSelectedOntology(String selectedOntology) {		
+		this._selectedOntology = selectedOntology;
+	}	
 
-    /**
-     * Get metadata coding scheme
-     * @return
-     */
-    public String getScheme() {
-        return _scheme;
-    }
-
-    /**
-     * Set metadata coding scheme
-     * @param scheme
-     */
-    public void setScheme(String scheme) {
-        _scheme = scheme;
-    }
-
+	// =======================
+	
+	public Map<String,CodingSchemeSummary> getOntologyList() {
+		return _selectedOntologyList;
+	}		
+	
+    // =======================
+    
     /**
      * Get metadata sources
      * @return

@@ -1,12 +1,21 @@
 package gov.nih.nci.evs.valueseteditor.utilities;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
+import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
 import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
 import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
 import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
+import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
 import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
@@ -84,53 +93,33 @@ public class ValueSetSearchUtil {
      * Get list all of all concept domains loaded
      * @return
      */
-    public HashMap<String,String> getConceptDomainNames() {
-        String scheme = "conceptDomainCodingScheme";
-        //scheme = "NCI Thesaurus";
-/*
-          CodingScheme cs = getCodingScheme(scheme, null);
-            String uri = cs.getCodingSchemeURI();
-            String version = cs.getRepresentsVersion();
-
-            System.out.println("Hey!!!!!!!!!!!! " +  uri);
-            System.out.println("Hey!!!!!!!!!!!! " +  version);
-    */
-
-        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
-        //if (version != null)
-          //  csvt.setVersion(version);
-
-        HashMap<String,String> hmap = new HashMap<String,String>();
-        try {
-            LexBIGService lbSvc = null;
-            lbSvc = new RemoteServerUtil().createLexBIGService();
-
-            LocalNameList entityTypes = new LocalNameList();
-            entityTypes.addEntry("conceptDomain");
-
-            CodedNodeSet cns = lbSvc.getNodeSet(scheme, csvt, entityTypes);
-
-            SortOptionList sortOptions = null;
-            LocalNameList filterOptions = null;
-            LocalNameList propertyNames = null;
-            CodedNodeSet.PropertyType[] propertyTypes = null;
-            boolean resolveObjects = true;
-            int maxToReturn = 1000;
-            ResolvedConceptReferenceList rcrl = cns.resolveToList(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects, maxToReturn);
-
-            System.out.println("Number of concept domains: " + rcrl.getResolvedConceptReferenceCount());
-            for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
-                ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
-                Entity entity = rcr.getReferencedEntry();
-                //conceptDomainName_vec.add(entity.getEntityDescription().getContent());
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
+    public Map<String,String> getConceptDomainNames() {
+    	/* TODO: Add lexevs data retrieval code here. */
+    	Map<String,String> hmap = new HashMap<String,String>();
+    	hmap.put("AcknowledgementCondition","1");
         return hmap;
     }
-
+    
+    /**
+     * Retrieve list of ontologies
+     * @return
+     * @throws LBInvocationException 
+     */
+    public Map<String,CodingSchemeSummary> getOntologyList() throws LBInvocationException {
+    	Map<String,CodingSchemeSummary> hmap = new HashMap<String,CodingSchemeSummary>();    	
+    	CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
+        CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+        
+        for (int i = 0; i < csrs.length; i++) {
+        	CodingSchemeRendering csr = csrs[i];
+        	CodingSchemeSummary css = csr.getCodingSchemeSummary();
+        	String representsVersion = css.getRepresentsVersion();
+        	String name = css.getLocalName();
+        	String key = name + " (" + representsVersion + ")";
+        	hmap.put(key,css);	
+        }
+    	return hmap;
+    }    
 
     // -----------------------------------------------------
     // Internal utility methods

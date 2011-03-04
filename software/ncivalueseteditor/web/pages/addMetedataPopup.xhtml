@@ -1,7 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:ui="http://java.sun.com/jsf/facelets">
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:f="http://java.sun.com/jsf/core">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Add Metadata</title>
@@ -9,7 +10,7 @@
 <body>
   <ui:composition template="/pages/templates/popupTemplate.xhtml">
   <script type="text/javascript">
-    window.resizeTo(500,327);
+    window.resizeTo(600,327);
   </script>
   <div id="resizeDiv">
   <font size="4"><b>Add Metadata</b></font><br/>
@@ -17,39 +18,43 @@
     <table border="0">
       <tr>
         <td align="right">
-          <h:outputLabel for="uri" value="#{msg.label_uri}:" />
+        	<h:outputLabel for="uri" value="#{msg.label_uri}:" />
         </td>
         <td align="left">
-        <h:inputText id="uri" value="#{ValueSetBean.uri}" width="300"/>
-      </td>
+        	<h:inputText id="uri" value="#{ValueSetBean.uri}" width="300"/>
+        </td>
       </tr>
       <tr>
         <td align="right">
-          <h:outputLabel for="domain" value="#{msg.label_domain}:" />
+			<h:outputLabel for="domain" value="#{msg.label_domain}:" />
         </td>
         <td align="left">
-        <h:inputText id="domain" value="#{ValueSetBean.domain}" width="300"/>
-      </td>
+			<h:selectOneMenu id="domain" value="#{ValueSetBean.selectedConceptDomain}">
+				<f:selectItems value="#{ValueSetBean.conceptDomainList}" />				
+			</h:selectOneMenu>        
+      	</td>
       </tr>
       <tr>
         <td align="right">
-          <h:outputLabel for="dcs" value="#{msg.label_default_cs}:" />
+        	<h:outputLabel for="dcs" value="#{msg.label_default_cs}:" />
         </td>
         <td align="left">
-        <h:inputText id="dcs" value="#{ValueSetBean.scheme}" width="300"/>
-      </td>
+			<h:selectOneMenu id="dcs" value="#{ValueSetBean.selectedOntology}">
+				<f:selectItems value="#{ValueSetBean.ontologyList}" />				
+			</h:selectOneMenu>         	
+      	</td>
       </tr>
       <tr>
         <td align="right">
-          <h:outputLabel for="sources" value="#{msg.label_sources}:" />
+          	<h:outputLabel for="sources" value="#{msg.label_sources}:" />
         </td>
         <td align="left">
-        <h:inputText id="sources" value="#{ValueSetBean.sources}" width="300"/>
-      </td>
+        	<h:inputText id="sources" value="#{ValueSetBean.sources}" width="300"/>
+      	</td>
       </tr>
-      </table>
-      <hr />
-      <div class="inputMessage"><h:outputText value="#{ValueSetBean.message}&#xA0;" /></div>
+    </table>
+    <hr />
+    <div class="inputMessage"><h:outputText value="#{ValueSetBean.message}&#xA0;" /></div>
         <h:commandButton value="Save" action="#{ValueSetBean.addMetadataAction}"
           accesskey="13"
           onclick="javascript:cursor_wait();"
@@ -57,9 +62,9 @@
           alt="Save">
         </h:commandButton>
         &#xA0;
-      <h:outputLink value="javascript:window.close();">
-        <h:graphicImage value="../images/close.gif" alt="Close window" title="Close window" style="border: none" />
-      </h:outputLink>
+        <h:outputLink value="javascript:window.close();">
+          <h:graphicImage value="../images/close.gif" alt="Close window" title="Close window" style="border: none" />
+        </h:outputLink>
     </h:form>
     </div>
   </ui:composition>
