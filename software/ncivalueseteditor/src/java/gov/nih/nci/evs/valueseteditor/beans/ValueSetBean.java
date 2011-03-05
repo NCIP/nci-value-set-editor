@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.valueseteditor.beans;
 
+import gov.nih.nci.evs.valueseteditor.utilities.FacesUtil;
 import gov.nih.nci.evs.valueseteditor.utilities.ValueSetSearchUtil;
 
 import java.util.Collection;
@@ -10,7 +11,6 @@ import java.util.ResourceBundle;
 
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
 import org.apache.log4j.Logger;
 
 /**
@@ -68,17 +68,20 @@ public class ValueSetBean {
     private HashMap<String, ValueSetObject> _cart = null;
     private String _message = null;
     
-    // Set metadata variables
-    private String _uri = null;
-    private String _sources = null;
+    // Internal maps
     private String _selectedConceptDomain = null;
     private Map<String,String> _selectedConceptDomainList = null;    
     private String _selectedOntology = null;
-    private Map<String,String> _selectedOntologyList = null; 
+    private Map<String,String> _selectedOntologyList = null;   
     
+    // Set metadata variables (popup window)
+    private String _uri = null;
+    private String _sources = null;
+     
     // Error messages
     static public final String NO_VALUE_SETS = "No value sets in cart.";
     static public final String NOTHING_SELECTED = "No value sets selected.";
+    static public final String DUPLICATE_VS = "Duplicate URI.";
 
     /**
      * Class constructor
@@ -90,6 +93,7 @@ public class ValueSetBean {
     		_selectedConceptDomainList = util.getConceptDomainNames();
     	if (_selectedOntologyList == null)
     		_selectedOntologyList = util.getOntologyList();
+    	if (_cart == null) _init();
 	}    
     
     // ========================================================
@@ -111,7 +115,7 @@ public class ValueSetBean {
         _message = null;        // Clear last message
         return text;
     }
-
+   
     // ****************  Metadata Entries  ******************
 
      public String getUri() {
@@ -178,55 +182,80 @@ public class ValueSetBean {
 
     // ========================================================
     // ====                 Action Methods                  ===
-    // ========================================================
+    // ========================================================   
+    
+    // *** Popup Action Methods
+    
+    public String saveMetadataAction() {
 
-    /**
-     * Add value set definition to cart
-     * @return
-     */
-    public String addToCart() {
-        return null;
-    }
-
-    /**
-     * Edit value set
-     * @return
-     */
-    public String editValueSet() {
-        return null;
-    }
-
-    /**
-     * Remove concept(s) from the Cart
-     * @return
-     */
-    public String removeFromCart() {
-
-        for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
-            ValueSetObject item = (ValueSetObject)i.next();
-            if (item.getCheckbox().isSelected()) {
-                if (_cart.containsKey(item.code))
-                    i.remove();
-            }
-        }
-
-        return null;
-    }
-
-    public String addMetadataAction() {
-
-        _logger.debug("Adding metadata to cart.");
+        _logger.debug("Saving metadata to cart.");
+        
         // Validate input
         if (_uri == null || _uri.length() < 1) {
             _message = resource.getString("error_missing_uri");
             return null;
         }
+  
+    	_logger.debug("Adding value set to cart.");
+    	
+    	ValueSetObject item = new ValueSetObject();
+    	item.setUri(_uri);
+    	item.setConceptDomain(_selectedConceptDomain);
+    	item.setCodingScheme(_selectedOntology);
+    	item.setSources(_sources);
 
+        _cart.put(_uri,item);            
         _message = resource.getString("action_saved");
-
+        
         return null;
     }
 
+    // *** Value Set List Buttons
+    
+    public String newValueSetAction() {
+    	_logger.debug("Creating new value set.");
+    	
+    	clear();
+    	return "newvalueset";
+    } 
+    
+    public String removeFromCartAction() {
+
+        for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
+            ValueSetObject item = (ValueSetObject)i.next();
+            if (item.getCheckbox().isSelected()) {
+                if (_cart.containsKey(item._uri))
+                    i.remove();
+            }
+        }
+
+        return "removevalueset";
+    }    
+ 
+    // Value Item Action Methods
+    
+    public String editValueSetAction() {
+    	
+    	String uriParam = FacesUtil.getRequestParameter("uriParam");
+    	_logger.debug("Editng value set: " + uriParam);
+    	
+    	loadUI(uriParam);
+    	
+    	return "editvalueset";
+    }     
+  
+    public String previewValueSetAction() {
+    	_logger.debug("Previewing value set.");
+    	    	
+    	return "previewvalueset";
+    }    
+    
+    public String exportValueSetAction() {
+    	_logger.debug("Exporting value.");
+    	
+    	return "exportvalueset";
+    }    
+    
     // ******************** Internal Class Methods ************************
 
     /**
@@ -237,75 +266,70 @@ public class ValueSetBean {
     }
 
     /**
+     * Clear UI data
+     */
+    private void clear() {
+    	_uri = null;
+        _sources = null;
+        _selectedConceptDomain = null;
+        _selectedOntology = null;
+    }    
+    
+    /**
+     * Load UI with Value set data
+     * @param uriParam
+     */
+    private void loadUI(String uriParam) {
+    	ValueSetObject vso = _cart.get(uriParam);
+    	_uri = vso.getUri();
+        _sources = vso.getSources();
+        _selectedConceptDomain = vso.getConceptDomain();
+        _selectedOntology = vso.getCodingScheme();    	
+    }
+    
+    /**
      * Subclass to hold contents of the cart
      * @author garciawa2
      */
     public class ValueSetObject {
-        private String code = null;
-        private String codingScheme = null;
-        private String nameSpace = null;
-        private String name = null;
-        private String version = null;
-        private String url = null;
-        private String semanticType = null;
+        private String _uri = null;
+        private String _conceptDomain = null;
+        private String _codingScheme = null;
+        private String _sources = null;
         private HtmlSelectBooleanCheckbox _checkbox = null;
 
         // Getters & setters
 
-        public String getCode() {
-            return this.code;
+        public String getUri() {
+            return this._uri;
         }
 
-        public void setCode(String code) {
-            this.code = code;
+        public void setUri(String uri) {
+            this._uri = uri;
+        }
+
+        public String getConceptDomain() {
+            return this._conceptDomain;
+        }
+
+        public void setConceptDomain(String conceptDomain) {
+            this._conceptDomain = conceptDomain;
         }
 
         public String getCodingScheme() {
-            return this.codingScheme;
+            return this._codingScheme;
         }
 
         public void setCodingScheme(String codingScheme) {
-            this.codingScheme = codingScheme;
+            this._codingScheme = codingScheme;
         }
 
-        public String getNameSpace() {
-            return this.nameSpace;
+        public String getSources() {
+            return this._sources;
         }
 
-        public void setNameSpace(String namespace) {
-            this.nameSpace = namespace;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getVersion() {
-            return this.version;
-        }
-
-        public void setVersion(String version) {
-            this.version = version;
-        }
-
-        public String getUrl() {
-            return this.url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public String getSemanticType() {
-            return this.semanticType;
-        }
-
-        public void setSemanticType(String semanticType) {
-            this.semanticType = semanticType;
+        public void setSources(String sources) {
+            this._sources = sources;
         }
 
         public HtmlSelectBooleanCheckbox getCheckbox() {
@@ -359,30 +383,17 @@ public class ValueSetBean {
             sb.append("\tCart:\n");
             for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
                 ValueSetObject item = (ValueSetObject)i.next();
-                sb.append("\t         Code = " + item.code + "\n");
-                sb.append("\tCoding scheme = " + item.codingScheme + "\n");
-                sb.append("\t      Version = " + item.version + "\n");
-                sb.append("\t   Name space = " + item.nameSpace + "\n");
-                sb.append("\t         Name = " + item.name + "\n");
-                sb.append("\t     Selected = " + item.getSelected() + "\n");
-                sb.append("\t          URL = " + item.url + "\n");
-                sb.append("\tSemantic Type = " + item.semanticType + "\n");
+                sb.append("\t          URI  = " + item._uri + "\n");
+                sb.append("\tConcept Domain = " + item._conceptDomain + "\n");
+                sb.append("\t Coding Scheme = " + item._codingScheme + "\n");
+                sb.append("\t       Sources = " + item._sources + "\n");
+                sb.append("\t      Selected = " + item.getSelected() + "\n");
             }
         } else {
             sb.append("Cart is empty.");
         }
 
         return sb.toString();
-    }
-
-    /**
-     * Clean a string for use in file type CSV
-     * @param str
-     * @return
-     */
-    private String clean(String str) {
-        String tmpStr = str.replace('"', ' ');
-        return tmpStr;
     }
 
 } // End of ValueSetBean

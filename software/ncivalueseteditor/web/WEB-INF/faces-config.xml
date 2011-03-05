@@ -23,6 +23,35 @@
         <render-kit-factory>com.sun.faces.renderkit.RenderKitFactoryImpl</render-kit-factory>
     </factory>
 
+    <navigation-rule>
+       <from-view-id>/pages/valueSets.xhtml</from-view-id>
+       <navigation-case>
+          <from-action>#{ValueSetBean.removeFromCartAction}</from-action>
+          <from-outcome>removevalueset</from-outcome>
+          <to-view-id>/pages/valueSets.xhtml</to-view-id>
+       </navigation-case>
+       <navigation-case>
+          <from-action>#{ValueSetBean.newValueSetAction}</from-action>
+          <from-outcome>newvalueset</from-outcome>
+          <to-view-id>/pages/editValueSet.xhtml</to-view-id>
+       </navigation-case>
+       <navigation-case>
+          <from-action>#{ValueSetBean.editValueSetAction}</from-action>
+          <from-outcome>editvalueset</from-outcome>
+          <to-view-id>/pages/editValueSet.xhtml</to-view-id>
+       </navigation-case>
+       <navigation-case>
+          <from-action>#{ValueSetBean.previewValueSetAction}</from-action>
+          <from-outcome>previewvalueset</from-outcome>
+          <to-view-id>/pages/valueSets.xhtml</to-view-id>
+       </navigation-case>
+       <navigation-case>
+          <from-action>#{ValueSetBean.exportValueSetAction}</from-action>
+          <from-outcome>exportvalueset</from-outcome>
+          <to-view-id>/pages/valueSets.xhtml</to-view-id>
+       </navigation-case>
+    </navigation-rule>
+
     <managed-bean>
         <managed-bean-name>UserSessionBean</managed-bean-name>
         <managed-bean-class>gov.nih.nci.evs.valueseteditor.beans.UserSessionBean</managed-bean-class>

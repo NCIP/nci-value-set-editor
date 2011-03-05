@@ -24,13 +24,16 @@
 			</h:outputLink>     
       		<h:outputLink value="javascript:newPopup('${facesContext.externalContext.requestContextPath}/pages/addComponentPopup.xhtml');" styleClass="mainMenuLink">
 				&#xA0;<h:graphicImage value="../images/addComponent.gif" alt="Add component" title="Add component to value set definition" style="border: none" />&#xA0;
-			</h:outputLink>     	         	  	
+			</h:outputLink>
 		  </td>    
   		</tr>	
   	 </table> 
   	 </h:form>
   	 <hr />
-     <table border="0">  
+     <table border="0"> 
+  		<tr>
+  			<td align="right" span="2"><font size="3"><b><u>Metadata</u></b></font></td>      
+  		</tr>
   		<tr>
   			<td align="right"><h:outputLabel for="uri" value="#{msg.label_uri}:" /></td>
   			<td><b><h:outputText id="uri" value="#{ValueSetBean.uri}" /></b></td>

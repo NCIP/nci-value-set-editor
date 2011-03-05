@@ -13,11 +13,11 @@
   <script type="text/javascript">
     window.resizeTo(600,327);
     function closePopup() {
-      window.opener.location.href = window.opener.location.href;
-      window.close();
+    	window.opener.location.href = "${facesContext.externalContext.requestContextPath}/pages/editValueSet.xhtml";
+        window.close();
     }
   </script>
-  <font size="4"><b>Add Metadata</b></font><br/>
+  <font size="4"><b>Metadata</b></font><br/>
   <h:form id="f1">
     <table border="0">
       <tr>
@@ -30,10 +30,10 @@
       </tr>
       <tr>
         <td align="right">
-      <h:outputLabel for="domain" value="#{msg.label_domain}:" />
+      <h:outputLabel for="conceptDomain" value="#{msg.label_domain}:" />
         </td>
         <td align="left">
-          <h:selectOneMenu id="domain" value="#{ValueSetBean.selectedConceptDomain}">
+          <h:selectOneMenu id="conceptDomain" value="#{ValueSetBean.selectedConceptDomain}">
             <c:forEach var="v" items="${ValueSetBean.conceptDomainList}">
           		<f:selectItem itemLabel="#{v.value}" itemValue="#{v.key}" />
         	</c:forEach>
@@ -42,10 +42,10 @@
       </tr>
       <tr>
         <td align="right">
-          <h:outputLabel for="dcs" value="#{msg.label_default_cs}:" />
+          <h:outputLabel for="codingScheme" value="#{msg.label_default_cs}:" />
         </td>
         <td align="left">
-			<h:selectOneMenu id="dcs" value="#{ValueSetBean.selectedOntology}">
+			<h:selectOneMenu id="codingScheme" value="#{ValueSetBean.selectedOntology}">
 			  <c:forEach var="v" items="${ValueSetBean.ontologyList}">
 			     <f:selectItem itemLabel="#{v.value}" itemValue="#{v.key}" />
 			  </c:forEach>
@@ -63,8 +63,7 @@
     </table>
     <hr />
     <div class="inputMessage"><h:outputText value="#{ValueSetBean.message}&#xA0;" /></div>
-    <h:commandButton value="Save" action="#{ValueSetBean.addMetadataAction}"
-      accesskey="13"
+    <h:commandButton value="Save" action="#{ValueSetBean.saveMetadataAction}"
       onclick="javascript:cursor_wait();"
       image="#{requestContextPath}/images/save.gif"
       alt="Save">
