@@ -74,7 +74,7 @@ public class ValueSetBean {
     private String _selectedOntology = null;
     private Map<String,String> _selectedOntologyList = null;   
     
-    // Set metadata variables (popup window)
+    // Metadata variables
     private String _uri = null;
     private String _sources = null;
      
@@ -113,8 +113,6 @@ public class ValueSetBean {
     public String getMessage() {
         return _message;
     }
-    
-    // ****************  Metadata Entries  ******************
 
      public String getUri() {
         return _uri;
@@ -181,8 +179,6 @@ public class ValueSetBean {
     // ========================================================
     // ====                 Action Methods                  ===
     // ========================================================   
-    
-    // *** Popup Action Methods
     
     public String saveMetadataAction() {
 

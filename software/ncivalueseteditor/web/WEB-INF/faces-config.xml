@@ -25,7 +25,9 @@
 
     <navigation-rule>
        <from-view-id>/pages/valueSets.xhtml</from-view-id>
-       <!-- Buttons -->
+
+       <!-- Buttons Actions -->
+
        <navigation-case>
           <from-action>#{ValueSetBean.newValueSetAction}</from-action>
           <from-outcome>newvalueset</from-outcome>
@@ -36,7 +38,9 @@
           <from-outcome>removevalueset</from-outcome>
           <to-view-id>/pages/valueSets.xhtml</to-view-id>
        </navigation-case>
-       <!-- Links -->
+
+       <!-- Links Actions -->
+
        <navigation-case>
           <from-action>#{ValueSetBean.editValueSetAction}</from-action>
           <from-outcome>editvalueset</from-outcome>
@@ -74,6 +78,12 @@
         <managed-bean-name>ValueSetBean</managed-bean-name>
         <managed-bean-class>gov.nih.nci.evs.valueseteditor.beans.ValueSetBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>ComponentBean</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.evs.valueseteditor.beans.ComponentBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
 
 </faces-config>
