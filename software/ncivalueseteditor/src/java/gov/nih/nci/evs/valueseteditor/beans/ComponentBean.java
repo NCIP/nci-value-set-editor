@@ -1,7 +1,10 @@
 package gov.nih.nci.evs.valueseteditor.beans;
 
+import gov.nih.nci.evs.valueseteditor.beans.ValueSetBean.ComponentObject;
+import gov.nih.nci.evs.valueseteditor.beans.ValueSetBean.ValueSetObject;
 import gov.nih.nci.evs.valueseteditor.utilities.ValueSetSearchUtil;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -72,7 +75,7 @@ public class ComponentBean {
     private String _description = null;
     
     // Value Set bean
-    ValueSetBean vso = null;
+    ValueSetBean vsb = null;
 
     /**
      * Class constructor
@@ -83,7 +86,7 @@ public class ComponentBean {
     	if (_selectedOntologyList == null)
     		_selectedOntologyList = util.getOntologyList();
     	
-    	vso = (ValueSetBean)FacesContext.getCurrentInstance()
+    	vsb = (ValueSetBean)FacesContext.getCurrentInstance()
 			.getExternalContext().getSessionMap().get("ValueSetBean");
 	}    
     
@@ -115,10 +118,6 @@ public class ComponentBean {
 	
 	public String getSelectedOntology() {		
 		return _selectedOntology;
-	}
-
-	public String getSelectedOntologyText() {
-		return _selectedOntologyList.get(_selectedOntology);
 	}	
 	
 	public void setSelectedOntology(String selectedOntology) {		
@@ -133,13 +132,12 @@ public class ComponentBean {
     // ====                 Action Methods                  ===
     // ========================================================   
     
-    public String saveComponentAction() {
+    public String saveComponentAction() throws Exception {
 
     	_message = null;	
-        _logger.debug("Saving component.");
         
         // Validate input
-        if (vso.getUri() == null || vso.getUri().length() < 1) {
+        if (vsb.getUri() == null || vsb.getUri().length() < 1) {
             _message = resource.getString("error_missing_uri");
             return "error";
         }        
@@ -148,6 +146,14 @@ public class ComponentBean {
             return "error";
         }
         
+        _logger.debug("Saving component.");
+        
+        ValueSetObject vs = vsb.getCurrentValueSet();
+        ValueSetBean.ComponentObject co = vsb.new ComponentObject();
+        co.setLabel(_label);
+        co.setDescription(_description);
+        vs.getCompList().put(_label, co);
+   
         _message = resource.getString("action_saved");
         
         return "sucess";

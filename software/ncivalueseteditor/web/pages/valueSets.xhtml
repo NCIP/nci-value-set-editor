@@ -43,7 +43,7 @@
 			</tr>
 			<c:choose>
 				<c:when test="${sessionScope.ValueSetBean.count>0}">
-					<c:forEach var="item" begin="0" items="#{ValueSetBean.valuesets}"
+					<c:forEach var="item" begin="0" items="#{ValueSetBean.valueSetList}"
 						varStatus="status">
 						<c:set var="class" value="dataRowDark" />
 						<c:if test="${status.index % 2 == 0}">

@@ -20,24 +20,18 @@
   		<tr>
   		 <td align="left"><font size="4"><b>#{msg.label_editvalueset}</b></font></td>
     	 <td align="right" valign="bottom">
-         &#xA0;
-         <h:commandButton
-            value="Save" action="#{ValueSetBean.saveMetadataAction}"
-            onclick="javascript:cursor_wait();"
-            image="#{requestContextPath}/images/saveMetadata.gif" alt="Save value set metadata" />         
-      	<h:outputLink value="javascript:newPopup('${facesContext.externalContext.requestContextPath}/pages/addComponentPopup.xhtml');" styleClass="mainMenuLink">
+      	<h:outputLink value="javascript:newPopup('${facesContext.externalContext.requestContextPath}/pages/addComponentPopup.xhtml');"
+            styleClass="mainMenuLink" rendered="#{not empty ValueSetBean.uri}">
 				&#xA0;<h:graphicImage value="../images/addComponent.gif" alt="Add component" title="Add component to value set definition" style="border: none" />&#xA0;
 			</h:outputLink>
 		  </td>    
   		</tr>	
   	  </table> 	 
   	  <hr />
-     <h:outputText value="#{ValueSetBean.message}"
-         rendered="#{not empty ValueSetBean.message}"
-         styleClass="inputMessage" />
-     <table border="0">
+     <table border="0" width="100%">
   		<tr>
-  			<td align="right" span="2"><font size="3"><b><u>Metadata</u></b></font></td>      
+  			<td align="right"><font size="3"><b><u>Metadata</u></b></font></td>
+         <td></td>      
   		</tr>
   		<tr>
   			<td align="right"><h:outputLabel for="uri" value="#{msg.label_uri}:" /></td>
@@ -66,7 +60,66 @@
   		<tr>
   			<td align="right"><h:outputLabel for="sources" value="#{msg.label_sources}:" /></td>
   			<td><h:inputText id="sources" value="#{ValueSetBean.sources}" width="300"/></td>
-  		</tr>  			 		
+  		</tr> 
+      <tr><td colspan="2" height="5px"></td></tr> 	
+      <tr>
+         <td></td>
+         <td>
+            <table border="0" width="100%">
+               <tr>
+                  <td valign="middle" width="100px">
+                     <h:commandButton
+                        value="Save" action="#{ValueSetBean.saveMetadataAction}"
+                        onclick="javascript:cursor_wait();"
+                        image="#{requestContextPath}/images/saveMetadata.gif" alt="Save value set metadata" />          
+                  </td>
+                  <td width="30px"></td>
+                  <td valign="middle" align="left">                  
+                     <h:outputText value="#{ValueSetBean.message}"
+                        rendered="#{not empty ValueSetBean.message}"
+                        styleClass="inputMessage" />
+                  </td>
+               </tr>
+            </table>         
+         </td>
+      </tr>
+      <c:choose>
+         <c:when test="${sessionScope.ValueSetBean.componentCount>0}">
+            <tr>
+               <td colspan="2"><hr /></td>
+            </tr>         
+            <tr>
+               <td align="right"><font size="3"><b><u>Component Sets</u></b></font></td>
+               <td></td>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  <table class="dataTable" summary="" cellpadding="3" cellspacing="0"
+                     border="0" width="100%">
+                     <tr height="15px">
+                        <th class="dataTableHeader" scope="col" align="left" width="20px">&#xA0;</th>
+                        <th class="dataTableHeader" scope="col" align="left">Label</th>
+                        <th class="dataTableHeader" scope="col" align="left">Description</th>
+                        <th class="dataTableHeader" scope="col" align="left">Action</th>
+                     </tr>
+                     <c:forEach var="item" begin="0" items="#{ValueSetBean.componentObjectList}"
+                        varStatus="status">
+                        <c:set var="class" value="dataRowDark" />
+                        <c:if test="${status.index % 2 == 0}">
+                           <c:set var="class" value="dataRowLight" />
+                        </c:if>
+                        <tr class="#{class}">
+                           <td></td>
+                           <td>#{item.label}</td>
+                           <td>#{item.description}</td>
+                           <td></td>
+                        </tr>
+                     </c:forEach>
+                  </table>
+               </td>
+            </tr>
+         </c:when>   
+      </c:choose>
      </table>
      </h:form>		   	  
   </ui:composition>

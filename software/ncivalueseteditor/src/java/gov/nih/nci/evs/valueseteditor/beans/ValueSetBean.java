@@ -105,11 +105,21 @@ public class ValueSetBean {
         return _cart.size();
     }
 
-    public Collection<ValueSetObject> getValuesets() {
+    public Collection<ValueSetObject> getValueSetList() {
         if (_cart == null) _init();
         return _cart.values();
     }
 
+    public ValueSetObject getCurrentValueSet() {
+        if (_cart == null) {
+        	_init();
+        	return null;
+        }
+        if (_uri == null || _uri.length() < 1)
+        	return null;       
+        return _cart.get(_uri);
+    }    
+    
     public String getMessage() {
         return _message;
     }
@@ -122,15 +132,21 @@ public class ValueSetBean {
         _uri = uri;
     }
     
+    public int getComponentCount() {
+    	if (_uri == null || _uri.length() < 1) return 0;
+    	return _cart.get(_uri).getCompListSize();
+    }
+ 
+    public Collection<ComponentObject> getComponentObjectList() {
+    	if (_uri == null || _uri.length() < 1) return null;
+    	return _cart.get(_uri)._compList.values();
+    }    
+    
     // =======================
    
 	public String getSelectedConceptDomain() {		
 		return _selectedConceptDomain;
 	}
-
-	public String getSelectedConceptDomainText() {		
-		return _selectedConceptDomainList.get(_selectedConceptDomain);
-	}	
 	
 	public void setSelectedConceptDomain(String selectedConceptDomain) {		
 		this._selectedConceptDomain = selectedConceptDomain;
@@ -144,10 +160,6 @@ public class ValueSetBean {
 	
 	public String getSelectedOntology() {		
 		return _selectedOntology;
-	}
-
-	public String getSelectedOntologyText() {
-		return _selectedOntologyList.get(_selectedOntology);
 	}	
 	
 	public void setSelectedOntology(String selectedOntology) {		
@@ -219,7 +231,7 @@ public class ValueSetBean {
     public String removeFromCartAction() {
 
     	_message = null;
-        for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
+        for (Iterator<ValueSetObject> i = getValueSetList().iterator(); i.hasNext();) {
             ValueSetObject item = (ValueSetObject)i.next();
             if (item.getCheckbox().isSelected()) {
                 if (_cart.containsKey(item._uri))
@@ -293,12 +305,21 @@ public class ValueSetBean {
      * @author garciawa2
      */
     public class ValueSetObject {
-        private String _uri = null;
+
+		private String _uri = null;
         private String _conceptDomain = null;
         private String _codingScheme = null;
         private String _sources = null;
         private HtmlSelectBooleanCheckbox _checkbox = null;
+        private Map<String,ComponentObject> _compList = null; 
 
+        /**
+         * Constructor
+         */
+        public ValueSetObject() {
+        	_compList = new HashMap<String,ComponentObject>();
+		}        
+        
         // Getters & setters
 
         public String getUri() {
@@ -341,11 +362,16 @@ public class ValueSetBean {
             _checkbox = checkbox;
         }
 
-        // *** Private Methods ***
-
-        private void setSelected(boolean selected) {
-            _checkbox.setSelected(selected);
+        public Map<String,ComponentObject> getCompList() {
+            return this._compList;
         }
+
+        public int getCompListSize() {
+            if (_compList == null) return 0;
+            return _compList.size();
+        }     
+        
+        // *** Private Methods ***
 
         private boolean getSelected() {
             return _checkbox.isSelected();
@@ -353,24 +379,34 @@ public class ValueSetBean {
 
     } // End of Concept
 
+    public class ComponentObject {
+        private String _label = null;
+        private String _description = null;
+        
+        // Getters & setters
+        
+        public String getLabel() {
+        	return _label;
+        }
+        
+        public void setLabel(String label) {
+        	this._label = label;
+        }
+        
+        public String getDescription() {
+        	return _description;
+        }
+        
+        public void setDescription(String description) {
+        	this._description = description;
+        }
+        
+    } // End of ComponentObject
+
     //**
     //* Utility methods
-    //**
-
-    /**
-     * Test any concept in the cart has been selected
-     * @return
-     */
-    private boolean hasSelected() {
-        if (_cart != null && _cart.size() > 0) {
-            for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
-                ValueSetObject item = (ValueSetObject)i.next();
-                if (item.getSelected()) return true;
-            }
-        }
-        return false;
-    }
-
+    //**    
+    
     /**
      * Dump contents of cart object
      * (non-Javadoc)
@@ -382,13 +418,14 @@ public class ValueSetBean {
 
         if (_cart != null && _cart.size() > 0) {
             sb.append("\tCart:\n");
-            for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
+            for (Iterator<ValueSetObject> i = getValueSetList().iterator(); i.hasNext();) {
                 ValueSetObject item = (ValueSetObject)i.next();
-                sb.append("\t          URI  = " + item._uri + "\n");
-                sb.append("\tConcept Domain = " + item._conceptDomain + "\n");
-                sb.append("\t Coding Scheme = " + item._codingScheme + "\n");
-                sb.append("\t       Sources = " + item._sources + "\n");
-                sb.append("\t      Selected = " + item.getSelected() + "\n");
+                sb.append("\t                URI  = " + item._uri + "\n");
+                sb.append("\t      Concept Domain = " + item._conceptDomain + "\n");
+                sb.append("\t       Coding Scheme = " + item._codingScheme + "\n");
+                sb.append("\t             Sources = " + item._sources + "\n");
+                sb.append("\t            Selected = " + item.getSelected() + "\n");
+                sb.append("\t Component list size = " + item.getCompListSize() + "\n");
             }
         } else {
             sb.append("Cart is empty.");
