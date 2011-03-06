@@ -2,6 +2,7 @@ package gov.nih.nci.evs.valueseteditor.beans;
 
 import gov.nih.nci.evs.valueseteditor.beans.ValueSetBean.ComponentObject;
 import gov.nih.nci.evs.valueseteditor.beans.ValueSetBean.ValueSetObject;
+import gov.nih.nci.evs.valueseteditor.utilities.FacesUtil;
 import gov.nih.nci.evs.valueseteditor.utilities.ValueSetSearchUtil;
 
 import java.util.Collection;
@@ -88,6 +89,11 @@ public class ComponentBean {
     	
     	vsb = (ValueSetBean)FacesContext.getCurrentInstance()
 			.getExternalContext().getSessionMap().get("ValueSetBean");
+    	
+    	_logger.debug("Editing component:");
+    	
+    	//String uriParam = FacesUtil.getRequestParameter("uriParam");
+    	
 	}    
     
     // ========================================================

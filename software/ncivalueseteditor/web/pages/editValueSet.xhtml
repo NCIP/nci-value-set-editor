@@ -94,13 +94,12 @@
             </tr>
             <tr>
                <td colspan="2">
-                  <table class="dataTable" summary="" cellpadding="3" cellspacing="0"
+                  <table cellpadding="3" cellspacing="0"
                      border="0" width="100%">
                      <tr height="15px">
-                        <th class="dataTableHeader" scope="col" align="left" width="20px">&#xA0;</th>
-                        <th class="dataTableHeader" scope="col" align="left">Label</th>
-                        <th class="dataTableHeader" scope="col" align="left">Description</th>
-                        <th class="dataTableHeader" scope="col" align="left">Action</th>
+                        <th class="dataRowDark" scope="col" align="left">Label</th>
+                        <th class="dataRowDark" scope="col" align="left">Description</th>
+                        <th class="dataRowDark" scope="col" align="left">Action</th>
                      </tr>
                      <c:forEach var="item" begin="0" items="#{ValueSetBean.componentObjectList}"
                         varStatus="status">
@@ -109,10 +108,16 @@
                            <c:set var="class" value="dataRowLight" />
                         </c:if>
                         <tr class="#{class}">
-                           <td></td>
                            <td>#{item.label}</td>
                            <td>#{item.description}</td>
-                           <td></td>
+                           <td width="110px">
+                              <h:outputLink value="javascript:newPopup('${facesContext.externalContext.requestContextPath}/pages/addComponentPopup.xhtml');">
+                                <f:attribute name="labelParam" value="#{item.label}" />Edit&#xA0;
+                              </h:outputLink>                                    
+                              <h:commandLink action="#{ValueSetBean.removeComponentAction}"
+                                  value="Remove" /> 
+                              &#xA0;                             
+                           </td>
                         </tr>
                      </c:forEach>
                   </table>

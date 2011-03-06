@@ -269,6 +269,25 @@ public class ValueSetBean {
     	return "exportvalueset";
     }    
     
+    // Component Action Methods
+    
+    public String editComponentAction() {
+    	
+    	_message = null;
+    	String labelParam = FacesUtil.getRequestParameter("labelParam");
+    	_logger.debug("Editng value set: " + labelParam);
+    	
+    	return "editcomponent";
+    }     
+ 
+    public String removeComponentAction() {
+
+    	_message = null;
+    	_logger.debug("Removing component.");
+
+        return "removecomponent";
+    }    
+    
     // ******************** Internal Class Methods ************************
 
     /**
