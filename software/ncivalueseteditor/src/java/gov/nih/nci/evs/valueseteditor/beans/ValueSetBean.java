@@ -111,11 +111,9 @@ public class ValueSetBean {
     }
 
     public String getMessage() {
-        String text = _message;
-        _message = null;        // Clear last message
-        return text;
+        return _message;
     }
-   
+    
     // ****************  Metadata Entries  ******************
 
      public String getUri() {
@@ -188,12 +186,14 @@ public class ValueSetBean {
     
     public String saveMetadataAction() {
 
+    	_message = null;	
         _logger.debug("Saving metadata to cart.");
         
         // Validate input
         if (_uri == null || _uri.length() < 1) {
             _message = resource.getString("error_missing_uri");
-            return null;
+            _logger.debug("URI is null.");
+            return "error";
         }
   
     	_logger.debug("Adding value set to cart.");
@@ -207,12 +207,13 @@ public class ValueSetBean {
         _cart.put(_uri,item);            
         _message = resource.getString("action_saved");
         
-        return null;
+        return "sucess";
     }
 
     // *** Value Set List Buttons
     
     public String newValueSetAction() {
+    	_message = null;
     	_logger.debug("Creating new value set.");
     	
     	clear();
@@ -221,6 +222,7 @@ public class ValueSetBean {
     
     public String removeFromCartAction() {
 
+    	_message = null;
         for (Iterator<ValueSetObject> i = getValuesets().iterator(); i.hasNext();) {
             ValueSetObject item = (ValueSetObject)i.next();
             if (item.getCheckbox().isSelected()) {
@@ -236,6 +238,7 @@ public class ValueSetBean {
     
     public String editValueSetAction() {
     	
+    	_message = null;
     	String uriParam = FacesUtil.getRequestParameter("uriParam");
     	_logger.debug("Editng value set: " + uriParam);
     	
@@ -245,12 +248,14 @@ public class ValueSetBean {
     }     
   
     public String previewValueSetAction() {
+    	_message = null;
     	_logger.debug("Previewing value set.");
     	    	
     	return "previewvalueset";
     }    
     
     public String exportValueSetAction() {
+    	_message = null;
     	_logger.debug("Exporting value.");
     	
     	return "exportvalueset";

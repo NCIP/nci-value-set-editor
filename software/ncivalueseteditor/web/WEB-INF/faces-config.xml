@@ -25,16 +25,18 @@
 
     <navigation-rule>
        <from-view-id>/pages/valueSets.xhtml</from-view-id>
-       <navigation-case>
-          <from-action>#{ValueSetBean.removeFromCartAction}</from-action>
-          <from-outcome>removevalueset</from-outcome>
-          <to-view-id>/pages/valueSets.xhtml</to-view-id>
-       </navigation-case>
+       <!-- Buttons -->
        <navigation-case>
           <from-action>#{ValueSetBean.newValueSetAction}</from-action>
           <from-outcome>newvalueset</from-outcome>
           <to-view-id>/pages/editValueSet.xhtml</to-view-id>
        </navigation-case>
+       <navigation-case>
+          <from-action>#{ValueSetBean.removeFromCartAction}</from-action>
+          <from-outcome>removevalueset</from-outcome>
+          <to-view-id>/pages/valueSets.xhtml</to-view-id>
+       </navigation-case>
+       <!-- Links -->
        <navigation-case>
           <from-action>#{ValueSetBean.editValueSetAction}</from-action>
           <from-outcome>editvalueset</from-outcome>
@@ -49,6 +51,16 @@
           <from-action>#{ValueSetBean.exportValueSetAction}</from-action>
           <from-outcome>exportvalueset</from-outcome>
           <to-view-id>/pages/valueSets.xhtml</to-view-id>
+       </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+       <from-view-id>/pages/editValueSet.xhtml</from-view-id>
+       <navigation-case>
+          <from-action>#{ValueSetBean.saveMetadataAction}</from-action>
+          <from-outcome>sucess</from-outcome>
+          <from-outcome>error</from-outcome>
+          <to-view-id>/pages/editValueSet.xhtml</to-view-id>
        </navigation-case>
     </navigation-rule>
 

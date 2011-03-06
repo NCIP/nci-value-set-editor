@@ -2,7 +2,8 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns:h="http://java.sun.com/jsf/html"
   xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:f="http://java.sun.com/jsf/core">
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:c="http://java.sun.com/jstl/core">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Value Sets</title>
@@ -19,38 +20,55 @@
   		<tr>
   		 <td align="left"><font size="4"><b>#{msg.label_editvalueset}</b></font></td>
     	 <td align="right" valign="bottom">
-      		<h:outputLink value="javascript:newPopup('${facesContext.externalContext.requestContextPath}/pages/addMetedataPopup.xhtml');" styleClass="mainMenuLink">
-				&#xA0;<h:graphicImage value="../images/editMetadata.gif" alt="Edit metadata" title="Edit metadata of the value set definition" style="border: none" />&#xA0;
-			</h:outputLink>     
-      		<h:outputLink value="javascript:newPopup('${facesContext.externalContext.requestContextPath}/pages/addComponentPopup.xhtml');" styleClass="mainMenuLink">
+         &#xA0;
+         <h:commandButton
+            value="Save" action="#{ValueSetBean.saveMetadataAction}"
+            onclick="javascript:cursor_wait();"
+            image="#{requestContextPath}/images/saveMetadata.gif" alt="Save value set metadata" />         
+      	<h:outputLink value="javascript:newPopup('${facesContext.externalContext.requestContextPath}/pages/addComponentPopup.xhtml');" styleClass="mainMenuLink">
 				&#xA0;<h:graphicImage value="../images/addComponent.gif" alt="Add component" title="Add component to value set definition" style="border: none" />&#xA0;
 			</h:outputLink>
 		  </td>    
   		</tr>	
-  	 </table> 
-  	 </h:form>
-  	 <hr />
-     <table border="0"> 
+  	  </table> 	 
+  	  <hr />
+     <h:outputText value="#{ValueSetBean.message}"
+         rendered="#{not empty ValueSetBean.message}"
+         styleClass="inputMessage" />
+     <table border="0">
   		<tr>
   			<td align="right" span="2"><font size="3"><b><u>Metadata</u></b></font></td>      
   		</tr>
   		<tr>
   			<td align="right"><h:outputLabel for="uri" value="#{msg.label_uri}:" /></td>
-  			<td><b><h:outputText id="uri" value="#{ValueSetBean.uri}" /></b></td>
+  			<td><h:inputText id="uri" value="#{ValueSetBean.uri}" width="300"/></td>
+  		</tr>
+      <tr>
+  			<td align="right"><h:outputLabel for="conceptDomain" value="#{msg.label_domain}:" /></td>
+         <td>
+          <h:selectOneMenu id="conceptDomain" value="#{ValueSetBean.selectedConceptDomain}">
+            <c:forEach var="v" items="${ValueSetBean.conceptDomainList}">
+               <f:selectItem itemLabel="#{v.value}" itemValue="#{v.key}" />
+            </c:forEach>
+          </h:selectOneMenu> 
+         </td>   			
   		</tr>
    		<tr>
-  			<td align="right"><h:outputLabel for="domain" value="#{msg.label_domain}:" /></td>
-  			<td><b><h:outputText id="domain" value="#{ValueSetBean.selectedConceptDomainText}" /></b></td>
-  		</tr>
-   		<tr>
-  			<td align="right"><h:outputLabel for="dcs" value="#{msg.label_default_cs}:" /></td>
-  			<td><b><h:outputText id="dcs" value="#{ValueSetBean.selectedOntologyText}" /></b></td>
+  			<td align="right"><h:outputLabel for="codingScheme" value="#{msg.label_default_cs}:" /></td>
+  			<td>
+            <h:selectOneMenu id="codingScheme" value="#{ValueSetBean.selectedOntology}">
+              <c:forEach var="v" items="${ValueSetBean.ontologyList}">
+                 <f:selectItem itemLabel="#{v.value}" itemValue="#{v.key}" />
+              </c:forEach>
+            </h:selectOneMenu>         
+         </td>
   		</tr> 	
   		<tr>
   			<td align="right"><h:outputLabel for="sources" value="#{msg.label_sources}:" /></td>
-  			<td><b><h:outputText id="sources" value="#{ValueSetBean.sources}" /></b></td>
+  			<td><h:inputText id="sources" value="#{ValueSetBean.sources}" width="300"/></td>
   		</tr>  			 		
-     </table>		   	  
+     </table>
+     </h:form>		   	  
   </ui:composition>
   <ui:debug />
 </body>
