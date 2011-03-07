@@ -1,11 +1,9 @@
 package gov.nih.nci.evs.valueseteditor.beans;
 
-import gov.nih.nci.evs.valueseteditor.beans.ValueSetBean.ComponentObject;
 import gov.nih.nci.evs.valueseteditor.beans.ValueSetBean.ValueSetObject;
 import gov.nih.nci.evs.valueseteditor.utilities.FacesUtil;
 import gov.nih.nci.evs.valueseteditor.utilities.ValueSetSearchUtil;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -83,6 +81,9 @@ public class ComponentBean {
      * @throws Exception
      */
     public ComponentBean() throws Exception {
+    	
+    	// Read in pull down lists
+    	
     	ValueSetSearchUtil util = new ValueSetSearchUtil();
     	if (_selectedOntologyList == null)
     		_selectedOntologyList = util.getOntologyList();
@@ -90,11 +91,18 @@ public class ComponentBean {
     	vsb = (ValueSetBean)FacesContext.getCurrentInstance()
 			.getExternalContext().getSessionMap().get("ValueSetBean");
     	
-    	_logger.debug("Editing component:");
+    	// Check if this is an edit session
     	
-    	//String uriParam = FacesUtil.getRequestParameter("uriParam");
+		String labelParam = FacesUtil.getRequestParameter("labelParam");
+		if (labelParam != null) {
+			_logger.debug("Reading component: " + labelParam);
+	        ValueSetObject vs = vsb.getCurrentValueSet();
+	        ValueSetBean.ComponentObject co = vs.getCompList().get(labelParam);
+	        _label = co.getLabel();
+	        _description = co.getDescription();	  
+		}
     	
-	}    
+	}     
     
     // ========================================================
     // ====               Getters & Setters                 ===
@@ -171,5 +179,11 @@ public class ComponentBean {
     	
     	return "previewcomponent";
     } 
+    
+    public String openPopupAction() {
+    	_message = null;
+    	_logger.debug("Popup opened.");
+    	return null;
+    }
 
 } // End of ComponentBean

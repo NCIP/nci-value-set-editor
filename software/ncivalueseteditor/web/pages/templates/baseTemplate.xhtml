@@ -11,14 +11,14 @@
   <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/css/styleSheet.css" />
   <link rel="shortcut icon" href="${facesContext.externalContext.requestContextPath}/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="${facesContext.externalContext.requestContextPath}/js/dropdown.js"></script>
-    <script type="text/javascript">
-    function newPopup(url) {
-        var centerWidth = (window.screen.width - 500) / 2;
+  <script type="text/javascript">
+    function newPopup(url) {    	  
+    	  var centerWidth = (window.screen.width - 500) / 2;
         var centerHeight = (window.screen.height - 400) / 2;
-      popupWindow = window.open(url,'_blank',
-        'top=' + centerHeight +
-        ',left=' + centerWidth +
-        ', height=200, width=300, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');
+        window.open(url,'_blank',
+        	   'top=' + centerHeight +
+        	   ',left=' + centerWidth +
+        	   ', height=200, width=300, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');
     }
   </script>
 </head>
