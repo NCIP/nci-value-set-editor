@@ -86,4 +86,10 @@
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
 
+    <managed-bean>
+        <managed-bean-name>ExpressionBean</managed-bean-name>
+        <managed-bean-class>gov.nih.nci.evs.valueseteditor.beans.ExpressionBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
 </faces-config>

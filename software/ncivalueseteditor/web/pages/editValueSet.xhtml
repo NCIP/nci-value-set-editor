@@ -22,8 +22,12 @@
        <td align="right" valign="bottom">
         <h:outputLink value="javascript:newPopup('${facesContext.externalContext.requestContextPath}/pages/editComponentPopup.xhtml');"
             styleClass="mainMenuLink" rendered="#{not empty ValueSetBean.uri}">
-        &#xA0;<h:graphicImage value="../images/addComponent.gif" alt="Add component" title="Add component to value set definition" style="border: none" />&#xA0;
-      </h:outputLink>
+            &#xA0;<h:graphicImage value="../images/addComponent.gif" alt="Add component" title="Add component to value set definition" style="border: none" />&#xA0;
+        </h:outputLink>
+        <h:outputLink value="javascript:newPopup('${facesContext.externalContext.requestContextPath}/pages/editExpressionPopup.xhtml');"
+            styleClass="mainMenuLink" rendered="#{not empty ValueSetBean.uri}">
+            &#xA0;<h:graphicImage value="../images/setExpression.gif" alt="Add component" title="Add value set expression" style="border: none" />&#xA0;
+        </h:outputLink>      
       </td>
       </tr>
       </table>
