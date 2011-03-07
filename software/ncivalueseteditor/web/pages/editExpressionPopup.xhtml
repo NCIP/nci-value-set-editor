@@ -11,7 +11,7 @@
 <body>
   <ui:composition template="/pages/templates/popupTemplate.xhtml">
   <script type="text/javascript">
-    window.resizeTo(700,420);
+    window.resizeTo(700,450);
     function closePopup() {
     	window.opener.location.href = "${facesContext.externalContext.requestContextPath}/pages/editValueSet.xhtml";
         window.close();
@@ -20,8 +20,24 @@
   <font size="4"><b>Value Set Expression</b></font><br/>
   <h:form id="f1">
     <h:inputTextarea id="expText" value="#{ExpressionBean.expText}"
-      rows="10" cols="75" />
-    <hr />
+      rows="10" cols="75" /><br /><br />
+    <h:commandButton value="Component Set" action="#{ExpressionBean.componentSetAction}"
+      onclick="javascript:cursor_wait();"
+      image="#{requestContextPath}/images/componentSet.gif"
+      alt="Component Set" />&#xA0;&#xA0;   
+    <h:commandButton value="Union" action="#{ExpressionBean.unionAction}"
+      onclick="javascript:cursor_wait();"
+      image="#{requestContextPath}/images/union.gif"
+      alt="Union" />&#xA0;&#xA0;
+    <h:commandButton value="Intersection" action="#{ExpressionBean.intersectionAction}"
+      onclick="javascript:cursor_wait();"
+      image="#{requestContextPath}/images/intersection.gif"
+      alt="Intersection" />&#xA0;&#xA0;
+    <h:commandButton value="Difference" action="#{ExpressionBean.differenceAction}"
+      onclick="javascript:cursor_wait();"
+      image="#{requestContextPath}/images/difference.gif"
+      alt="Difference" />&#xA0;&#xA0;       
+    <hr />  
     <div class="inputMessage"><h:outputText value="#{ExpressionBean.message}&#xA0;" /></div>
     <h:commandButton value="Save" action="#{ExpressionBean.saveExpressionAction}"
       onclick="javascript:cursor_wait();"

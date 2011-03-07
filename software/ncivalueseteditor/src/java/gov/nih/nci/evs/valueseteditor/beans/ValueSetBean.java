@@ -204,9 +204,15 @@ public class ValueSetBean {
             return "error";
         }
   
-    	_logger.debug("Adding value set to cart.");
-    	
-    	ValueSetObject item = new ValueSetObject();
+        ValueSetObject item = null;
+        if (_cart.containsKey(_uri)) {
+        	item = _cart.get(_uri);
+        	_logger.debug("Updating value set.");
+        } else {
+        	item = new ValueSetObject();
+        	_logger.debug("Adding value set to cart.");
+        }
+    	    	
     	item.setUri(_uri);
     	item.setConceptDomain(_selectedConceptDomain);
     	item.setCodingScheme(_selectedOntology);

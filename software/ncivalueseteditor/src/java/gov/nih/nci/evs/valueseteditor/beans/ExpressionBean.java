@@ -114,5 +114,61 @@ public class ExpressionBean {
         
         return "sucess";
     }
+
+    public String componentSetAction() throws Exception {
+
+    	_logger.debug("Component set expression action.");
+    	_message = null;	
+        
+        // Validate input
+        if (vsb.getUri() == null || vsb.getUri().length() < 1) {
+            _message = resource.getString("error_missing_uri");
+            return "error";
+        }        
+        
+        return "sucess";
+    }    
+
+    public String unionAction() throws Exception {
+
+    	_logger.debug("Union action.");
+    	_message = null;	
+        
+        // Validate input
+        if (vsb.getUri() == null || vsb.getUri().length() < 1) {
+            _message = resource.getString("error_missing_uri");
+            return "error";
+        }        
+        
+        return "sucess";
+    }      
+
+    public String intersectionAction() throws Exception {
+
+    	_logger.debug("Intersection action.");
+    	_message = null;	
+        
+        // Validate input
+        if (vsb.getUri() == null || vsb.getUri().length() < 1) {
+            _message = resource.getString("error_missing_uri");
+            return "error";
+        }        
+        
+        return "sucess";
+    }     
+
+    public String differenceAction() throws Exception {
+
+    	_logger.debug("Difference action.");
+    	_message = null;	
+        
+        // Validate input
+        if (vsb.getUri() == null || vsb.getUri().length() < 1) {
+            _message = resource.getString("error_missing_uri");
+            return "error";
+        }        
+        
+        return "sucess";
+    }     
     
 } // End of ExpressionBean
