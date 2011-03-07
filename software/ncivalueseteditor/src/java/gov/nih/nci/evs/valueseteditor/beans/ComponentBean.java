@@ -72,6 +72,9 @@ public class ComponentBean {
     // Component variables
     private String _label = null;
     private String _description = null;
+    private String _type = null;
+    private String _matchText = null;
+    private String _algo = null;
     
     // Value Set bean
     ValueSetBean vsb = null;
@@ -99,7 +102,10 @@ public class ComponentBean {
 	        ValueSetObject vs = vsb.getCurrentValueSet();
 	        ValueSetBean.ComponentObject co = vs.getCompList().get(labelParam);
 	        _label = co.getLabel();
-	        _description = co.getDescription();	  
+	        _description = co.getDescription();	
+	        _type = co.getType();
+	        _matchText = co.getMatchText();
+	        _algo = co.getAlgo();
 		}
     	
 	}     
@@ -112,6 +118,8 @@ public class ComponentBean {
         return _message;
     }
     
+    // -----------
+    
     public String getLabel() {
         return _label;
     }
@@ -120,6 +128,8 @@ public class ComponentBean {
         _label = label;
     }
 
+    // -----------
+    
     public String getDescription() {
         return _description;
     }
@@ -128,7 +138,7 @@ public class ComponentBean {
         _description = description;
     }    
     
-	// =======================
+    // -----------
 	
 	public String getSelectedOntology() {		
 		return _selectedOntology;
@@ -141,7 +151,37 @@ public class ComponentBean {
 	public Map<String,String> getOntologyList() {
 		return _selectedOntologyList;
 	}		
+
+    // -----------
+    
+    public String getType() {
+        return _type;
+    }
+
+    public void setType(String type) {
+        _type = type;
+    } 	
 	
+    // -----------
+    
+    public String getMatchText() {
+        return _matchText;
+    }
+
+    public void setMatchText(String matchText) {
+        _matchText = matchText;
+    } 	
+    
+    // -----------
+
+    public String getAlgo() {
+        return _algo;
+    }
+
+    public void setAlgo(String algo) {
+        _algo = algo;
+    } 	    
+    
     // ========================================================
     // ====                 Action Methods                  ===
     // ========================================================   
@@ -166,7 +206,10 @@ public class ComponentBean {
         ValueSetBean.ComponentObject co = vsb.new ComponentObject();
         co.setLabel(_label);
         co.setDescription(_description);
-        vs.getCompList().put(_label, co);
+        co.setType(_type);
+        co.setMatchText(_matchText);
+        co.setAlgo(_algo);
+        vs.getCompList().put(_label, co);        
    
         _message = resource.getString("action_saved");
         

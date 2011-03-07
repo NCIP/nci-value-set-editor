@@ -11,7 +11,7 @@
 <body>
   <ui:composition template="/pages/templates/popupTemplate.xhtml">
   <script type="text/javascript">
-    window.resizeTo(600,327);
+    window.resizeTo(700,420);
     function closePopup() {
     	window.opener.location.href = "${facesContext.externalContext.requestContextPath}/pages/editValueSet.xhtml";
         window.close();
@@ -38,16 +38,51 @@
       </tr>
       <tr>
         <td align="right">
-          <h:outputLabel for="CompVocab" value="#{msg.label_default_cs}:" />
+          <h:outputLabel for="compVocab" value="Vocabulary:" />
         </td>
         <td align="left">
-			<h:selectOneMenu id="CompVocab" value="#{ComponentBean.selectedOntology}">
+			<h:selectOneMenu id="compVocab" value="#{ComponentBean.selectedOntology}">
 			  <c:forEach var="v" items="${ComponentBean.ontologyList}">
 			     <f:selectItem itemLabel="#{v.value}" itemValue="#{v.key}" />
 			  </c:forEach>
 			</h:selectOneMenu>
         </td>
       </tr>
+      <tr>
+        <td align="right">
+          <h:outputLabel for="compType" value="Type:" />
+        </td>
+        <td align="left">
+            <h:selectOneRadio id="compType" value="#{ComponentBean.type}" layout="lineDirection">               
+                  <f:selectItem itemValue="code" itemLabel="Code" />
+                  <f:selectItem itemValue="name" itemLabel="Name" />
+                  <f:selectItem itemValue="prop" itemLabel="Property" />
+                  <f:selectItem itemValue="rel" itemLabel="Relationship" />
+                  <f:selectItem itemValue="enum" itemLabel="Enumeration of Codes" />
+                  <f:selectItem itemValue="entire" itemLabel="Entire Vocabulary" />
+            </h:selectOneRadio>
+        </td>
+      </tr>
+      <tr>
+        <td align="right">
+          <h:outputLabel for="matchText" value="Match Text" />
+        </td>
+        <td align="left">
+          <h:inputText id="matchText" value="#{ComponentBean.matchText}" width="300"/>
+        </td>
+      </tr>
+      <tr>
+        <td align="right">
+          <h:outputLabel for="algo" value="Match Algorithm:" />
+        </td>
+        <td align="left">
+            <h:selectOneRadio id="algo" value="#{ComponentBean.algo}" layout="lineDirection">               
+                  <f:selectItem itemValue="exact" itemLabel="Exact Match" />
+                  <f:selectItem itemValue="begins" itemLabel="Begins With" />
+                  <f:selectItem itemValue="contains" itemLabel="Contains" />
+            </h:selectOneRadio>
+        </td>
+      </tr>                    
     </table>
     <hr />
     <div class="inputMessage"><h:outputText value="#{ComponentBean.message}&#xA0;" /></div>

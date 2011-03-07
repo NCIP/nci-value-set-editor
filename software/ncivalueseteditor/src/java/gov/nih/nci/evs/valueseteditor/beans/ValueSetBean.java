@@ -401,6 +401,9 @@ public class ValueSetBean {
     public class ComponentObject {
         private String _label = null;
         private String _description = null;
+        private String _type = null;
+        private String _matchText = null;
+        private String _algo = null;
         
         // Getters & setters
         
@@ -419,6 +422,30 @@ public class ValueSetBean {
         public void setDescription(String description) {
         	this._description = description;
         }
+
+        public String getType() {
+        	return _type;
+        }
+        
+        public void setType(String type) {
+        	this._type = type;
+        }        
+
+        public String getMatchText() {
+        	return _matchText;
+        }
+        
+        public void setMatchText(String matchText) {
+        	this._matchText = matchText;
+        }         
+
+        public String getAlgo() {
+        	return _algo;
+        }
+        
+        public void setAlgo(String algo) {
+        	this._algo = algo;
+        }        
         
     } // End of ComponentObject
 
