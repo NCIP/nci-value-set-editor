@@ -79,7 +79,8 @@ public class TestSearchUtil extends TestCase {
               @SuppressWarnings("unchecked")
               Map.Entry<String,CodingSchemeSummary> pairs 
               	= (Map.Entry<String,CodingSchemeSummary>)it.next();
-              System.out.println(pairs.getKey() + " = " + pairs.getValue().getFormalName());
+              String key = pairs.getKey();              
+              System.out.println(key + " = " + pairs.getValue());
           }    	  
       }
       
