@@ -590,6 +590,7 @@ System.out.println("vsd found: " + vsd.getValueSetDefinitionName());
     	item.setCodingScheme(vsd.getDefaultCodingScheme());
 
     	System.out.println("DefaultCodingScheme: " + vsd.getDefaultCodingScheme());
+
         String cs_nm = DataUtils.getFormalName(vsd.getDefaultCodingScheme(), null);
     	setSelectedOntology(cs_nm);
 
@@ -624,9 +625,6 @@ System.out.println("vsd found: " + vsd.getValueSetDefinitionName());
 		}
 
         _cart.put(_uri,item);
-
-        //_message = resource.getString("copy_action_saved");
-
         _new_vsd = false;
 
 		return "save_copy";
@@ -823,6 +821,8 @@ _logger.debug("\t Vocabulary: " + ob.getVocabulary());
 					String s = (String) v.elementAt(i);
 					System.out.println(s);
 				}
+				item.setExpression(infixExpression);
+				setExpression(infixExpression);
 			}
 	    } catch (Exception e) {
 			//e.printStackTrace();
@@ -847,7 +847,7 @@ _logger.debug("\t Vocabulary: " + ob.getVocabulary());
 						return "error";
 		}
 
-        if (componentCount > 1 && (item.getExpression() == null || item.getExpression().length() == 0)) {
+        if (componentCount > 1 && (infixExpression == null || infixExpression.length() == 0)) {
 
 						String msg = "WARNING: No value set expression has been defined.";
 						request.setAttribute("message", msg);
@@ -857,7 +857,7 @@ _logger.debug("\t Vocabulary: " + ob.getVocabulary());
 
 		if (vsd == null) {
 
-						String msg = "WARNING: Unable to convert the given expression to a value set definition: " + item.getExpression());
+						String msg = "WARNING: Unable to convert the given expression to a value set definition: " + item.getExpression();
 						request.setAttribute("message", msg);
 						return "error";
 
@@ -1052,6 +1052,11 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
 					String s = (String) v.elementAt(i);
 					System.out.println(s);
 				}
+
+				item.setExpression(infixExpression);
+				setExpression(infixExpression);
+
+
 		    }
 	    } catch (Exception e) {
 			//e.printStackTrace();
@@ -1145,6 +1150,9 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
     	//item.setOrganizations(_organizations);
 
     	item.setConceptDomain(_selectedConceptDomain);
+
+    	_selectedOntology = FacesUtil.getRequestParameter("codingScheme");
+
     	item.setCodingScheme(_selectedOntology);
     	item.setSources(_selectedSource);
 
@@ -1338,6 +1346,7 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
 		private String _transitiveClosure = null;
 
 		private String _expression = null;
+		private boolean _isNotEmpty = true;
 
         /**
          * Constructor
@@ -1345,6 +1354,17 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
         public ValueSetObject() {
         	_compList = new HashMap<String,ComponentObject>();
 		}
+
+
+        public boolean getIsNotEmpty() {
+			if (getCompListSize() == 0) {
+				_isNotEmpty = false;
+			} else {
+				_isNotEmpty = true;
+			}
+			return _isNotEmpty;
+	    }
+
 
         // Getters & setters
 		public String getExpression() {

@@ -121,6 +121,12 @@
 	    if (organizations == null) organizations = "";
 	    
 	    selectedOntology = DataUtils.getFormalName(vsb.getSelectedOntology(), null);
+	    if (selectedOntology == null) {
+System.out.println("(???) Unable to find formalname for: " + vsb.getSelectedOntology());	
+selectedOntology = "NCI Thesaurus";
+	    }
+	    
+	    
 
 curr_uri = vsb.getUri();
 System.out.println("(*) curr_uri: " + curr_uri);

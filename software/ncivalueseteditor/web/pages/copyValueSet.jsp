@@ -97,7 +97,7 @@
      <tr>
  
  	 <td align="right" class="inputLabel">
- 	     Value Set Reference:
+ 	     Copy From Value Set:
  	 </td>                   
  
  	 <td class="inputItem">

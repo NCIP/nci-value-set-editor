@@ -120,7 +120,7 @@
                         <h:selectBooleanCheckbox binding="#{item.checkbox}"
 								    onclick="submit();" />
                      </td>
-							<td>
+		     <td>
                         <h:outputText value="#{item.uri}" />
                      </td>
 		     <td>&#xA0;&#xA0;</td>
@@ -129,16 +129,20 @@
                         <h:commandLink action="#{ValueSetBean.editValueSetAction}" value="Edit">
                              <f:param name="uri" value="#{item.uri}" />
                         </h:commandLink>      
-                        &#xA0;  
 
-                        <h:commandLink action="#{ValueSetBean.resolveVSDAction}" value="Resolve">
+                        &#xA0; 
+
+                        <h:commandLink action="#{ValueSetBean.resolveVSDAction}" value="Resolve"
+                             rendered="#{item.isNotEmpty}">
                              <f:param name="uri" value="#{item.uri}" />
                         </h:commandLink>      
                         &#xA0; 
                         
-                        <h:commandLink action="#{ValueSetBean.exportVSDToXMLAction}" value="Export">  
+                        <h:commandLink action="#{ValueSetBean.exportVSDToXMLAction}" value="Export"
+                              rendered="#{item.isNotEmpty}">  
                               <f:param name="uri" value="#{item.uri}" />
-                        </h:commandLink>                          
+                        </h:commandLink> 
+
                         
                      </td>
 						</tr>

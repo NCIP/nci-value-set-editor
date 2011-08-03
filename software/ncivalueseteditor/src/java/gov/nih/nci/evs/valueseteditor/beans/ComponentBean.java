@@ -700,6 +700,7 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
 				//vs = vsb.getValueSet(_vs_uri);
 				co = vs.getComponent(_component_label);
 			}
+			vsb.setUri(_vs_uri);
 	    }
 
       	_logger.debug("rel_search_association: " + _rel_search_association);
@@ -732,6 +733,8 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
         _message = resource.getString("action_saved");
 
         _logger.debug("saveComponentSubsetAction returns success");
+
+
 
         return "success";
     }
