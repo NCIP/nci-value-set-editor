@@ -7,9 +7,15 @@ import org.LexGrid.LexBIG.LexBIGService.*;
 import org.LexGrid.LexBIG.Impl.*;
 
 import gov.nih.nci.system.client.*;
+
 import gov.nih.nci.evs.security.SecurityToken;
 import gov.nih.nci.evs.valueseteditor.properties.ApplicationProperties;
 import org.apache.log4j.*;
+
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
+import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
+import org.lexgrid.valuesets.impl.LexEVSValueSetDefinitionServicesImpl;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -56,9 +62,9 @@ import org.apache.log4j.*;
 /**
  * @author EVS Team
  * @version 1.0
- * 
+ *
  *     Modification history Initial implementation kim.ong@ngc.com
- * 
+ *
  */
 public class RemoteServerUtil {
 	private static Logger _logger = Logger.getLogger(RemoteServerUtil.class);
@@ -76,12 +82,17 @@ public class RemoteServerUtil {
 
 	/**
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public static LexBIGService createLexBIGService() throws Exception {
+	public static LexBIGService createLexBIGService() { //throws Exception {
 		String url = null;
-		url = ApplicationProperties.getServiceurl();
-		return createLexBIGService(url);
+		try {
+			url = ApplicationProperties.getServiceurl();
+			return createLexBIGService(url);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -101,6 +112,7 @@ public class RemoteServerUtil {
 				_logger.debug(SEPARATOR);
 				_logger.debug("LexBIGService(remote): " + serviceUrl);
 			}
+
 			LexEVSApplicationService lexevsService = (LexEVSApplicationService) ApplicationServiceProvider
 					.getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
 			lexevsService = registerAllSecurityTokens(lexevsService);
@@ -120,11 +132,11 @@ public class RemoteServerUtil {
 			LexEVSApplicationService lexevsService) throws Exception {
 		HashMap<String,String> map = ApplicationProperties.getSecurityTokenMap();
 		map.entrySet().iterator();
-		
+
 		for (Map.Entry<String, String> entry: map.entrySet()) {
 			lexevsService = registerSecurityToken(lexevsService,
-					entry.getKey(), entry.getValue());		    
-		    
+					entry.getKey(), entry.getValue());
+
 		}
 		return lexevsService;
 	}
@@ -144,15 +156,84 @@ public class RemoteServerUtil {
 		try {
 			retval = lexevsService.registerSecurityToken(codingScheme,
 					securityToken);
+			/*
 			if (retval != null && retval.equals(Boolean.TRUE)) { //
 				_logger.debug("Registration of SecurityToken was successful.");
 			} else {
 				_logger.error("WARNING: Registration of SecurityToken failed.");
 			}
+			*/
 		} catch (Exception e) {
 			_logger.error("WARNING: Registration of SecurityToken failed.");
 		}
 		return lexevsService;
 	}
-	
+
+
+
+    public static LexEVSDistributed getLexEVSDistributed() {
+		String url = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
+		ApplicationProperties properties = null;
+		try {
+            properties = ApplicationProperties.getInstance();
+            url = properties.getServiceurl();
+            return getLexEVSDistributed(url);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+	}
+
+
+    public static LexEVSDistributed getLexEVSDistributed(String serviceUrl) {
+		try {
+			LexEVSDistributed distributed =
+				(LexEVSDistributed)
+				ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
+
+			return distributed;
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+	}
+
+
+    public static LexEVSValueSetDefinitionServices getLexEVSValueSetDefinitionServices() {
+
+		ApplicationProperties properties = null;
+		try {
+            properties = ApplicationProperties.getInstance();
+            String serviceUrl = properties.getServiceurl();
+            if (serviceUrl == null || serviceUrl.compareTo("") == 0 || serviceUrl.compareToIgnoreCase("null") == 0) {
+				return LexEVSValueSetDefinitionServicesImpl.defaultInstance();
+			}
+			LexEVSDistributed distributed = getLexEVSDistributed();
+			LexEVSValueSetDefinitionServices vds = distributed.getLexEVSValueSetDefinitionServices();
+			return vds;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+	}
+
+
+    public static LexEVSValueSetDefinitionServices getLexEVSValueSetDefinitionServices(String serviceUrl) {
+		try {
+			LexEVSDistributed distributed =
+				(LexEVSDistributed)
+				ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
+
+			LexEVSValueSetDefinitionServices vds = distributed.getLexEVSValueSetDefinitionServices();
+			return vds;
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+	}
+
+
+
+
 } // End of RemoteServerUtil

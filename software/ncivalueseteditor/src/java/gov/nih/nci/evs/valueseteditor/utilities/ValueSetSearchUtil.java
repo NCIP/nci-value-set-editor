@@ -1,7 +1,8 @@
 package gov.nih.nci.evs.valueseteditor.utilities;
 
-import java.util.HashMap;
-import java.util.Map;
+//import java.util.HashMap;
+//import java.util.Map;
+import java.util.*;
 
 import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
@@ -12,6 +13,8 @@ import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 import org.LexGrid.codingSchemes.CodingScheme;
 
 import org.apache.log4j.Logger;
+import javax.faces.model.*;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -58,13 +61,17 @@ import org.apache.log4j.Logger;
 /**
  * Search utility for value sets
  *
- * @author garciawa2
+ * @author kim.ong@ngc.com, garciawa2
  */
 public class ValueSetSearchUtil {
 
     // Local variables
     private static Logger _logger = Logger.getLogger(ValueSetSearchUtil.class);
     private static LexBIGService lbSvc = null;
+
+    List ontologyList = null;
+    //HashMap csnv2codingSchemeNameMap = null;
+    //HashMap csnv2VersionMap = null;
 
     /**
      * Constructor
@@ -91,27 +98,88 @@ public class ValueSetSearchUtil {
     	hmap.put("5","AcknowledgementType");
         return hmap;
     }
-    
+
     /**
      * Retrieve list of ontologies
      * @return
-     * @throws LBInvocationException 
+     * @throws LBInvocationException
      */
+
+     /*
     public Map<String,String> getOntologyList() throws Exception {
-    	Map<String,String> hmap = new HashMap<String,String>();    	
+
+		if (ontologyList != null) return ontologyList;
+		ontologyList = new HashMap<String,String>();
+
+    	Map<String,String> hmap = new HashMap<String,String>();
     	CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
         CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
-  
+
         for (int i = 0; i < csrs.length; i++) {
         	CodingSchemeRendering csr = csrs[i];
         	CodingSchemeSummary css = csr.getCodingSchemeSummary();
         	String representsVersion = css.getRepresentsVersion();
-        	String name = css.getLocalName();
-        	String key = name + " (" + representsVersion + ")";
-        	hmap.put(key,name);	
+        	//String name = css.getLocalName();
+        	String formalname = css.getFormalName();
+
+        	if (!DataUtils.isMapping(formalname, representsVersion) &&
+        	     DataUtils.isExtension(formalname, representsVersion)) {
+				String key = name + " (" + representsVersion + ")";
+				ontologyList.put(key,name);
+		    }
         }
-    	return hmap;
-    }    
+    	return ontologyList;
+    }
+    */
+
+    public List getOntologyList() throws Exception {
+
+		if (ontologyList != null) return ontologyList;
+
+        ontologyList = new DataUtils().getOntologyList();
+        return ontologyList;
+        /*
+
+        return new DataUtils().getOntologyList() ;
+
+    	//HashMap csnv2codingSchemeNameMap = new HashMap();
+    	//HashMap csnv2VersionMap = new HashMap();
+
+		ontologyList = new ArrayList();
+
+    	Map<String,String> hmap = new HashMap<String,String>();
+    	CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
+        CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+
+        Vector v = new Vector();
+        HashSet hset = new HashSet();
+        for (int i = 0; i < csrs.length; i++) {
+        	CodingSchemeRendering csr = csrs[i];
+        	CodingSchemeSummary css = csr.getCodingSchemeSummary();
+        	String representsVersion = css.getRepresentsVersion();
+       	    String formalname = css.getFormalName();
+
+        	if (!DataUtils.isMapping(formalname, representsVersion) &&
+        	    !DataUtils.isExtension(formalname, representsVersion)) {
+
+				if (!hset.contains(formalname)) {
+					hset.add(formalname);
+					v.add(formalname);
+				}
+			}
+		}
+
+		v = SortUtils.quickSort(v);
+		for (int i=0; i<v.size(); i++) {
+			String formalname = (String) v.elementAt(i);
+			ontologyList.add(new SelectItem(formalname));
+		}
+    	return ontologyList;
+    	*/
+    }
+
+
+
 
     // -----------------------------------------------------
     // Internal utility methods

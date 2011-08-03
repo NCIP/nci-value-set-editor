@@ -59,15 +59,17 @@ public class ApplicationProperties {
         Logger.getLogger(ApplicationProperties.class);
 
     // Public Constants
-    public static final String LG_CONFIG_FILE = "LG_CONFIG_FILE";    
-    
+    public static final String LG_CONFIG_FILE = "LG_CONFIG_FILE";
+
     // Private Constants
-    private static final String PROP_FILE = "NCIvseProperties";    
+    private static final String PROP_FILE = "NCIvseProperties";
     private static final String DEBUG = "DEBUG";
     private static final String BUILD_DATE = "BUILD_DATE";
-    private static final String APP_VERSION = "APPLICATION_VERSION";    
-    private static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";    
+    private static final String APP_VERSION = "APPLICATION_VERSION";
+    private static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
     private static final String APP_BUILD_TAG = "APP_BUILD_TAG";
+
+    private static final String NCIT_URL = "NCIT_URL";
 
     // Private Variables
     private static ApplicationProperties appProperties = null;
@@ -79,7 +81,9 @@ public class ApplicationProperties {
     private static String _app_build_tag = null;
     private static HashMap<String,String> _configurableItemMap;
     private static HashMap<String,String> _securityTokenMap;
-    
+
+    private static String _ncit_url = null;
+
     /**
      * Private constructor for singleton pattern.
      */
@@ -88,8 +92,8 @@ public class ApplicationProperties {
     }
 
     /**
-     * Gets the single instance of Properties.     
-     * @return single instance of ApplicationProperties     
+     * Gets the single instance of Properties.
+     * @return single instance of ApplicationProperties
      * @throws Exception the exception
      */
     public static ApplicationProperties getInstance() throws Exception {
@@ -108,13 +112,17 @@ public class ApplicationProperties {
                             .getProperty(ApplicationProperties.APP_VERSION);
                     _service_url =
                     	ApplicationProperties
-                            .getProperty(ApplicationProperties.EVS_SERVICE_URL);                    
+                            .getProperty(ApplicationProperties.EVS_SERVICE_URL);
                     _lg_config_file =
                     	ApplicationProperties
                             .getProperty(ApplicationProperties.LG_CONFIG_FILE);
                     _app_build_tag =
                     	ApplicationProperties
                             .getProperty(ApplicationProperties.APP_BUILD_TAG);
+
+                    _ncit_url =
+                    	ApplicationProperties
+                            .getProperty(ApplicationProperties.NCIT_URL);
                 }
             }
         }
@@ -123,7 +131,7 @@ public class ApplicationProperties {
     }
 
     // ***************** Getters ****************************
-    
+
     public static boolean getDebug() throws Exception {
     	if (appProperties == null) getInstance();
         return _debug;
@@ -132,35 +140,40 @@ public class ApplicationProperties {
     public static String getBuilddate() throws Exception {
     	if (appProperties == null) getInstance();
         return _build_date;
-    }    
-    
+    }
+
     public static String getAppversion() throws Exception {
     	if (appProperties == null) getInstance();
         return _app_version;
-    }     
+    }
 
     public static String getServiceurl() throws Exception {
     	if (appProperties == null) getInstance();
         return _service_url;
-    }    
+    }
 
     public static String getLgconfigfile() throws Exception {
     	if (appProperties == null) getInstance();
         return _lg_config_file;
-    }     
+    }
 
     public static String getAppbuildtag() throws Exception {
     	if (appProperties == null) getInstance();
         return _app_build_tag;
-    }    
-   
+    }
+
     public static HashMap<String,String> getSecurityTokenMap() throws Exception {
     	if (appProperties == null) getInstance();
         return _securityTokenMap;
-    }    
-    
+    }
+
+    public static String getNCITurl() throws Exception {
+    	if (appProperties == null) getInstance();
+        return _ncit_url;
+    }
+
     // ***************** Internal methods *******************
-    
+
     /**
      * @param key
      * @return
@@ -186,7 +199,7 @@ public class ApplicationProperties {
 
         PropertyFileParser parser = new PropertyFileParser(propertyFile);
         parser.run();
-        
+
         _configurableItemMap = parser.getConfigurableItemMap();
         _securityTokenMap = parser.getSecurityTokenMap();
     }

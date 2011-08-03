@@ -1,8 +1,6 @@
-package gov.nih.nci.evs.valueseteditor.beans;
-import java.util.*;
-import javax.faces.context.FacesContext;
+package gov.nih.nci.evs.valueseteditor.utilities;
 
-import gov.nih.nci.evs.valueseteditor.properties.ApplicationProperties;
+import java.util.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -47,71 +45,84 @@ import gov.nih.nci.evs.valueseteditor.properties.ApplicationProperties;
  */
 
 /**
- * @author kim.ong@ngc.com, garciawa2
- * UserSessionBean
+ * @author EVS Team
+ * @version 1.0
+ *
+ *          Modification history Initial implementation kim.ong@ngc.com
+ *
  */
-public class UserSessionBean {
 
-    private Throwable _exception = null;
+public class SortUtils {
 
-	public String getBuilddate() throws Exception {
-        return ApplicationProperties.getBuilddate();
+    public static final int SORT_BY_NAME = 1;
+    public static final int SORT_BY_CODE = 2;
+
+    /**
+     * Performs quick sort of a List by name.
+     *
+     * @param list an instance of List
+     */
+    public static void quickSort(List list) {
+        quickSort(list, SORT_BY_NAME);
     }
 
-    public String getAppversion() throws Exception {
-        return ApplicationProperties.getAppversion();
+    /**
+     * Performs quick sort of a List by a specified sort option.
+     *
+     * @param list an instance of List
+     * @param sort_option, an integer; 1, if sort by name; 2: if sort by code
+     */
+    public static void quickSort(List list, int sort_option) {
+        if (list == null)
+            return;
+        if (list.size() <= 1)
+            return;
+        try {
+            Collections.sort(list, new SortComparator(sort_option));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
-    public String getBuildtag() throws Exception {
-        return ApplicationProperties.getAppbuildtag();
+    /**
+     * Performs quick sort of a Vector by a specified sort option.
+     *
+     * @param v an instance of Vector
+     * @param sort_option, an integer; 1, if sort by name; 2: if sort by code
+     */
+
+    public static Vector quickSort(Vector v, int sort_option) {
+        if (v == null)
+            return v;
+        if (v.size() <= 1)
+            return v;
+        try {
+            Collections.sort((List) v, new SortComparator(sort_option));
+            return v;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
-    public String getEvsserviceurl() throws Exception {
-        return ApplicationProperties.getServiceurl();
+    /**
+     * Performs quick sort of a Vector by name.
+     *
+     * @param v an instance of Vector
+     */
+
+    public static Vector quickSort(Vector v) {
+        return quickSort(v, SORT_BY_NAME);
     }
 
-    public boolean getDebug() throws Exception {
-        return ApplicationProperties.getDebug();
+    @SuppressWarnings("unchecked")
+    public static Enumeration<?> sort(Enumeration<?> enumeration) {
+        if (enumeration == null)
+            return enumeration;
+
+        List keyList = Collections.list(enumeration);
+        Collections.sort(keyList);
+        enumeration = Collections.enumeration(keyList);
+        return enumeration;
     }
-
-	private static final String SERVLET_EXCEPTION_KEY = "javax.servlet.error.exception";
-
-	public Throwable getException() {
-		initializeException();
-		if (_exception == null) return new Throwable("Unknown error.");
-		return _exception;
-	}
-
-    // -----------------------------------------------------
-    // Internal utility methods
-    // -----------------------------------------------------
-
-	/**
-	 * Find the exception method
-	 */
-	private void initializeException() {
-		FacesContext ctx = FacesContext.getCurrentInstance();
-		if (ctx.getExternalContext().getRequestMap()
-				.containsKey(SERVLET_EXCEPTION_KEY)) {
-			this._exception = (Throwable) ctx.getExternalContext()
-					.getRequestMap().remove(SERVLET_EXCEPTION_KEY);
-		} else if (ctx.getExternalContext().getSessionMap()
-				.containsKey(SERVLET_EXCEPTION_KEY)) {
-			this._exception = (Throwable) ctx.getExternalContext()
-					.getSessionMap().remove(SERVLET_EXCEPTION_KEY);
-		}
-	}
-
-    public static List getResultsPerPageValues() {
-        List resultsPerPageList = new ArrayList();
-        resultsPerPageList.add("10");
-        resultsPerPageList.add("25");
-        resultsPerPageList.add("50");
-        resultsPerPageList.add("75");
-        resultsPerPageList.add("100");
-        resultsPerPageList.add("250");
-        resultsPerPageList.add("500");
-        return resultsPerPageList;
-    }
-
-} // End of UserSessionBean
+}

@@ -29,6 +29,12 @@
         </ConfigurableItem>
 
         <ConfigurableItem>
+             <name>NCIT_URL</name>
+             <value>@ncit.url@</value>
+        </ConfigurableItem>
+        
+        
+        <ConfigurableItem>
              <name>LG_CONFIG_FILE</name>
              <value>@lg.config.file@</value>
         </ConfigurableItem>

@@ -4,20 +4,42 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-    <context-param>
-        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
-        <param-value>.xhtml</param-value>
-    </context-param>
-
     <session-config>
         <session-timeout>120</session-timeout>
     </session-config>
 
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>server</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>javax.faces.CONFIG_FILES</param-name>
+        <param-value>/WEB-INF/faces-config.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
+    </listener>
+
+    <servlet>
+       <servlet-name>Log4JServlet</servlet-name>
+       <servlet-class>gov.nih.nci.evs.valueseteditor.servlet.Log4JServlet</servlet-class>
+       <load-on-startup>1</load-on-startup>
+    </servlet>
+
 
     <!-- Faces Servlet -->
+
+    <!-- servlet>
+         <servlet-name>Faces Servlet</servlet-name>
+         <servlet-class>gov.nih.nci.evs.browser.servlet.AFacesServlet</servlet-class>
+         <init-param>
+           <param-name>errorPage</param-name>
+           <param-value>/pages/error_handler.jsf</param-value>
+         </init-param>
+         <load-on-startup>-1</load-on-startup>
+    </servlet -->
 
     <servlet>
         <servlet-name>FacesServlet</servlet-name>
@@ -29,16 +51,11 @@
 
     <servlet-mapping>
         <servlet-name>FacesServlet</servlet-name>
-        <url-pattern>*.xhtml</url-pattern>
+        <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
 
     <!--  Log4j init servlet -->
 
-    <servlet>
-       <servlet-name>Log4JServlet</servlet-name>
-       <servlet-class>gov.nih.nci.evs.valueseteditor.servlet.Log4JServlet</servlet-class>
-       <load-on-startup>1</load-on-startup>
-    </servlet>
 
     <!-- Internal server error -->
 
@@ -53,5 +70,6 @@
        <exception-type>java.lang.Throwable</exception-type>
        <location>/pages/errorPage.xhtml</location>
     </error-page>
-
+    
+    
 </web-app>

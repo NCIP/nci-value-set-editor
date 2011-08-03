@@ -7,6 +7,6 @@
 	<title>NCI Value Set Editor</title>
 </head>
 <body>
-	<jsp:forward page="/pages/welcome.xhtml" />
+	<jsp:forward page="/pages/welcome.jsf" />
 </body>
 </html>

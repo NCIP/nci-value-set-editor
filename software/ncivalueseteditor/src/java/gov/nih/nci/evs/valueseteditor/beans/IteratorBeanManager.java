@@ -1,8 +1,9 @@
 package gov.nih.nci.evs.valueseteditor.beans;
-import java.util.*;
-import javax.faces.context.FacesContext;
 
-import gov.nih.nci.evs.valueseteditor.properties.ApplicationProperties;
+import gov.nih.nci.evs.valueseteditor.utilities.*;
+
+
+import java.util.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -47,71 +48,82 @@ import gov.nih.nci.evs.valueseteditor.properties.ApplicationProperties;
  */
 
 /**
- * @author kim.ong@ngc.com, garciawa2
- * UserSessionBean
+ * @author EVS Team
+ * @version 1.0
+ *
+ *          Modification history Initial implementation kim.ong@ngc.com
+ *
  */
-public class UserSessionBean {
 
-    private Throwable _exception = null;
+public class IteratorBeanManager extends Object {
+    private HashMap _iteratorBeanHashMap = null;
+    private Random _random = null;
 
-	public String getBuilddate() throws Exception {
-        return ApplicationProperties.getBuilddate();
+    public IteratorBeanManager() {
+        _iteratorBeanHashMap = new HashMap();
+        _random = new Random();
     }
 
-    public String getAppversion() throws Exception {
-        return ApplicationProperties.getAppversion();
+    public String createIteratorKey(Vector schemes, String matchText,
+        String searchTarget, String matchAlgorithm, int maxReturn) {
+        String maxReturn_str = Integer.toString(maxReturn);
+        String key = matchText.trim();
+        key = key + "|" + searchTarget + "|" + matchAlgorithm;
+        for (int i = 0; i < schemes.size(); i++) {
+            String scheme = (String) schemes.elementAt(i);
+            key = key + "|" + scheme;
+        }
+        key = key + "|" + maxReturn_str;
+        int randomNumber = _random.nextInt();
+        String randomNumber_str = Integer.toString(randomNumber);
+        key = key + "|" + randomNumber_str;
+        return key;
     }
 
-    public String getBuildtag() throws Exception {
-        return ApplicationProperties.getAppbuildtag();
+    public boolean addIteratorBean(IteratorBean bean) {
+        String key = bean.getKey();
+        if (_iteratorBeanHashMap.containsKey(key))
+            return false;
+        _iteratorBeanHashMap.put(key, bean);
+        return true;
     }
 
-    public String getEvsserviceurl() throws Exception {
-        return ApplicationProperties.getServiceurl();
+    public IteratorBean getIteratorBean(String key) {
+        if (key == null)
+            return null;
+        if (!containsIteratorBean(key))
+            return null;
+        return (IteratorBean) _iteratorBeanHashMap.get(key);
     }
 
-    public boolean getDebug() throws Exception {
-        return ApplicationProperties.getDebug();
+
+    public IteratorBean removeIteratorBean(String key) {
+        if (key == null)
+            return null;
+        if (!containsIteratorBean(key))
+            return null;
+        IteratorBean bean = (IteratorBean) _iteratorBeanHashMap.remove(key);
+        return bean;
     }
 
-	private static final String SERVLET_EXCEPTION_KEY = "javax.servlet.error.exception";
 
-	public Throwable getException() {
-		initializeException();
-		if (_exception == null) return new Throwable("Unknown error.");
-		return _exception;
-	}
-
-    // -----------------------------------------------------
-    // Internal utility methods
-    // -----------------------------------------------------
-
-	/**
-	 * Find the exception method
-	 */
-	private void initializeException() {
-		FacesContext ctx = FacesContext.getCurrentInstance();
-		if (ctx.getExternalContext().getRequestMap()
-				.containsKey(SERVLET_EXCEPTION_KEY)) {
-			this._exception = (Throwable) ctx.getExternalContext()
-					.getRequestMap().remove(SERVLET_EXCEPTION_KEY);
-		} else if (ctx.getExternalContext().getSessionMap()
-				.containsKey(SERVLET_EXCEPTION_KEY)) {
-			this._exception = (Throwable) ctx.getExternalContext()
-					.getSessionMap().remove(SERVLET_EXCEPTION_KEY);
-		}
-	}
-
-    public static List getResultsPerPageValues() {
-        List resultsPerPageList = new ArrayList();
-        resultsPerPageList.add("10");
-        resultsPerPageList.add("25");
-        resultsPerPageList.add("50");
-        resultsPerPageList.add("75");
-        resultsPerPageList.add("100");
-        resultsPerPageList.add("250");
-        resultsPerPageList.add("500");
-        return resultsPerPageList;
+    public boolean containsIteratorBean(String key) {
+        if (key == null)
+            return false;
+        return _iteratorBeanHashMap.containsKey(key);
     }
 
-} // End of UserSessionBean
+    public Vector getKeys() {
+        if (_iteratorBeanHashMap == null)
+            return null;
+        Vector key_vec = new Vector();
+        Iterator iterator = _iteratorBeanHashMap.keySet().iterator();
+        while (iterator.hasNext()) {
+            String key = (String) iterator.next();
+            IteratorBean bean = (IteratorBean) _iteratorBeanHashMap.get(key);
+            key_vec.add(bean.getKey());
+        }
+        return key_vec;
+    }
+
+}
