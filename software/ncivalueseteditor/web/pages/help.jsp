@@ -53,6 +53,8 @@
           
           <%
           String indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
+          String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf";
+          String arrowImage = request.getContextPath() + "/images/up_arrow.jpg";
           %>
           
           <a href="#value_set">Value Set Tab</a><br/>
@@ -61,21 +63,403 @@
           <%=indent%><%=indent%> <a href="#modify_metadata">Modify Metadata</a><br/>
           <%=indent%><%=indent%> <a href="#create_component_subset">Create Component Subset</a><br/>
           <%=indent%><%=indent%> <a href="#edit_component_subset">Edit Component Subset</a><br/>
-          <%=indent%><%=indent%> <a href="#edit_component_subset">Resolve Component Subset</a><br/>
+          <%=indent%><%=indent%> <a href="#resolve_component_subset">Resolve Component Subset</a><br/>
           
-          <%=indent%><%=indent%> <a href="#edit_component_subset">Create Value Set Expression</a><br/>
-          <%=indent%><%=indent%> <a href="#edit_component_subset">Resolve Value Set Definition</a><br/>
-          <%=indent%><%=indent%> <a href="#edit_component_subset">Export Value Set Definition</a><br/>
+          <%=indent%><%=indent%> <a href="#create_value_set_expression">Create Value Set Expression</a><br/>
+          <%=indent%><%=indent%> <a href="#resolve_value_set_definition">Resolve Value Set Definition</a><br/>
+          <%=indent%><%=indent%> <a href="#export_value_set_definition">Export Value Set Definition</a><br/>
           
-          <%=indent%> <a href="#copy_value_set">Copy a Value Set Definition from Server</a><br/>
+          <%=indent%> <a href="#copy_value_set">Copy a Value Set Definition</a><br/>
           <%=indent%> <a href="#remove_value_set">Remove a Value Set Definition</a><br/>
 
           <a href="#additionalInformation">Additional Information</a><br/>
         </p>
 
         <%-- -------------------------------------------------------------- --%> 
+ 
+         <div class="textbody">
+           <br/>
+           <table width="720px" cellpadding="0" cellspacing="0" border="0">
+             <tr>
+               <td><a name="introduction"><b>Introduction</b></a></td>
+               <td align="right">
+                 <a href="#"><img src="<%=arrowImage%>" 
+                   width="16" height="16" border="0" alt="top" /></a>
+               </td>
+             </tr>
+           </table>
+<p>
+The objective of the value set editor application is to help its users to extract an arbitrary subset of   
+concepts from the EVS terminology sever. Such a subset would be
+refer to as a value set in the following discussion. The XML representation of a value set defining the content of a value set
+would be referred to as a value set definition. 
+A value set definition can be resolved into a list of concepts by the value set editor provided that 
+a version of each participating terminology is specified by the user. 
+If no version is specified, then the production version of each participating terminology would be used. 
+The remainder sessions would be focused on the instructions on how to create, edit, delete, and export  
+a value set definition. 
+</p>
+
+        </div>  
+
+
+        <%-- -------------------------------------------------------------- --%> 
+ 
+         <div class="textbody">
+           <br/>
+           <table width="720px" cellpadding="0" cellspacing="0" border="0">
+             <tr>
+               <td><a name="homePage"><b>NCI EVS Value Set Editor Home Page</b></a></td>
+               <td align="right">
+                 <a href="#"><img src="<%=arrowImage%>" 
+                   width="16" height="16" border="0" alt="top" /></a>
+               </td>
+             </tr>
+           </table>
+<p>
+The Home page of the value set editor is composed of a banner, a horizontal bar containing a quicklink combobox, 
+a menu bar, and a welcome paragraph.
+The menu bar contains two items, <b>Home</b> and <b>Value Set</b>, referred to here as <b>Home</b> tab 
+and <b>Value Set</b> tab, respectively.
+</p>
+
+        </div>  
+        
+        <%-- -------------------------------------------------------------- --%> 
+ 
+         <div class="textbody">
+           <br/>
+           <table width="720px" cellpadding="0" cellspacing="0" border="0">
+             <tr>
+               <td><a name="home"><b>Home Tab</b></a></td>
+               <td align="right">
+                 <a href="#"><img src="<%=arrowImage%>" 
+                   width="16" height="16" border="0" alt="top" /></a>
+               </td>
+             </tr>
+           </table>
+<p>
+The menu bar is accessible from all user interface pages.
+You may return to the home page at any time by clicking the <b>Home</b> tab on the menu bar.
+</p>
+
+        </div>  
+        
+
+        <%-- -------------------------------------------------------------- --%> 
+ 
+         <div class="textbody">
+           <br/>
+           <table width="720px" cellpadding="0" cellspacing="0" border="0">
+             <tr>
+               <td><a name="value_set"><b>Value Set Tab</b></a></td>
+               <td align="right">
+                 <a href="#"><img src="<%=arrowImage%>" 
+                   width="16" height="16" border="0" alt="top" /></a>
+               </td>
+             </tr>
+           </table>
+<p>
+The Value Set tab shows a list of value set definitions you are working on. 
+This list is empty initially.
+You may click on the <b>Add</b> button to create the first value set definition.
+The step by step procedure on how to create a value set definition would be discussed in 
+the <a name="create_value_set"><b>Create a New Value Set Definition</b></a> session next.
+</p>
+<p>
+To remove a value set definition, select the checkbox corresponding to the value set
+definition you wish to delete, then click on the <b>Remove</b> button.
+A confirmation dialog box will appear asking you to confirm the <b>Remove</b> action.
+All data would be permanently deleted once the action is confirmed.
+</p>
+<p>
+You may make a local copy of a value set definition stord on the server.
+See <a name="copy_value_set"><b>Copy a Value Set Definition</b></a> for details.
+</p>
+<p>
+You may also also make changes to a value set definition you created previously
+by clicking on the Edit hyperlink.
+See <a name="edit_value_set"><b>Edit a Value Set Definition</b></a>.
+</p>
+<p>
+Clicking on the Resolve hyperlink to view the list of concepts belonging to the corresponding value set.
+See <a name="resolve_value_set_definition"><b>Resolve Value Set Definition</b></a>.
+</p>
+<p>
+You may also export a value set definition to a file in
+LexGrid XML format by clicking on the Export hyperlink.
+See <a name="export_value_set_definition"><b>Export Value Set Definition</b></a>.
+</p>
+
+
+        </div>  
+        
+        <%-- -------------------------------------------------------------- --%> 
+ 
+         <div class="textbody">
+           <br/>
+           <table width="720px" cellpadding="0" cellspacing="0" border="0">
+             <tr>
+               <td><a name="create_value_set"><b>Create a New Value Set Definition</b></a></td>
+               <td align="right">
+                 <a href="#"><img src="<%=arrowImage%>" 
+                   width="16" height="16" border="0" alt="top" /></a>
+               </td>
+             </tr>
+           </table>        
+        
+<p>
+The procedure for creating a value set definition involves first entering some metadata about the value set definition.
+Next, define a collection of component subsets.  
+Finally, you can create a value set expression using component subsets you just created and three standard set operators 
+Union (&#8746;), Intersection (&#8745;), and Difference(/); for example, ((A &#8746; B) &#8745; C), here A, B, C are labels 
+of component subsets.
+</p>
+<p>
+When you click on the Export XML button, 
+the value set editor application will derive a value set definition using metadata, component subsets, and value set expression
+you provided and export it to a file in LexGrid XML format. 
+</p>
+<p>
+You may review the list of concepts belonging to a value set
+by clicking on the <b>Resolve</b> button.
+See <a href="#resolve_value_set_definition"><b>Resolve Value Set Definition</b></a>.
+<p>
+</p>
+<p>
+In the next session, we will explain metadata elements in detail.
+</p>           
+</div>             
+        
+    
+        <%-- -------------------------------------------------------------- --%> 
+    
+         <div class="textbody">
+           <br/>
+           <table width="720px" cellpadding="0" cellspacing="0" border="0">
+             <tr>
+               <td><a name="enter_metadata"><b>Enter Metadata</b></a></td>
+               <td align="right">
+                 <a href="#"><img src="<%=arrowImage%>" 
+                   width="16" height="16" border="0" alt="top" /></a>
+               </td>
+             </tr>
+           </table>
+<p>
+
+</p>
+
+        </div>          
+      
+        <%-- -------------------------------------------------------------- --%> 
+    
+         <div class="textbody">
+           <br/>
+           <table width="720px" cellpadding="0" cellspacing="0" border="0">
+             <tr>
+               <td><a name="modify_metadata"><b>Modify Metadata</b></a></td>
+               <td align="right">
+                 <a href="#"><img src="<%=arrowImage%>" 
+                   width="16" height="16" border="0" alt="top" /></a>
+               </td>
+             </tr>
+           </table>
+<p>
+
+</p>
+
+        </div>       
+    
+ 
+      
+        <%-- -------------------------------------------------------------- --%> 
+    
+         <div class="textbody">
+           <br/>
+           <table width="720px" cellpadding="0" cellspacing="0" border="0">
+             <tr>
+               <td><a name="create_component_subset"><b>Create Component Subset</b></a></td>
+               <td align="right">
+                 <a href="#"><img src="<%=arrowImage%>" 
+                   width="16" height="16" border="0" alt="top" /></a>
+               </td>
+             </tr>
+           </table>
+<p>
+
+</p>
+
+        </div>     
+ 
+
+
+        <%-- -------------------------------------------------------------- --%> 
+    
+         <div class="textbody">
+           <br/>
+           <table width="720px" cellpadding="0" cellspacing="0" border="0">
+             <tr>
+               <td><a name="edit_component_subset"><b>Edit Component Subset</b></a></td>
+               <td align="right">
+                 <a href="#"><img src="<%=arrowImage%>" 
+                   width="16" height="16" border="0" alt="top" /></a>
+               </td>
+             </tr>
+           </table>
+<p>
+
+</p>
+
+        </div>   
+        
+
+        <%-- -------------------------------------------------------------- --%> 
+    
+         <div class="textbody">
+           <br/>
+           <table width="720px" cellpadding="0" cellspacing="0" border="0">
+             <tr>
+               <td><a name="resolve_component_subset"><b>Resolve Component Subset</b></a></td>
+               <td align="right">
+                 <a href="#"><img src="<%=arrowImage%>" 
+                   width="16" height="16" border="0" alt="top" /></a>
+               </td>
+             </tr>
+           </table>
+<p>
+
+</p>
+
+        </div>
+        
+ 
+ 
+         <%-- -------------------------------------------------------------- --%> 
+     
+          <div class="textbody">
+            <br/>
+            <table width="720px" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td><a name="create_value_set_expression"><b>Create Value Set Expression</b></a></td>
+                <td align="right">
+                  <a href="#"><img src="<%=arrowImage%>" 
+                    width="16" height="16" border="0" alt="top" /></a>
+                </td>
+              </tr>
+            </table>
+ <p>
+ 
+ </p>
+ 
+        </div>
         
         
+         <%-- -------------------------------------------------------------- --%> 
+     
+          <div class="textbody">
+            <br/>
+            <table width="720px" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td><a name="resolve_value_set_definition"><b>Resolve Value Set Definition</b></a></td>
+                <td align="right">
+                  <a href="#"><img src="<%=arrowImage%>" 
+                    width="16" height="16" border="0" alt="top" /></a>
+                </td>
+              </tr>
+            </table>
+ <p>
+ 
+ </p>
+ 
+        </div>
+ 
+ 
+ 
+          <%-- -------------------------------------------------------------- --%> 
+      
+           <div class="textbody">
+             <br/>
+             <table width="720px" cellpadding="0" cellspacing="0" border="0">
+               <tr>
+                 <td><a name="export_value_set_definition"><b>Export Value Set Definition</b></a></td>
+                 <td align="right">
+                   <a href="#"><img src="<%=arrowImage%>" 
+                     width="16" height="16" border="0" alt="top" /></a>
+                 </td>
+               </tr>
+             </table>
+  <p>
+  
+  </p>
+  
+        </div>
+        
+        
+
+          <%-- -------------------------------------------------------------- --%> 
+      
+           <div class="textbody">
+             <br/>
+             <table width="720px" cellpadding="0" cellspacing="0" border="0">
+               <tr>
+                 <td><a name="copy_value_set"><b>Many a Copy of a Value Set Definition</b></a></td>
+                 <td align="right">
+                   <a href="#"><img src="<%=arrowImage%>" 
+                     width="16" height="16" border="0" alt="top" /></a>
+                 </td>
+               </tr>
+             </table>
+  <p>
+  
+  </p>
+  
+        </div>
+        
+
+
+          <%-- -------------------------------------------------------------- --%> 
+      
+           <div class="textbody">
+             <br/>
+             <table width="720px" cellpadding="0" cellspacing="0" border="0">
+               <tr>
+                 <td><a name="remove_value_set"><b>Remove a Value Set Definition</b></a></td>
+                 <td align="right">
+                   <a href="#"><img src="<%=arrowImage%>" 
+                     width="16" height="16" border="0" alt="top" /></a>
+                 </td>
+               </tr>
+             </table>
+  <p>
+  
+  </p>
+  
+        </div>
+        
+ 
+ 
+           <%-- -------------------------------------------------------------- --%> 
+       
+            <div class="textbody">
+              <br/>
+              <table width="720px" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td><a name="additionalInformation"><b>Additional Information</b></a></td>
+                  <td align="right">
+                    <a href="#"><img src="<%=arrowImage%>" 
+                      width="16" height="16" border="0" alt="top" /></a>
+                  </td>
+                </tr>
+              </table>
+   <p>
+   
+   </p>
+   
+        </div>
+        
+        
+          
+          
  		           
 		      <%@ include file="/pages/include/footer.jsp" %>
 		  </div>

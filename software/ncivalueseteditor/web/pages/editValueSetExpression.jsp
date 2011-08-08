@@ -122,8 +122,11 @@
 	    
 	    selectedOntology = DataUtils.getFormalName(vsb.getSelectedOntology(), null);
 	    if (selectedOntology == null) {
-System.out.println("(???) Unable to find formalname for: " + vsb.getSelectedOntology());	
+System.out.println("(?????) Unable to find formalname for: " + vsb.getSelectedOntology());	
 selectedOntology = "NCI Thesaurus";
+	    } else {
+	    
+System.out.println("(*****) selectedOntology: " + selectedOntology);	
 	    }
 	    
 	    
