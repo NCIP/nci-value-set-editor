@@ -804,6 +804,23 @@ body
  text-decoration: none;
 }
 
+.texttitle-blue
+{
+ font-size: 20px;
+ color: #2F2F5F;
+ font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
+ font-weight: bold;
+}
+
+
+.textbody
+{
+ font-size: 12px;
+ color: #444444;
+ font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
+}
+
+
 .textbodyred
 {
  font-size: 12px;
