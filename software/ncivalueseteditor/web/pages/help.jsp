@@ -69,7 +69,7 @@
           <%=indent%><%=indent%> <a href="#resolve_value_set_definition">Resolve Value Set Definition</a><br/>
           <%=indent%><%=indent%> <a href="#export_value_set_definition">Export Value Set Definition</a><br/>
           
-          <%=indent%> <a href="#copy_value_set">Copy a Value Set Definition</a><br/>
+          <%=indent%> <a href="#copy_value_set">Make a Copy of a Value Set Definition</a><br/>
           <%=indent%> <a href="#remove_value_set">Remove a Value Set Definition</a><br/>
 
           <a href="#additionalInformation">Additional Information</a><br/>
@@ -223,12 +223,10 @@ you provided and export it to a file in LexGrid XML format.
 <p>
 You may review the list of concepts belonging to a value set
 by clicking on the <b>Resolve</b> button.
-See <a href="#resolve_value_set_definition"><b>Resolve Value Set Definition</b></a>.
+See <a href="#resolve_value_set_definition"><b>Resolve Value Set Definition</b></a> for details.
 <p>
 </p>
-<p>
-In the next session, we will explain metadata elements in detail.
-</p>           
+        
 </div>             
         
     
@@ -246,9 +244,47 @@ In the next session, we will explain metadata elements in detail.
              </tr>
            </table>
 <p>
-
+The metadata of a value set definition contain the following data elements:
 </p>
 
+          <ul>
+            <li>
+              <b>URI</b>: A unique identifier of a value set definition for computer processing.
+            </li>
+            <li>
+              <b>Name</b>: A human readable name of a value set definition; for example: FDA SPL Color Terminology              
+            </li>
+            <li>
+              <b>Description</b>: A narrative text describing the value set definition.               
+            </li>
+            <li>
+              <b>Concept domain</b>: A concept domain name for categorizing value set definitions; for example, Intellectual Product. 
+                Select one item from the combo-box.
+            </li>               
+            <li>
+              <b>Default coding scheme</b>: The default terminology name. Select one item from the combo-box.               
+            </li>
+            <li>
+              <b>Is active?</b>: An active flag. The default value is true.               
+            </li> 
+             <li>
+              <b>Owner</b>: The owner of the value set definition; for example, FDA.               
+            </li>            
+            <li>
+              <b>Organizations</b>Organization names; for example: FDA.             
+            </li>               
+            <li>
+              <b>Source</b>A source name for determining the position of the value set definition in value set hierarchies; for example:, FDA_SPL_Component. 
+              Select one item from the combo-box. The default value is a blank string (or equivalently, not specified).
+            </li>            
+          </ul>
+
+<p>
+Press the <b>Save Metadata</b> button to save metadata you entered. 
+If all data are entered properly, an <a href="#edit_component_subset">Edit Component Subset</a> page will appear.
+A "Change saved." message will also show. 
+</p>
+         
         </div>          
       
         <%-- -------------------------------------------------------------- --%> 
@@ -265,12 +301,11 @@ In the next session, we will explain metadata elements in detail.
              </tr>
            </table>
 <p>
-
+To change the value of a metadata element, enter or select a new value of the field and press the
+<b>Save</b> button. A message will appear indicating the change has been saved properly.
 </p>
 
         </div>       
-    
- 
       
         <%-- -------------------------------------------------------------- --%> 
     
@@ -287,6 +322,113 @@ In the next session, we will explain metadata elements in detail.
            </table>
 <p>
 
+</p>
+<p>
+The
+<a href="#edit_component_subset">Edit Component Subset</a> page
+will show metadata you entered and a Component Subsets table.
+Component subsets are operands shown in a value set expression 
+(See <a href="#create_value_set_expression">Create Value Set Expression</a>).
+Initially, the Component subsets table would be empty.
+Click on the <b>Add Component</b> button to create a component subset.
+A Component Set page will appear.
+</p>
+<p>
+The following data elements are required for characterizing a component subset:
+</p>
+
+
+          <ul>
+            <li>
+              <b>Label</b>: A short notation for representing the component subset; for example, S1.
+            </li>
+            <li>
+              <b>Name</b>: A human readable name of a component subset; for example: Blue color.              
+            </li>
+            <li>
+              <b>Description</b>: A narrative text describing the component subset.               
+            </li>
+            <li>
+              <b>Vocabulary</b>: The name of the vocabulary where concepts in this component subset
+                 would be drawn. 
+                 It is applicable to all types of component subsets except value set reference.    
+                 Select one item from the combo-box.               
+            </li>
+            <li>
+              <b>Type</b>: The type of component subset. There are six types of component subset:     
+              
+		  <ul>
+		    <li>
+		      <b>Code</b>: The component subset consists of a single concept in a particular vocabulary.
+		    </li>
+		    <li>
+		      <b>Property</b>: The component subset consists of a collection of concepts in a particular vocabulary 
+				     that matches with a user specified matching criterion
+		    </li>
+		    <li>
+		      <b>Relationship</b>               
+		    </li>
+		    <li>
+		      <b>Entire vocabulary</b>              
+		    </li>
+		    <li>
+		      <b>Enumeration of codes</b>             
+		    </li>   
+		    <li>
+		      <b>Value set reference</b>             
+		    </li>   		    
+		  </ul>              
+            </li>            
+            <li>
+              <b>Match text</b>: Search string, applicable only to Property type component subsets.             
+            </li>               
+            <li>
+              <b>Match Algorithm</b>: Matching Algorithm, applicable only to Property type component subsets.
+              Click one of the three radio buttons: Eact Match, Begin With, and Contains. 
+            </li>  
+            <li>
+              <b>Property</b>: Property name, applicable only to Property type component subsets.  
+              Select one from the dropdown combo-box.
+            </li>              
+             <li>
+              <b>Code</b>: Concept code, applicable only to Code type component subsets.  
+            </li>            
+             <li>
+              <b>Focus concept code</b>: Focus concept code, applicable only to Relationship type component subsets.  
+            </li>              
+             <li>
+              <b>Association</b>: Association name, applicable only to Relationship type component subsets.
+              Select one from the dropdown combo-box.
+            </li>               
+             <li>
+              <b>Direction</b>: Association direction, applicable only to Relationship type component subsets.
+              Select one from two radio buttons: Forward and Backward.
+            </li>               
+             <li>
+              <b>Include focus concept?</b>: Include focus concept indicator, applicable only to Relationship type component subsets.
+              Check only if the focus concept is included.
+            </li>              
+             <li>
+              <b>Transitive closure?</b>: Transitive closure indicator, applicable only to Relationship type component subsets.
+              Check only if transitive closure is applied.
+            </li>  
+            <li>
+              <b>Codes</b>: List of codes, applicable only to Enumeration of Codes type component subsets.
+            </li>  
+            <li>
+              <b>Value Set Reference</b>: The name of the referenced value set definition available on the server,
+              applicable only to Value Set Reference type component subsets.
+            </li>              
+          </ul>
+
+<p>
+Press the <b>Preview</b> button to find out the list of concepts belonging to the component subset. 
+</p>
+<p>
+Press the <b>Save</b> button to save the component subset.
+</p>
+<p>
+Press the <b>Cancel</b> button to return to the previous page without saving the component subset data. 
 </p>
 
         </div>     
@@ -348,8 +490,47 @@ In the next session, we will explain metadata elements in detail.
               </tr>
             </table>
  <p>
- 
+ A value set expression determines how a sequence of binary operations on component subsets will be executed to
+ resolve the value set, or equivalently, to 
+ obtain the list of concepts belonging to a value set.
+ For example, the value set expression, ((A &#8746; B) &#8745; C), indicates that
+ the steps for resolving the corresponding value set would be first finding the Union of A and B, and then 
+ finding the intersection of A &#8746; B and C.
  </p>
+ 
+ <p>
+ You may use the following buttons to create the value set expression:
+ </p>
+           <ul>
+             <li>
+               <b>Component Set</b>: Add the lable of the selected component subset to the expression.
+             </li>
+             <li>
+               <b>Union</b>: Add the set union operator (&#8746;) to the expression.          
+             </li>
+             <li>
+               <b>Intersection</b>: Add the set intersection operator (&#8745;) to the expression.       
+            </li>
+             <li>
+               <b>Difference</b>: Add the set difference operator (/) to the expression.  
+            </li> 
+             <li>
+               <b>(</b>: Add the open bracket to the expression.       
+            </li>  
+             <li>
+               <b>)</b>: Add the close bracket to the expression.       
+            </li>               
+           </ul> 
+  
+ <p>
+ Use the <b>Reset</b> button to clear and reset the value set expression.
+ </p> 
+ <p>
+ Use the <b>Resolve</b> button to resolve the value set expression.
+ </p>  
+ <p>
+ Use the <b>Export XML</b> button to export the value set definition to a file in LexGrid XML format.
+ </p> 
  
         </div>
         
@@ -402,7 +583,7 @@ In the next session, we will explain metadata elements in detail.
              <br/>
              <table width="720px" cellpadding="0" cellspacing="0" border="0">
                <tr>
-                 <td><a name="copy_value_set"><b>Many a Copy of a Value Set Definition</b></a></td>
+                 <td><a name="copy_value_set"><b>Make a Copy of a Value Set Definition</b></a></td>
                  <td align="right">
                    <a href="#"><img src="<%=arrowImage%>" 
                      width="16" height="16" border="0" alt="top" /></a>
@@ -452,6 +633,9 @@ In the next session, we will explain metadata elements in detail.
                 </tr>
               </table>
    <p>
+   Notes on nested value set definition, i.e., value set definition involving component subsets of value set reference type; 
+   for example, a value set definition with an expression, ((A &#8746; B) &#8745; C) / ((D &#8745; E) &#8746; F).
+   
    
    </p>
    

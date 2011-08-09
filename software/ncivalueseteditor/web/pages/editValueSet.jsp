@@ -283,7 +283,8 @@
 %>	
 		
 		<tr valign="top">
-			<td colspan="4">Component sets are operands shown in a value set expression. Press the Add Component button to create component subsets.</td>
+			<td colspan="4">Component subsets are operands shown in a value set expression. 
+			Press the Add Component button to create component subsets.</td>
 		</tr>		
 
 		<tr>
