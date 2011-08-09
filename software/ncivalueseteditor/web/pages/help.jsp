@@ -666,9 +666,11 @@ So, you should exercise this command with caution.
               </tr>
             </table>
  <p>
- 
+ Resolve Value Set Definition:
  </p>
- 
+ <p>
+  You may export resolved value set definition to a file in either Comma Separated Value (CSV) or XML format.
+ </p>
         </div>
  
  
@@ -713,10 +715,14 @@ So, you should exercise this command with caution.
                 </tr>
               </table>
    <p>
-   Notes on nested value set definition, i.e., value set definition involving component subsets of value set reference type; 
-   for example, a value set definition with an expression, ((A &#8746; B) &#8745; C) / ((D &#8745; E) &#8746; F).
-   
-   
+   Some notes on nested value set definitions:
+   </p>
+   <p>
+   A value set definition may involve component subsets which in term refer to other value set definitions
+   that may or may not available on the server; for example,  
+   a value set definition with an expression, ((A &#8746; B) &#8745; C) / ((D &#8745; E) &#8746; F).
+   Currently, the extension to the LexEVSAPI 6.0 has the capability to resolve such value set definitions.
+   But, th API does not support exporting of such value set definitions to LexGrid XML.
    </p>
    
         </div>
