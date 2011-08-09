@@ -58,21 +58,27 @@
           %>
           
           <a href="#value_set">Value Set Tab</a><br/>
-          <%=indent%> <a href="#create_value_set">Create a New Value Set Definition</a><br/>
+          
+          <%=indent%> <a href="#create_value_set">Create Value Set Definition</a><br/>
           <%=indent%><%=indent%> <a href="#enter_metadata">Enter Metadata</a><br/>
           <%=indent%><%=indent%> <a href="#modify_metadata">Modify Metadata</a><br/>
+          
           <%=indent%><%=indent%> <a href="#create_component_subset">Create Component Subset</a><br/>
           <%=indent%><%=indent%> <a href="#edit_component_subset">Edit Component Subset</a><br/>
-          <%=indent%><%=indent%> <a href="#resolve_component_subset">Resolve Component Subset</a><br/>
           
+          <%=indent%><%=indent%> <a href="#resolve_component_subset">Resolve Component Subset</a><br/>
           <%=indent%><%=indent%> <a href="#create_value_set_expression">Create Value Set Expression</a><br/>
-          <%=indent%><%=indent%> <a href="#resolve_value_set_definition">Resolve Value Set Definition</a><br/>
-          <%=indent%><%=indent%> <a href="#export_value_set_definition">Export Value Set Definition</a><br/>
           
           <%=indent%> <a href="#copy_value_set">Make a Copy of a Value Set Definition</a><br/>
+          <%=indent%> <a href="#edit_value_set_definition">Edit Value Set Definition</a><br/>
+          
           <%=indent%> <a href="#remove_value_set">Remove a Value Set Definition</a><br/>
+          
+          <%=indent%> <a href="#resolve_value_set_definition">Resolve Value Set Definition</a><br/>
+          <%=indent%> <a href="#export_value_set_definition">Export Value Set Definition</a><br/>
 
           <a href="#additionalInformation">Additional Information</a><br/>
+          
         </p>
 
         <%-- -------------------------------------------------------------- --%> 
@@ -89,15 +95,21 @@
              </tr>
            </table>
 <p>
-The objective of the value set editor application is to help its users to extract an arbitrary subset of   
-concepts from the EVS terminology sever. Such a subset would be
-refer to as a value set in the following discussion. The XML representation of a value set defining the content of a value set
-would be referred to as a value set definition. 
-A value set definition can be resolved into a list of concepts by the value set editor provided that 
-a version of each participating terminology is specified by the user. 
-If no version is specified, then the production version of each participating terminology would be used. 
-The remainder sessions would be focused on the instructions on how to create, edit, delete, and export  
-a value set definition. 
+The objective of the value set editor application is to provide users with capabilities to extract an arbitrary subset of   
+concepts, referred to here as a value set, from the EVS terminology sever. 
+A value set can be fully characterized by a value set definition.
+A value set definition can be represented in an LexGrid XML format and exported to the server 
+for later retrieval by client applications such as the NCI Term Browser.
+A value set definition can also be resolved into a list of concepts provided that 
+a version of each terminology participating in the value set is specified by the user. 
+A terminology is said to participate in a value set if and only if a concept belonging to the terminology 
+is also a member of this value set.
+If no version is specified, then the production version of each participating terminology would be used
+in resolving the value set definition. 
+</p>
+<p>
+The remainder sessions would be focused on how to create, edit, remove, resolve, and export  
+value set definitions. 
 </p>
 
         </div>  
@@ -117,10 +129,12 @@ a value set definition.
              </tr>
            </table>
 <p>
-The Home page of the value set editor is composed of a banner, a horizontal bar containing a quicklink combobox, 
-a menu bar, and a welcome paragraph.
-The menu bar contains two items, <b>Home</b> and <b>Value Set</b>, referred to here as <b>Home</b> tab 
-and <b>Value Set</b> tab, respectively.
+The Home page of the value set editor is composed of an application banner, 
+a menu bar containing a online help hyperlink, 
+a horizontal bar containing a quicklink combobox, 
+a navigation bar, and a welcome paragraph.
+The navigation bar contains two tabs, the <b>Home</b> tab and the <b>Value Set</b> tab.
+
 </p>
 
         </div>  
@@ -139,8 +153,10 @@ and <b>Value Set</b> tab, respectively.
              </tr>
            </table>
 <p>
-The menu bar is accessible from all user interface pages.
-You may return to the home page at any time by clicking the <b>Home</b> tab on the menu bar.
+The application banner, 
+menu bar, quicklink combobox, and navigation bar are 
+accessible from all user interface pages.
+You may return to the Home page at any time by clicking on the <b>Home</b> tab on the navigation bar.
 </p>
 
         </div>  
@@ -160,35 +176,33 @@ You may return to the home page at any time by clicking the <b>Home</b> tab on t
              </tr>
            </table>
 <p>
-The Value Set tab shows a list of value set definitions you are working on. 
-This list is empty initially.
-You may click on the <b>Add</b> button to create the first value set definition.
-The step by step procedure on how to create a value set definition would be discussed in 
-the <a name="create_value_set"><b>Create a New Value Set Definition</b></a> session next.
+Clicking on the <b>Value Set</b> tab
+will take you to the Value Set List page.
+This page shows a list of value set definitions under construction. 
+You may click on the <b>Add</b> button to create a value set definition.
+The detailed procedure for creating a value set definition would be discussed in 
+the <a name="create_value_set"><b>Create Value Set Definition</b></a> session next.
 </p>
 <p>
-To remove a value set definition, select the checkbox corresponding to the value set
-definition you wish to delete, then click on the <b>Remove</b> button.
+You may make a local copy of a value set definition available on the server using the
+<b>Copy</b> command. Refer to 
+<a name="copy_value_set"><b>Make a Copy of a Value Set Definition</b></a> for details.
+</p>
+<p>
+If there is any value value definition under construction, then the
+<b>Remove</b> will appear.
+You may check a value set definition and press the <b>Remove</b>button to remove the value set definition
+from the system.
 A confirmation dialog box will appear asking you to confirm the <b>Remove</b> action.
 All data would be permanently deleted once the action is confirmed.
 </p>
 <p>
-You may make a local copy of a value set definition stord on the server.
-See <a name="copy_value_set"><b>Copy a Value Set Definition</b></a> for details.
-</p>
-<p>
-You may also also make changes to a value set definition you created previously
-by clicking on the Edit hyperlink.
-See <a name="edit_value_set"><b>Edit a Value Set Definition</b></a>.
-</p>
-<p>
-Clicking on the Resolve hyperlink to view the list of concepts belonging to the corresponding value set.
-See <a name="resolve_value_set_definition"><b>Resolve Value Set Definition</b></a>.
-</p>
-<p>
-You may also export a value set definition to a file in
-LexGrid XML format by clicking on the Export hyperlink.
-See <a name="export_value_set_definition"><b>Export Value Set Definition</b></a>.
+There other value set definition actions are also available: 
+<b>Edit</b>, <b>Resolve</b>, and <b>Export</b>.
+Each would be discussed in 
+<a name="edit_value_set_definition"><b>Edit Value Set Definition</b></a>,
+<a name="resolve_value_set_definition"><b>Resolve Value Set Definition</b></a>,
+<a name="export_value_set_definition"><b>Export Value Set Definition</b></a> below.
 </p>
 
 
@@ -200,7 +214,7 @@ See <a name="export_value_set_definition"><b>Export Value Set Definition</b></a>
            <br/>
            <table width="720px" cellpadding="0" cellspacing="0" border="0">
              <tr>
-               <td><a name="create_value_set"><b>Create a New Value Set Definition</b></a></td>
+               <td><a name="create_value_set"><b>Create Value Set Definition</b></a></td>
                <td align="right">
                  <a href="#"><img src="<%=arrowImage%>" 
                    width="16" height="16" border="0" alt="top" /></a>
@@ -523,16 +537,112 @@ Press the <b>Cancel</b> button to return to the previous page without saving the
            </ul> 
   
  <p>
- Use the <b>Reset</b> button to clear and reset the value set expression.
+ Use the <b>Reset</b> command to clear and reset the value set expression.
  </p> 
  <p>
- Use the <b>Resolve</b> button to resolve the value set expression.
+ Use the <b>Resolve</b> command to resolve the corresponding value set definition.
  </p>  
  <p>
- Use the <b>Export XML</b> button to export the value set definition to a file in LexGrid XML format.
+ Use the <b>Export XML</b> command to export the value set definition to a file in LexGrid XML format.
  </p> 
  
         </div>
+        
+        
+          <%-- -------------------------------------------------------------- --%> 
+      
+           <div class="textbody">
+             <br/>
+             <table width="720px" cellpadding="0" cellspacing="0" border="0">
+               <tr>
+                 <td><a name="copy_value_set"><b>Make a Copy of a Value Set Definition</b></a></td>
+                 <td align="right">
+                   <a href="#"><img src="<%=arrowImage%>" 
+                     width="16" height="16" border="0" alt="top" /></a>
+                 </td>
+               </tr>
+             </table>
+  <p>
+  <p>
+To make a local copy of a value set definition available on the server, 
+click on the Value Set tab on the navigation bar.
+This would take you to the Value Set List page.
+Press the <b>Copy</b>button to open the Copy Value Set page.
+
+<p>
+Specify the value of the following two fields and press the Save button.
+</p>
+
+          <ul>
+            <li>
+              <b>URI</b>: A unique identifier of a value set definition for computer processing.
+            </li>
+            <li>
+              <b>Value Set Reference</b>: The name of the value set definition available on the server. 
+              Select one name from the combo-box.
+            </li>
+          </ul>  
+
+  
+<p>
+The data about the referenced value set definition will appear in a
+Edit Value Set page.
+Refer to <a href="#edit_value_set_definition">Edit Value Set Definition</a> for information on
+how to modify a value set definition.
+
+</p>  
+  
+        </div>        
+        
+        
+         <%-- -------------------------------------------------------------- --%> 
+     
+          <div class="textbody">
+            <br/>
+            <table width="720px" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td><a name="edit_value_set_definition"><b>Edit Value Set Definition</b></a></td>
+                <td align="right">
+                  <a href="#"><img src="<%=arrowImage%>" 
+                    width="16" height="16" border="0" alt="top" /></a>
+                </td>
+              </tr>
+            </table>
+ <p>
+ 
+ </p>
+ 
+        </div>
+
+
+        
+
+
+          <%-- -------------------------------------------------------------- --%> 
+      
+           <div class="textbody">
+             <br/>
+             <table width="720px" cellpadding="0" cellspacing="0" border="0">
+               <tr>
+                 <td><a name="remove_value_set"><b>Remove a Value Set Definition</b></a></td>
+                 <td align="right">
+                   <a href="#"><img src="<%=arrowImage%>" 
+                     width="16" height="16" border="0" alt="top" /></a>
+                 </td>
+               </tr>
+             </table>
+  <p>
+To remove a value set definition, click on the Value Set tab on the navigation bar.
+This would take you to the Value Set List page.
+Check the value set definition you would like to remove and press the <b>Remove</b>button.
+The system would prompt you for confirmation.
+All data you entered regarding the value set definition
+would be permanently deleted once the <b>Remove</b> action is confirmed.
+So, you should exercise this command with caution.
+  </p>
+  
+        </div>
+        
         
         
          <%-- -------------------------------------------------------------- --%> 
@@ -577,45 +687,8 @@ Press the <b>Cancel</b> button to return to the previous page without saving the
         
         
 
-          <%-- -------------------------------------------------------------- --%> 
-      
-           <div class="textbody">
-             <br/>
-             <table width="720px" cellpadding="0" cellspacing="0" border="0">
-               <tr>
-                 <td><a name="copy_value_set"><b>Make a Copy of a Value Set Definition</b></a></td>
-                 <td align="right">
-                   <a href="#"><img src="<%=arrowImage%>" 
-                     width="16" height="16" border="0" alt="top" /></a>
-                 </td>
-               </tr>
-             </table>
-  <p>
-  
-  </p>
-  
-        </div>
-        
 
 
-          <%-- -------------------------------------------------------------- --%> 
-      
-           <div class="textbody">
-             <br/>
-             <table width="720px" cellpadding="0" cellspacing="0" border="0">
-               <tr>
-                 <td><a name="remove_value_set"><b>Remove a Value Set Definition</b></a></td>
-                 <td align="right">
-                   <a href="#"><img src="<%=arrowImage%>" 
-                     width="16" height="16" border="0" alt="top" /></a>
-                 </td>
-               </tr>
-             </table>
-  <p>
-  
-  </p>
-  
-        </div>
         
  
  

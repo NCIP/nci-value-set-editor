@@ -4,6 +4,6 @@
     <td align="right">
       <a href="<%= request.getContextPath() %>/pages/help.jsf" >Help</a>
     </td>
-    <td width="15"></td>
+    <td width="12"></td>
   </tr>
 </table>
