@@ -72,7 +72,7 @@
           <%=indent%> <a href="#copy_value_set">Make a Copy of a Value Set Definition</a><br/>
           <%=indent%> <a href="#edit_value_set_definition">Edit Value Set Definition</a><br/>
           
-          <%=indent%> <a href="#remove_value_set">Remove a Value Set Definition</a><br/>
+          <%=indent%> <a href="#remove_value_set">Remove Value Set Definition</a><br/>
           
           <%=indent%> <a href="#resolve_value_set_definition">Resolve Value Set Definition</a><br/>
           <%=indent%> <a href="#export_value_set_definition">Export Value Set Definition</a><br/>
@@ -610,13 +610,19 @@ how to modify a value set definition.
               </tr>
             </table>
  <p>
- 
- </p>
+ To edit a value set definition, click on the Value Set tab on the navigation bar.
+ This would take you to the Value Set List page.
+ Click on the <b>Edit</b> action hyperlink corresponding to the value set defnition you would like
+ to modify.
+ The Edit Value Set page will appear.
+ Make necessary change to the value set definition using the
+ commands provided by the page.
+ Save the change as appropriate.
+  </p>
  
         </div>
 
-
-        
+       
 
 
           <%-- -------------------------------------------------------------- --%> 
@@ -625,7 +631,7 @@ how to modify a value set definition.
              <br/>
              <table width="720px" cellpadding="0" cellspacing="0" border="0">
                <tr>
-                 <td><a name="remove_value_set"><b>Remove a Value Set Definition</b></a></td>
+                 <td><a name="remove_value_set"><b>Remove Value Set Definition</b></a></td>
                  <td align="right">
                    <a href="#"><img src="<%=arrowImage%>" 
                      width="16" height="16" border="0" alt="top" /></a>
