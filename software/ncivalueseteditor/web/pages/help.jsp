@@ -38,7 +38,7 @@
 	          <%@ include file="/pages/include/applicationBanner.jsp" %>
 	          <%@ include file="/pages/include/quickLinks.jsp" %>
 		  <div class="pagecontent">
-		      <%@ include file="/pages/include/menuBar.jsp" %>
+		      <%@ include file="/pages/include/navBar.jsp" %>
 
 
         <!-- ======================================= -->
@@ -275,7 +275,7 @@ The metadata of a value set definition contain the following data elements:
             </li>               
             <li>
               <b>Source</b>A source name for determining the position of the value set definition in value set hierarchies; for example:, FDA_SPL_Component. 
-              Select one item from the combo-box. The default value is a blank string (or equivalently, not specified).
+              Select one item from the combo-box. The default value is a blank string indicating that the relative position of the value set definition in value set hierarchies has not been specified.
             </li>            
           </ul>
 
@@ -334,7 +334,7 @@ Click on the <b>Add Component</b> button to create a component subset.
 A Component Set page will appear.
 </p>
 <p>
-The following data elements are required for characterizing a component subset:
+The following data elements are required for defining a component subset:
 </p>
 
 

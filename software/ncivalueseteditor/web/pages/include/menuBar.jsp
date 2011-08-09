@@ -1,39 +1,9 @@
-    <table cellpadding="0" cellspacing="0" border="0" height="20px">
-      <tr height="20px" class="mainMenuItem">
 
-<%
-String bgcolor = "#A4A4A4";
-String tab = request.getParameter("tab");
-if (tab == null || tab.compareTo("null") == 0) tab = "welcome";
-if (tab.compareTo("welcome") == 0) {
-    bgcolor = "#5C5C5C";
-} 
-%>
-
-
-
-	      <td bgcolor="<%=bgcolor%>">
-
-        <a href="<%=request.getContextPath() %>"  class="mainMenuLink" >Home</a>
-
-	      </td>
-
-<%
-bgcolor = "#A4A4A4";
-if (tab.compareTo("valueset") == 0) bgcolor = "#5C5C5C";
-%>
-
-	      <td>&#xA0;</td>
-	      <td bgcolor="<%=bgcolor%>">
-
-<a href="<%=request.getContextPath() %>/pages/ValueSets.jsf?tab=valueset" class="mainMenuLink" >Value Set</a>
-
-	      </td>
-
-    
-      
-	      
-	      
-      </tr>
-      <tr height="10px"><td>&#xA0;</td></tr>
-    </table>
+<table class="global-nav" border="0" width="100%" height="15px" cellpadding="0" cellspacing="0">
+  <tr valign="bottom">
+    <td align="right">
+      <a href="<%= request.getContextPath() %>/pages/help.jsf" >Help</a>
+    </td>
+    <td width="15"></td>
+  </tr>
+</table>

@@ -38,7 +38,7 @@
 	          <%@ include file="/pages/include/applicationBanner.jsp" %>
 	          <%@ include file="/pages/include/quickLinks.jsp" %>
 		  <div class="pagecontent">
-		      <%@ include file="/pages/include/menuBar.jsp" %>
+		      <%@ include file="/pages/include/navBar.jsp" %>
 		      
 		      
              <%
@@ -73,13 +73,6 @@
 					onclick="return confirm('Are you sure you want to remove?')"
 					rendered="#{ValueSetBean.isNotEmpty}"
 					image="#{requestContextPath}/images/remove.gif" alt="Remove value set definition" />
-					
-					
-     &nbsp;
-    <a href="<%=request.getContextPath() %>/pages/help.jsf" >
-      <img src="<%=request.getContextPath() %>/images/search-help.gif" border="0" alt="Help" />
-    </a>
-					
 					
 				</td>
 			</tr>

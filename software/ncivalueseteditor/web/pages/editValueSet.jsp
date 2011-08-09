@@ -54,7 +54,7 @@
 	          <%@ include file="/pages/include/applicationBanner.jsp" %>
 	          <%@ include file="/pages/include/quickLinks.jsp" %>
 		  <div class="pagecontent">
-		      <%@ include file="/pages/include/menuBar.jsp" %>
+		      <%@ include file="/pages/include/navBar.jsp" %>
 
 
 	<%

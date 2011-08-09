@@ -830,6 +830,14 @@ body
  font-weight: bold;
 }
 
+.global-nav, .global-nav a
+{
+ font-weight: bold;
+ font-size: 11px;
+ color: #2F2F5F;
+}
+
+
 .pagetitle
 {
  font-size: 18px;
