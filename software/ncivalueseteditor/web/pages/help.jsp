@@ -344,20 +344,21 @@ will show metadata you entered and a Component Subsets table.
 Component subsets are operands shown in a value set expression 
 (See <a href="#create_value_set_expression">Create Value Set Expression</a>).
 Initially, the Component subsets table would be empty.
-Click on the <b>Add Component</b> button to create a component subset.
-A Component Set page will appear.
+Click on the <b>Add Component</b> button to create a new component subset.
 </p>
 <p>
-The following data elements are required for defining a component subset:
+When the <b>Add Component</b> button is pressed, a Component Set page will appear.
 </p>
-
-
+<p>
+Specify a value for each of the following data elements:
+</p>
           <ul>
             <li>
               <b>Label</b>: A short notation for representing the component subset; for example, S1.
+              It would be used in formulating a <a href="#create_value_set_expression">value set expression</a>.
             </li>
             <li>
-              <b>Name</b>: A human readable name of a component subset; for example: Blue color.              
+              <b>Name</b>: A human readable name of a component subset; for example: The Blue color.              
             </li>
             <li>
               <b>Description</b>: A narrative text describing the component subset.               
