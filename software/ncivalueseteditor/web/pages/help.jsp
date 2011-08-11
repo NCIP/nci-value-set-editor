@@ -676,10 +676,16 @@ So, you should exercise this command with caution.
  In either case, when the command is issued, a Resolve Value Set page will appear which shows
  the available versions of each vocabulary participarting in the corresponding value set definition.
  Select one from each set of version radio buttons.
- Click on the <b>Continue</b> button to continue to resolve the value set definition.
- Or, click on <b>Cancel</b> to abort the <b>Resolve</b> operation.
-  <p>
-  You may export resolved value set definition to a file in either Comma Separated Value (CSV) or XML format.
+ Click on the <b>Continue</b> button to resolve the value set definition.
+ Or, click on the <b>Cancel</b> button to abort the <b>Resolve</b> operation.
+ 
+ <p>
+ If the <p>Resolve</p> operation is successful, a Resolved Value Set Definiion page will appear.
+ The page would contain code, name, and namespace of all concepts contained in this value set. 
+ </p>
+ <p>
+  You may export this list of concepts to a file in either Comma Separated Value (CSV), or LexGrid XML format
+  by clicking on the two hyperlinks, <b>Export CSV</b> and <b>Export XML</b>, respectively.
  </p>
         </div>
   

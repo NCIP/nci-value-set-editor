@@ -1104,10 +1104,29 @@ _logger.debug("Resolving value set: Step 2 ");
     	String codingSchemeNames = FacesUtil.getRequestParameter("codingSchemeNames");
     	_logger.debug("codingSchemeNames: " + codingSchemeNames);
 
-Vector codingSchemeName_vec = DataUtils.parseData(codingSchemeNames);
+// to be modified:
 
-AbsoluteCodingSchemeVersionReferenceList csvList
-                  = DataUtils.getAbsoluteCodingSchemeVersionReferenceListForValueSetDefinition(codingSchemeName_vec);
+		Vector cs_name_vec = DataUtils.parseData(codingSchemeNames);
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+		Vector ref_vec = new Vector();
+		//String key = vsd_uri;
+		String cs_ref_key = "";
+		int lcv = 0;
+
+        for (int i=0; i<cs_name_vec.size(); i++) {
+			String cs_name = (String) cs_name_vec.elementAt(i);
+			String version = (String) request.getParameter(cs_name);
+			if (version != null) {
+				csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_name, version));
+				//ref_vec.add(cs_name + "$" + version);
+				//key = key + "|" + cs_name + "$" + version;
+				if (lcv > 0) {
+					cs_ref_key = cs_ref_key + "|";
+				}
+				cs_ref_key = cs_ref_key + cs_name + "$" + version;
+				lcv++;
+		    }
+		}
 
 
         ResolvedConceptReferencesIterator iterator = ValueSetUtils.resolveValueSetDefinition(vsd, csvList, referencedVSDs);
@@ -1165,6 +1184,9 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
 
 
             System.out.println("search_results -- numbe of matches: " + size);
+
+            request.setAttribute("cs_ref_key", cs_ref_key);
+
 			return "resolve";
 		}
 
@@ -1193,20 +1215,6 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
 
 
 
-    public String exportResolvedVSDToXMLAction() {
-
-
-		return "exportXML";
-
-	}
-
-    public String exportResolvedVSDToCSVAction() {
-
-
-		return "exportCSV";
-
-	}
-
 
 
     public String exportVSDToXMLAction() {
@@ -1228,12 +1236,16 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
     	String curr_uri = FacesUtil.getRequestParameter("uri");
     	_logger.debug("Exporting value set: " + curr_uri);
 
+    	String infixExpression = null;
+    	infixExpression = expression;
+
 
         ValueSetObject item = null;
         if (_cart.containsKey(curr_uri)) {
         	item = _cart.get(curr_uri);
-
         	item.setExpression(expression);
+
+
 			if (item.getCompListSize() > 1 && expression.compareTo("") == 0) {
 				String msg = "WARNING: Please complete the value set expression.";
 				request.setAttribute("message", msg);
@@ -1261,7 +1273,7 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
 		}
 
         //expression
-        String infixExpression = null;
+
         try {
 			infixExpression = FacesUtil.getRequestParameter("expression");
 			if (infixExpression != null) {
@@ -2724,7 +2736,6 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 				entry.setRuleOrder(ruleOrderCount);
 				entry.setOperator(DefinitionOperator.OR);
 				vsd.addDefinitionEntry(entry);
-
 			}
 
 			return vsd;
@@ -2734,5 +2745,136 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
           return null;
 
 	  }
+
+	public AbsoluteCodingSchemeVersionReferenceList constructAbsoluteCodingSchemeVersionReferenceList(String cs_ref_key) {
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+		Vector v = DataUtils.parseData(cs_ref_key);
+		for (int i=0; i<v.size(); i++) {
+			String nm_version = (String) v.elementAt(i);
+			Vector u = DataUtils.parseData(nm_version, "$");
+			String cs_uri = (String) u.elementAt(0);
+			String cs_version = (String) u.elementAt(1);
+			csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_uri, cs_version));
+		}
+		return csvList;
+	}
+
+
+
+
+    // To be implemented (API not available)
+    public String exportResolvedVSDToCSVAction() {
+
+
+		return "exportCSV";
+
+	}
+
+    // To be implemented (API not available)
+    public String exportResolvedVSDToXMLAction() {
+		HttpServletRequest request =
+			(HttpServletRequest) FacesContext.getCurrentInstance()
+				.getExternalContext().getRequest();
+        request.getSession().removeAttribute("message");
+
+
+        String cs_ref_key = FacesUtil.getRequestParameter("cs_ref_key");
+        AbsoluteCodingSchemeVersionReferenceList csvList = constructAbsoluteCodingSchemeVersionReferenceList(cs_ref_key);
+
+		//request.getSession().setAttribute("expression", expression);
+
+    	_message = null;
+    	_logger.debug("Exporting value.");
+    	//<input type="hidden" id="uri" name="uri" value="<%=curr_uri%>" />
+
+    	String curr_uri = FacesUtil.getRequestParameter("uri");
+    	_logger.debug("Exporting value set: " + curr_uri);
+
+        ValueSetObject item = null;
+        if (_cart.containsKey(curr_uri)) {
+        	item = _cart.get(curr_uri);
+		}
+
+		if (item == null) {
+			String msg = "ERROR: Unable to identify the value set definition with URI " + curr_uri;
+			request.setAttribute("message", msg);
+			return "error";
+		}
+
+
+        String infixExpression = item.getExpression();
+		ValueSetDefinition vsd = convertToValueSetDefinition(item, infixExpression);
+		if (vsd == null) {
+			String msg = "ERROR: Unable to construct ValueSetDefinition based on the given expression.";
+			request.setAttribute("message", msg);
+			return "error";
+		}
+
+
+        try {
+        	LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+
+            StringBuffer buf = null;
+            InputStream reader = null;
+
+    	String codingSchemeNames = FacesUtil.getRequestParameter("codingSchemeNames");
+    	_logger.debug("codingSchemeNames: " + codingSchemeNames);
+
+            try {
+	    		reader = vsd_service.exportValueSetResolution(vsd, null, csvList, null, false);
+
+				if (reader != null) {
+					buf = new StringBuffer();
+					for (int c = reader.read(); c != -1; c = reader.read()) {
+						buf.append((char) c);
+					}
+				} else {
+					buf = new StringBuffer("<error>exportValueSetResolution returned null.</error>");
+				}
+
+            } catch (Exception e) {
+				buf = new StringBuffer("<error>The VSD export service is not supported by your current LexEVS setup.</error>");
+				buf.append("<!-- " + e.getMessage() + " -->");
+			} finally {
+				try {
+					reader.close();
+				} catch (Exception e) {
+					new StringBuffer("<error>" + e.getMessage() + "</error>");
+				}
+			}
+
+            // Send export XML string to browser
+
+            HttpServletResponse response = (HttpServletResponse) FacesContext
+                    .getCurrentInstance().getExternalContext().getResponse();
+
+			response.setContentType("text/xml");
+
+			String vsd_name = item.getName();
+			vsd_name = vsd_name.replaceAll(" ", "_");
+			vsd_name = vsd_name + ".xml";
+
+			response.setHeader("Content-Disposition", "attachment; filename="
+					+ vsd_name);
+
+            response.setContentLength(buf.length());
+            ServletOutputStream ouputStream = response.getOutputStream();
+            ouputStream.write(buf.toString().getBytes(), 0, buf.length());
+            ouputStream.flush();
+            ouputStream.close();
+
+            // Don't allow JSF to forward to cart.jsf
+            FacesContext.getCurrentInstance().responseComplete();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+
+		//return "exportCSV";
+
+	}
+
+
+
 
 } // End of ValueSetBean

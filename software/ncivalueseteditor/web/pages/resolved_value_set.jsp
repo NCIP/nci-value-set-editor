@@ -65,6 +65,9 @@
 		      
             <%
             
+String cs_ref_key = (String) request.getAttribute("cs_ref_key"); 
+if (cs_ref_key == null) cs_ref_key = "";
+            
             		String browser_url = ApplicationProperties.getNCITurl();
 
                         Vector u = null;
@@ -214,12 +217,12 @@
                                     <td align="right">
                                        <h:commandLink
                                           value="Export XML"
-                                          action="#{valueSetBean.exportResolvedVSDToXMLAction}"
+                                          action="#{ValueSetBean.exportResolvedVSDToXMLAction}"
                                           styleClass="texttitle-blue-small"
                                           title="Export VSD in LexGrid XML format" />
                                        | <h:commandLink
                                           value="Export CSV"
-                                          action="#{valueSetBean.exportResolvedVSDToCSVAction}"
+                                          action="#{ValueSetBean.exportResolvedVSDToCSVAction}"
                                           styleClass="texttitle-blue-small"
                                           title="Export VSD in CSV format" />
                                     </td>
@@ -331,7 +334,8 @@
                      <%
                      	}
                      %>
-                     <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=valueset_uri%>">
+                     <input type="hidden" name="uri" id="uri" value="<%=valueset_uri%>">
+                     <input type="hidden" name="cs_ref_key" id="cs_ref_key" value="<%=cs_ref_key%>">
                      <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
                      </h:form>
                                           
