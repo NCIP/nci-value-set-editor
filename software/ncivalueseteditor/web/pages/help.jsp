@@ -571,12 +571,13 @@ This would take you to the Value Set List page.
 Press the <b>Copy</b>button to open the Copy Value Set page.
 
 <p>
-Specify the value of the following two fields and press the Save button.
+Specify the value for each of the following two data fields and press the </b>Continue</b> button
+to create a local copy of the selected value set definition.
 </p>
 
           <ul>
             <li>
-              <b>URI</b>: A unique identifier of a value set definition for computer processing.
+              <b>URI</b>: A unique identifier of a value set definition for supporting computer processing.
             </li>
             <li>
               <b>Value Set Reference</b>: The name of the value set definition available on the server. 
@@ -666,14 +667,22 @@ So, you should exercise this command with caution.
               </tr>
             </table>
  <p>
- Resolve Value Set Definition:
+ The <b>Resolve</b> command for resolving a value set definition can be executed from
+ the Value Set tab starting page, or from the Edit Value Set page.
+ On the Value Set tab starting page, you will see a <b>Resolve</b> hyperlink under the Action column 
+ of the value set definition table.
+ On the Edit Value Set page, the command will be accessible through an image button.
  </p>
- <p>
+ In either case, when the command is issued, a Resolve Value Set page will appear which shows
+ the available versions of each vocabulary participarting in the corresponding value set definition.
+ Select one from each set of version radio buttons.
+ Click on the <b>Continue</b> button to continue to resolve the value set definition.
+ Or, click on <b>Cancel</b> to abort the <b>Resolve</b> operation.
+  <p>
   You may export resolved value set definition to a file in either Comma Separated Value (CSV) or XML format.
  </p>
         </div>
- 
- 
+  
  
           <%-- -------------------------------------------------------------- --%> 
       

@@ -313,6 +313,9 @@ public class DataUtils {
         if (formalName2CodingSchemeName == null) formalName2CodingSchemeName = new HashMap();
         if (codingSchemeName2formalName == null) codingSchemeName2formalName = new HashMap();
 
+        if (_codingSchemeName2URIHashMap == null) _codingSchemeName2URIHashMap = new HashMap();
+
+
 		if (ontologyList != null) return ontologyList;
 
     	//HashMap csnv2codingSchemeNameMap = new HashMap();
@@ -334,6 +337,9 @@ public class DataUtils {
         	String representsVersion = css.getRepresentsVersion();
        	    String formalname = css.getFormalName();
        	    String uri = css.getCodingSchemeURI();
+
+       	    _codingSchemeName2URIHashMap.put(formalname, uri);
+
        	    formalName2URI.put(formalname, uri);
        	    formalName2URI.put(uri, uri);
 
@@ -802,5 +808,344 @@ System.out.println(	"WARNING: DataUtils.getCodingSchemeURI cannot find coding sc
 			return null;
 		}
 	}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Coding scheme version references
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//constructVSDMappings
+//Vector of coding scheme names
+
+
+/*
+    public static Vector getCodingSchemesInValueSetDefinition(String uri) {
+		HashSet hset = new HashSet();
+		try {
+			java.net.URI valueSetDefinitionURI = new URI(uri);
+			Vector v = new Vector();
+			try {
+				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+				AbsoluteCodingSchemeVersionReferenceList codingSchemes =
+					vsd_service.getCodingSchemesInValueSetDefinition(valueSetDefinitionURI);
+
+				//output is all of the mapping ontologies that this code participates in.
+				for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
+					String urn = ref.getCodingSchemeURN();
+					System.out.println("URI: " + ref.getCodingSchemeURN());
+					if (!hset.contains(urn)) {
+					System.out.println("Version: " + ref.getCodingSchemeVersion());
+					    v.add(ref.getCodingSchemeURN());
+					    hset.add(urn);
+				    }
+				}
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			return v;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+
+
+
+*/
+
+    public static AbsoluteCodingSchemeVersionReferenceList
+                  getAbsoluteCodingSchemeVersionReferenceListForValueSetDefinition(Vector codingSchemeName_vec) {
+		Vector v = getCodingSchemeReferencesInValueSetDefinition(codingSchemeName_vec);
+		if (v == null) return null;
+		return vector2CodingSchemeVersionReferenceList(v);
+	}
+
+
+    public static Vector getCodingSchemeVersionsByURN(String urn) {
+		if (urn == null) return null;
+
+        try {
+			Vector v = new Vector();
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) {
+                _logger
+                    .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+            }
+            CodingSchemeRenderingList csrl = null;
+            try {
+                csrl = lbSvc.getSupportedCodingSchemes();
+            } catch (LBInvocationException ex) {
+                ex.printStackTrace();
+                _logger.error("lbSvc.getSupportedCodingSchemes() FAILED..."
+                    + ex.getCause());
+                return null;
+            }
+            CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+            for (int i = 0; i < csrs.length; i++) {
+                int j = i + 1;
+                CodingSchemeRendering csr = csrs[i];
+                CodingSchemeSummary css = csr.getCodingSchemeSummary();
+                Boolean isActive =
+                        csr.getRenderingDetail().getVersionStatus().equals(
+                            CodingSchemeVersionStatus.ACTIVE);
+
+                if (isActive != null && isActive.equals(Boolean.TRUE)) {
+                	String uri = css.getCodingSchemeURI();
+                	if (uri != null && uri.compareTo(urn) == 0) {
+						String representsVersion = css.getRepresentsVersion();
+						v.add(representsVersion);
+					}
+				}
+			}
+			return v;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+
+
+    public static String getCodingSchemeURN(String cs) {
+
+		if (formalName2URI == null) {
+			try {
+				ontologyList = getOntologyList();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				return null;
+			}
+		}
+		return (String) formalName2URI.get(cs);
+
+	}
+
+    public static Vector getCodingSchemeURNs(Vector codingSchemeName_vec) {
+		if (codingSchemeName_vec == null) return null;
+
+		Vector v = new Vector();
+		for (int i=0; i<codingSchemeName_vec.size(); i++) {
+            String cs = (String) codingSchemeName_vec.elementAt(i);
+            String urn = getCodingSchemeURN(cs);
+            v.add(urn);
+		}
+		return v;
+	}
+
+
+
+
+    public static Vector getCodingSchemeReferencesInValueSetDefinition(Vector codingSchemeName_vec) {
+		HashSet hset = new HashSet();
+		try {
+			Vector w = new Vector();
+			Vector urn_vec = getCodingSchemeURNs(codingSchemeName_vec);
+
+			if (urn_vec != null) {
+				for (int i=0; i<urn_vec.size(); i++) {
+					String urn = (String) urn_vec.elementAt(i);
+					Vector v = getCodingSchemeVersionsByURN(urn);
+
+					if (v != null) {
+						for (int j=0; j<v.size(); j++) {
+							String version = (String) v.elementAt(j);
+							String urn_version = urn + "|" + version;
+							//System.out.println(urn_version);
+
+							if (!hset.contains(urn_version)) {
+								hset.add(urn_version);
+							    w.add(urn_version);
+						    }
+						}
+					}
+				}
+				w = SortUtils.quickSort(w);
+				hset.clear();
+				return w;
+		    }
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+
+    public static AbsoluteCodingSchemeVersionReferenceList vector2CodingSchemeVersionReferenceList(Vector v) {
+		if (v == null) return null;
+		AbsoluteCodingSchemeVersionReferenceList list = new AbsoluteCodingSchemeVersionReferenceList();
+		for (int i=0; i<v.size(); i++) {
+			String s = (String) v.elementAt(i);
+			Vector u = parseData(s);
+			String uri = (String) u.elementAt(0);
+			String version = (String) u.elementAt(1);
+
+			AbsoluteCodingSchemeVersionReference vAbsoluteCodingSchemeVersionReference
+			    = new AbsoluteCodingSchemeVersionReference();
+			vAbsoluteCodingSchemeVersionReference.setCodingSchemeURN(uri);
+			vAbsoluteCodingSchemeVersionReference.setCodingSchemeVersion(version);
+			list.addAbsoluteCodingSchemeVersionReference(vAbsoluteCodingSchemeVersionReference);
+		}
+		return list;
+	}
+
+    public static String getVocabularyVersionTag(String codingSchemeName,
+        String version) {
+
+        if (codingSchemeName == null)
+            return null;
+
+
+        if (_codingSchemeTagHashMap != null) {
+			String key = null;
+			if (version == null) {
+				key = codingSchemeName + "$null";
+			} else {
+				key = codingSchemeName + "$" + version;
+			}
+			if (_codingSchemeTagHashMap.containsKey(key)) {
+				String tag = (String) _codingSchemeTagHashMap.get(key);
+				return tag;
+			}
+		}
+
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            CodingSchemeRenderingList lcsrl = lbSvc.getSupportedCodingSchemes();
+            CodingSchemeRendering[] csra = lcsrl.getCodingSchemeRendering();
+            for (int i = 0; i < csra.length; i++) {
+                CodingSchemeRendering csr = csra[i];
+                CodingSchemeSummary css = csr.getCodingSchemeSummary();
+                if (css.getFormalName().compareTo(codingSchemeName) == 0
+                    || css.getLocalName().compareTo(codingSchemeName) == 0
+                    || css.getCodingSchemeURI().compareTo(codingSchemeName) == 0) {
+
+					if (version == null) return "PRODUCTION";
+
+					String representsVersion = css.getRepresentsVersion();
+
+                    if (representsVersion.compareTo(version) == 0) {
+						RenderingDetail rd = csr.getRenderingDetail();
+						CodingSchemeTagList cstl = rd.getVersionTags();
+						String tag_str = "";
+						java.lang.String[] tags = cstl.getTag();
+						if (tags == null)
+							return "NOT ASSIGNED";
+
+						if (tags != null && tags.length > 0) {
+							tag_str = "";
+							for (int j = 0; j < tags.length; j++) {
+								String version_tag = (String) tags[j];
+								if (j == 0) {
+									tag_str = version_tag;
+								} else if (j == tags.length-1) {
+									tag_str = tag_str + version_tag;
+								} else {
+									tag_str = tag_str + version_tag + "|";
+								}
+							}
+						} else {
+							return "<NOT ASSIGNED>";
+						}
+
+                        if (_codingSchemeTagHashMap == null) {
+							_codingSchemeTagHashMap = new HashMap();
+						}
+						String key = null;
+						if (version == null) {
+							key = codingSchemeName + "$null";
+						} else {
+							key = codingSchemeName + "$" + version;
+						}
+						_codingSchemeTagHashMap.put(key, tag_str);
+						return tag_str;
+					}
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "<NOT AVAILABLE>";
+    }
+
+/*
+    public static Vector getCodingSchemeReferencesInValueSetDefinition(String uri, String tag) {
+		try {
+			Vector w = new Vector();
+			Vector urn_vec = getCodingSchemeURNsInValueSetDefinition(uri);
+			if (urn_vec != null) {
+				for (int i=0; i<urn_vec.size(); i++) {
+					String urn = (String) urn_vec.elementAt(i);
+					Vector v = getCodingSchemeVersionsByURN(urn, tag);
+					if (v != null) {
+						for (int j=0; j<v.size(); j++) {
+							String version = (String) v.elementAt(j);
+							w.add(urn + "|" + version);
+						}
+					}
+				}
+				w = SortUtils.quickSort(w);
+				return w;
+		    }
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+
+
+    public static Vector getCodingSchemeVersionsByURN(String urn, String tag) {
+        try {
+			Vector v = new Vector();
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) {
+                _logger
+                    .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+            }
+            CodingSchemeRenderingList csrl = null;
+            try {
+                csrl = lbSvc.getSupportedCodingSchemes();
+            } catch (LBInvocationException ex) {
+                ex.printStackTrace();
+                _logger.error("lbSvc.getSupportedCodingSchemes() FAILED..."
+                    + ex.getCause());
+                return null;
+            }
+            CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+            for (int i = 0; i < csrs.length; i++) {
+                int j = i + 1;
+                CodingSchemeRendering csr = csrs[i];
+                CodingSchemeSummary css = csr.getCodingSchemeSummary();
+                Boolean isActive =
+                        csr.getRenderingDetail().getVersionStatus().equals(
+                            CodingSchemeVersionStatus.ACTIVE);
+
+                if (isActive != null && isActive.equals(Boolean.TRUE)) {
+                	String uri = css.getCodingSchemeURI();
+                	if (uri.compareTo(urn) == 0) {
+						String representsVersion = css.getRepresentsVersion();
+						if (tag != null) {
+							String cs_tag = getVocabularyVersionTag(uri, representsVersion);
+							if (cs_tag.compareToIgnoreCase(tag) == 0) {
+								v.add(representsVersion);
+							}
+						} else {
+							v.add(representsVersion);
+						}
+					}
+				}
+			}
+			return v;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+*/
+
 
 }

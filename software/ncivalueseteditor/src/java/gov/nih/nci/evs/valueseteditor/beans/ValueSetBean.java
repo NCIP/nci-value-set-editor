@@ -761,14 +761,6 @@ String resolved_vs_key = "";
     	String curr_uri = FacesUtil.getRequestParameter("uri");
     	_logger.debug("Resolving value set: " + curr_uri);
 
-/*
-
-    	String uriParam = FacesUtil.getRequestParameter("uriParam");
-    	_logger.debug("Resolving value set: " + uriParam);
-
-*/
-
-
 		String expression = FacesUtil.getRequestParameter("expression");
 		if (expression != null) expression = expression.trim();
 
@@ -862,36 +854,263 @@ _logger.debug("\t Vocabulary: " + ob.getVocabulary());
 						return "error";
 
 		} else {
-		_logger.debug("Value set definition uri: " + vsd.getValueSetDefinitionURI());
-		_logger.debug("Value set definition name: " + vsd.getValueSetDefinitionName());
-		_logger.debug("Value set definition: definitionentrycount: " + vsd.getDefinitionEntryCount());
+			_logger.debug("Value set definition uri: " + vsd.getValueSetDefinitionURI());
+			_logger.debug("Value set definition name: " + vsd.getValueSetDefinitionName());
+			_logger.debug("Value set definition: definitionentrycount: " + vsd.getDefinitionEntryCount());
 
 
-		 DefinitionEntry[] entries = vsd.getDefinitionEntry();
-		 for (int k=0; k<vsd.getDefinitionEntryCount(); k++) {
-			 DefinitionEntry entry = entries[k];
-			 PropertyReference prop_ref = entry.getPropertyReference();
-			 if (prop_ref != null) {
-		_logger.debug("Value set definition: prop_ref != null." );
+			 DefinitionEntry[] entries = vsd.getDefinitionEntry();
+			 for (int k=0; k<vsd.getDefinitionEntryCount(); k++) {
+				 DefinitionEntry entry = entries[k];
+				 PropertyReference prop_ref = entry.getPropertyReference();
+				 if (prop_ref != null) {
+					_logger.debug("Value set definition: prop_ref != null." );
 
-			 } else {
-		_logger.debug("Value set definition: prop_ref == null ???" );
+				 } else {
+					_logger.debug("Value set definition: prop_ref == null ???" );
+
+				 }
 
 			 }
 
-		 }
+
+		}
+
+/*
+_logger.debug("Resolving value set: Step 2 ");
+
+        HashMap<String, ValueSetDefinition> referencedVSDs = null;
+        ResolvedConceptReferencesIterator iterator = ValueSetUtils.resolveValueSetDefinition(vsd, referencedVSDs);
+
+		if (iterator == null) {
+			String msg = "WARNING: Unable to resolve the value set definition.";
+			request.setAttribute("message", msg);
+			return "error";
+
+		}
+
+		IteratorBeanManager iteratorBeanManager =
+			(IteratorBeanManager) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap()
+				.get("iteratorBeanManager");
+
+		if (iteratorBeanManager == null) {
+			iteratorBeanManager = new IteratorBeanManager();
+			FacesContext.getCurrentInstance().getExternalContext()
+				.getSessionMap()
+				.put("iteratorBeanManager", iteratorBeanManager);
+		}
+
+		IteratorBean iteratorBean = null;
+
+		String key = (String) request.getSession().getAttribute("resolved_vs_key");
+		if (key != null && key.compareTo("null") != 0) {
+			IteratorBean it_bean = iteratorBeanManager.removeIteratorBean(key);
+			ResolvedConceptReferencesIterator it = it_bean.getIterator();
+			try {
+				it.release();
+			} catch (Exception ex) {
+
+			}
+		}
+
+
+		key = resolved_vs_key;//vsd.getValueSetDefinitionURI();
+System.out.println("resolveValueSetAction key " + key);
+
+		iteratorBean = new IteratorBean(iterator);
+		iteratorBean.setKey(key);
+		iteratorBeanManager.addIteratorBean(iteratorBean);
+
+		int size = iteratorBean.getSize();
+
+System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
+
+		if (size > 0) {
+			request.getSession().setAttribute("value_set_object", item);
+			String match_size = Integer.toString(size);
+			request.getSession().setAttribute("match_size", match_size);
+			request.getSession().setAttribute("page_string", "1");
+			request.getSession().setAttribute("resolved_vs_key", key);
+
+
+            System.out.println("search_results -- numbe of matches: " + size);
+			return "coding_scheme_references";
+		}
+
+        String message = "No match found.";
+
+        System.out.println("result: " + message);
+
+        request.getSession().setAttribute("message", message);
+        //request.getSession().setAttribute("dictionary", scheme);
+        return "message";
+*/
+        return "coding_scheme_references";
+    }
+
+
+    public String continueResolveValueSetAction() {
+_logger.debug("===== continueResolveValueSetAction");
+
+		String resolved_vs_key = "";
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        request.getSession().removeAttribute("message");
+    	_message = null;
+    	String curr_uri = FacesUtil.getRequestParameter("uri");
+    	_logger.debug("***************************** continueResolveValueSetAction Resolving value set: " + curr_uri);
+
+		String expression = FacesUtil.getRequestParameter("expression");
+		if (expression != null) expression = expression.trim();
+		String infixExpression = null;
+
+
+        ValueSetObject item = null;
+        if (_cart.containsKey(curr_uri)) {
+        	item = _cart.get(curr_uri);
+
+        	if (expression == null) {
+				expression = item.getExpression();
+			}
+
+			infixExpression = expression;
+
+
+
+			System.out.println("URI: " + curr_uri);
+			if (item.getCompListSize() > 1) {
+				if (expression == null || expression.compareTo("") == 0) {
+					String msg = "WARNING: Please complete the value set expression.";
+					request.setAttribute("message", msg);
+					return "error";
+				}
+			}
+
+			resolved_vs_key = resolved_vs_key + curr_uri;
+
+			System.out.println("ConceptDomain: " + item.getConceptDomain());
+			System.out.println("DefaultCodingScheme: " + item.getCodingScheme());
+			System.out.println("Sources: " + item.getSources());
+			Map<String,ComponentObject> map = item.getCompList();
+			Iterator it = map.keySet().iterator();
+			while (it.hasNext()) {
+				String key = (String) it.next();
+				ComponentObject ob = (ComponentObject) map.get(key);
+				System.out.println("(*) Label: " + ob.getLabel());
+				resolved_vs_key = resolved_vs_key + "$" + ob.getLabel();
+				System.out.println("\t Description: " + ob.getDescription());
+				System.out.println("\t Vocabulary: " + ob.getVocabulary());
+
+_logger.debug("\t Vocabulary: " + ob.getVocabulary());
+
+				System.out.println("\t Type: " + ob.getType());
+				System.out.println("\t MatchText: " + ob.getMatchText());
+				System.out.println("\t Algorithm: " + ob.getAlgorithm());
+				System.out.println("\n");
+			}
+		}
+
+        //expression
+
+        try {
+
+			if (infixExpression != null) {
+				System.out.println("\ninfixExpression: " + infixExpression);
+				RPN rpn = new RPN(infixExpression);
+				Vector v = rpn.convertToPostfixExpression(infixExpression);
+				for (int i=0; i<v.size(); i++) {
+					String s = (String) v.elementAt(i);
+					System.out.println(s);
+				}
+				item.setExpression(infixExpression);
+				setExpression(infixExpression);
+			}
+	    } catch (Exception e) {
+			//e.printStackTrace();
+			System.out.println("infixExpression is null???");
+		}
+
+
+    	_logger.debug("infixExpression: " + infixExpression);
+
+		_logger.debug("Resolving value set: Step 1 ");
+
+				// To be implemented.
+
+		_logger.debug("Resolving value set: convertToValueSetDefinition infixExpression: " + infixExpression);
+				ValueSetDefinition vsd = convertToValueSetDefinition(item, infixExpression);
+
+        int componentCount = item.getCompListSize();
+        if (componentCount == 0) {
+
+						String msg = "WARNING: No component subset has been defined.";
+						request.setAttribute("message", msg);
+						return "error";
+		}
+
+        if (componentCount > 1 && (infixExpression == null || infixExpression.length() == 0)) {
+
+						String msg = "WARNING: No value set expression has been defined.";
+						request.setAttribute("message", msg);
+						return "error";
+		}
+
+
+		if (vsd == null) {
+
+						String msg = "WARNING: Unable to convert the given expression to a value set definition: " + item.getExpression();
+						request.setAttribute("message", msg);
+						return "error";
+
+		} else {
+			_logger.debug("Value set definition uri: " + vsd.getValueSetDefinitionURI());
+			_logger.debug("Value set definition name: " + vsd.getValueSetDefinitionName());
+			_logger.debug("Value set definition: definitionentrycount: " + vsd.getDefinitionEntryCount());
+
+
+			 DefinitionEntry[] entries = vsd.getDefinitionEntry();
+			 for (int k=0; k<vsd.getDefinitionEntryCount(); k++) {
+				 DefinitionEntry entry = entries[k];
+				 PropertyReference prop_ref = entry.getPropertyReference();
+				 if (prop_ref != null) {
+					_logger.debug("Value set definition: prop_ref != null." );
+
+				 } else {
+					_logger.debug("Value set definition: prop_ref == null ???" );
+
+				 }
+
+			 }
 
 
 		}
 
 
-
-
-
 _logger.debug("Resolving value set: Step 2 ");
 
         HashMap<String, ValueSetDefinition> referencedVSDs = null;
-        ResolvedConceptReferencesIterator iterator = ValueSetUtils.resolveValueSetDefinition(vsd, referencedVSDs);
+
+
+//////////////////////////////////////////////////////////////////
+
+        //String vsd_uri = curr_uri;
+        //request.getSession().setAttribute("vsd_uri", curr_uri);
+
+
+    	String codingSchemeNames = FacesUtil.getRequestParameter("codingSchemeNames");
+    	_logger.debug("codingSchemeNames: " + codingSchemeNames);
+
+Vector codingSchemeName_vec = DataUtils.parseData(codingSchemeNames);
+
+AbsoluteCodingSchemeVersionReferenceList csvList
+                  = DataUtils.getAbsoluteCodingSchemeVersionReferenceListForValueSetDefinition(codingSchemeName_vec);
+
+
+        ResolvedConceptReferencesIterator iterator = ValueSetUtils.resolveValueSetDefinition(vsd, csvList, referencedVSDs);
 
 		if (iterator == null) {
 			String msg = "WARNING: Unable to resolve the value set definition.";
@@ -971,6 +1190,7 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
         return "message";
 
     }
+
 
 
     public String exportResolvedVSDToXMLAction() {
@@ -1918,14 +2138,22 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
 	}
 
 
-	public Vector findSupportedCodingSchemes(ValueSetObject vs_obj) {
+	public AbsoluteCodingSchemeVersionReferenceList getAbsoluteCodingSchemeVersionReferenceListForValueSetDefinition(ValueSetObject vs_obj) {
+		Vector codingSchemeName_vec = findSupportedCodingSchemes(vs_obj);
+		if (codingSchemeName_vec == null) return null;
+        return DataUtils.getAbsoluteCodingSchemeVersionReferenceListForValueSetDefinition(codingSchemeName_vec);
+    }
+
+
+
+	public Vector findParticipatingCodingSchemes(ValueSetObject vs_obj) {
 		if (vs_obj == null) return null;
 		HashSet hset = new HashSet();
 		Vector v = new Vector();
 		if (vs_obj.getCodingScheme() != null) {
 
 String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
-System.out.println("findSupportedCodingSchemes cs_name");
+System.out.println("cs_name 1 " + cs_name);
 
 			hset.add(cs_name);
 			v.add(cs_name);
@@ -1939,6 +2167,45 @@ System.out.println("findSupportedCodingSchemes cs_name");
 
 			if (ob.getType().compareTo("ValueSetReference") != 0) {
 				String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
+				System.out.println("cs_name 2 " + cs_name);
+
+				if (!hset.contains(cs_name)) {
+					hset.add(cs_name);
+					v.add(cs_name);
+				}
+		    }
+		}
+
+		hset.clear();
+		return v;
+	}
+
+
+
+
+	public Vector findSupportedCodingSchemes(ValueSetObject vs_obj) {
+		if (vs_obj == null) return null;
+		HashSet hset = new HashSet();
+		Vector v = new Vector();
+		if (vs_obj.getCodingScheme() != null) {
+
+String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
+System.out.println("cs_name 1 " + cs_name);
+
+			hset.add(cs_name);
+			v.add(cs_name);
+		}
+
+		Map<String,ComponentObject> map = vs_obj.getCompList();
+		Iterator it = map.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			ComponentObject ob = (ComponentObject) map.get(key);
+
+			if (ob.getType().compareTo("ValueSetReference") != 0) {
+				String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
+				System.out.println("cs_name 2 " + cs_name);
+
 				if (!hset.contains(cs_name)) {
 					hset.add(cs_name);
 					v.add(cs_name);
@@ -1961,14 +2228,17 @@ System.out.println("cs_uri: " + cs_uri);
 				Mappings mappings = DataUtils.getCodingSchemeMappings(cs_uri, null);
 				if (mappings != null) {
 					int knt1 = mappings.getSupportedCodingSchemeCount();
-					System.out.println("getSupportedCodingSchemeCount: " + knt1);
+					System.out.println("getSupportedCodingSchemeCount: " + knt1); //1
 
 					SupportedCodingScheme[] cs_array = mappings.getSupportedCodingScheme();
 					for (int j=0; j<knt1; j++) {
 						SupportedCodingScheme cs = cs_array[j];
 						if (cs != null) {
 							String key = cs.getLocalId() + "|" + cs.getUri() + "|" + cs.getIsImported();
+							System.out.println(key);
 							if (!hset.contains(key)) {
+
+								System.out.println("adding cs to vector ..." + cs.getUri());
 								w.add(cs);
 							}
 					    }
@@ -1976,6 +2246,8 @@ System.out.println("cs_uri: " + cs_uri);
 				}
 
 			}
+
+			System.out.println("w size: " + w.size());
 			return w;
 		} catch (Exception ex) {
 			//ex.printStackTrace();

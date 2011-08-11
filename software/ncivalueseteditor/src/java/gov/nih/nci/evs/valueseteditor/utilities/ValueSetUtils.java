@@ -1977,14 +1977,24 @@ Results returned: 14588
 
 //////////////////////////////////////////////////////////////////////////////////
 
-    public static ResolvedConceptReferencesIterator resolveValueSetDefinition(ValueSetDefinition vsd, HashMap<String, ValueSetDefinition> referencedVSDs) {
+    public static ResolvedConceptReferencesIterator resolveValueSetDefinition(ValueSetDefinition vsd,
+        HashMap<String, ValueSetDefinition> referencedVSDs) {
+		AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+		return resolveValueSetDefinition(vsd, csVersionList, referencedVSDs);
+    }
+
+    public static ResolvedConceptReferencesIterator resolveValueSetDefinition(ValueSetDefinition vsd,
+        AbsoluteCodingSchemeVersionReferenceList csVersionList,
+        HashMap<String, ValueSetDefinition> referencedVSDs) {
 		ResolvedConceptReferencesIterator iterator = null;
 		boolean failOnAllErrors = false;
 		String csVersionTag = null;//"PRODUCTION";
 
 		SortOptionList sortOptionList = null;
 
-		AbsoluteCodingSchemeVersionReferenceList csVersionList = getEntireAbsoluteCodingSchemeVersionReferenceList();
+        if (csVersionList == null) {
+		     csVersionList = getEntireAbsoluteCodingSchemeVersionReferenceList();
+		}
 
         try {
         	LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();

@@ -147,7 +147,7 @@
 	     <h:commandButton
 		value="Save" action="#{ValueSetBean.saveCopyAction}"
 		onclick="javascript:cursor_wait();"
-		image="#{form_requestContextPath}/images/save.gif" alt="Save a copy" />
+		image="#{form_requestContextPath}/images/continue.gif" alt="Save a copy" />
 
 	 &nbsp; 
  	 

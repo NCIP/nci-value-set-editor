@@ -1,52 +1,70 @@
+<%@ page import="javax.faces.context.FacesContext" %>
+<%@ page import="gov.nih.nci.evs.valueseteditor.beans.*" %>
+<%@ page import="gov.nih.nci.evs.valueseteditor.beans.ValueSetBean.ComponentObject" %>
+<%@ page import="gov.nih.nci.evs.valueseteditor.beans.ValueSetBean.ValueSetObject" %>
+
+<%@ page import="gov.nih.nci.evs.valueseteditor.properties.*" %>
+<%@ page import="gov.nih.nci.evs.valueseteditor.utilities.*" %>
+<%@ page import="org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator" %>
+<%@ page import="org.LexGrid.naming.SupportedCodingScheme" %>
+
+<%@ page import="java.io.*" %>
+<%@ page import="java.util.*"%>
+
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
-<%@ page import="java.io.*" %>
-<%@ page import="java.util.*"%>
+<%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
-<%@ page import="gov.nih.nci.evs.browser.bean.*" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
-<%@ page import="gov.nih.nci.evs.browser.properties.*" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
-<%@ page import="javax.faces.context.FacesContext" %>
+
+
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
+<%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.apache.log4j.*" %>
+
+<%@ page import="gov.nih.nci.evs.valueseteditor.utilities.*" %>
 
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
+
 <head>
-  <title>NCI Thesaurus</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>NCI ValueSet Editor</title>
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
+ 
+ <script type="text/javascript">
+ function openQuickLinkSite(url) {
+     if (url != "#")
+     {
+         window.open (url, "", "alwaysRaised,dependent,status,scrollbars,resizable,width=800,height=600"); 
+     }
+ }
+ </script>
+ 
 </head>
 <body>
-  <script type="text/javascript"
-    src="<%=request.getContextPath()%>/js/wz_tooltip.js"></script>
-  <script type="text/javascript"
-    src="<%=request.getContextPath()%>/js/tip_centerwindow.js"></script>
-  <script type="text/javascript"
-    src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
 
-
-  <%!
-    private static Logger _logger = Utils.getJspLogger("value_set_search_results.jsp");
-  %>
-  <f:view>
-    <!-- Begin Skip Top Navigation -->
-      <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
-    <!-- End Skip Top Navigation -->  
-    <%@ include file="/pages/templates/header.jsp" %>
+<%!
+  private static Logger _logger = Utils.getJspLogger("coding_scheme_references.jsp");
+%>
+   
+<f:view>
+    <%@ include file="/pages/include/header.jsp" %>
     <div class="center-page">
-      <%@ include file="/pages/templates/sub-header.jsp" %>
-      <!-- Main box -->
-      <div id="main-area">
-        <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp" %>
+        <%@ include file="/pages/include/subHeader.jsp" %>
+
+        <div class="mainbox-top"><img src="<%= request.getContextPath() %>/images/mainbox-top.gif" width="745" height="5" alt="Mainbox Top" /></div>
+	<div id="main-area">
+	          <%@ include file="/pages/include/applicationBanner.jsp" %>
+	          <%@ include file="/pages/include/quickLinks.jsp" %>
+		  <div class="pagecontent">
+		      <%@ include file="/pages/include/navBar.jsp" %>
+		      
+
         
 <%
 
@@ -57,31 +75,52 @@ System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_reques
 String message = (String) request.getSession().getAttribute("message");  
 request.getSession().removeAttribute("message");  
 
-String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
-if (vsd_uri == null) {
-    vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+
+       	ValueSetBean vsb = (ValueSetBean)FacesContext.getCurrentInstance()
+			     .getExternalContext().getSessionMap().get("ValueSetBean");
+	
+	String vsd_description = "";
+	String isActive = "true";
+	String organizations = "";
+	
+	String check_true = "";
+	String check_false = "";
+	
+	String vsd_uri = null;
+	
+	if (vsb == null) {
+	    System.out.println("ValueSetBean == null???");
+	} else {
+	    System.out.println("ValueSetBean != null");
+	}
+	
+	
+		vsd_uri = vsb.getUri();
+		ValueSetObject vs_obj = vsb.getValueSet(vsd_uri);
+		Vector codingSchemeName_vec = vsb.findParticipatingCodingSchemes(vs_obj);
+
+String codingSchemeNames = "";
+if (codingSchemeName_vec != null) {
+    for (int k=0; k<codingSchemeName_vec.size(); k++) {
+        String nm = (String) codingSchemeName_vec.elementAt(k);
+        if (k > 0) {
+            codingSchemeNames = codingSchemeNames + "|";
+        } 
+        codingSchemeNames = codingSchemeNames + nm;
+    }
 }
 
+Vector coding_scheme_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(codingSchemeName_vec);
 
-request.getSession().setAttribute("vsd_uri", vsd_uri);
-
-
-Vector coding_scheme_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri);
 
 System.out.println("resolve_value_set.jsp coding_scheme_ref_vec.size() " + coding_scheme_ref_vec.size()) ;
 
 
 String checked = "";
-
-
 String prev_cs_urn = "";
 
 %>
-        <div class="pagecontent">
-          <a name="evs-content" id="evs-content"></a>
-          <%-- 0 <%@ include file="/pages/templates/navigationTabs.jsp"%> --%>
-          <div class="tabTableContentContainer">
-          
+         
           
           <table>
             <tr>
@@ -92,10 +131,17 @@ String prev_cs_urn = "";
                 request.getSession().removeAttribute("message");
             %>
             
-        <tr class="textbodyred"><td>
-      <p class="textbodyred">&nbsp;<%=message%></p>
+        <tr class="textbodyred">
+        <td>
+            <p class="textbodyred">&nbsp;<%=message%></p>
         </td></tr>
             <% } %>
+
+
+            <tr>
+            <td>&nbsp;</td>
+            </tr>
+            
 
             <tr class="textbody"><td>
 
@@ -121,7 +167,7 @@ System.out.println("(" + lcv + ")" + coding_scheme_ref_str);
 		    
 		    Vector u = DataUtils.parseData(coding_scheme_ref_str);
 		    String cs_name = (String) u.elementAt(0);
-		    String displayed_cs_name = DataUtils.uri2CodingSchemeName(cs_name);
+		    String displayed_cs_name = DataUtils.getCodingSchemeName(cs_name, null);//uri2CodingSchemeName(cs_name);
 		    
 		    //cs_name = DataUtils.uri2CodingSchemeName(cs_name); 
 		    
@@ -191,10 +237,16 @@ System.out.println("resolve_value_set.jsp cs_version: " + cs_version);
              %>                 
 
 
+
+
               </table>
 
+            <tr>
+            <td>&nbsp;</td>
+            </tr>
+            
                   <tr><td>
-                    <h:commandButton id="continue_resolve" value="continue_resolve" action="#{valueSetBean.continueResolveValueSetAction}"
+                    <h:commandButton id="continue_resolve" value="continue_resolve" action="#{ValueSetBean.continueResolveValueSetAction}"
                       onclick="javascript:cursor_wait();"
                       image="#{valueSetSearch_requestContextPath}/images/continue.gif"
                       alt="Resolve"
@@ -202,20 +254,24 @@ System.out.println("resolve_value_set.jsp cs_version: " + cs_version);
                     </h:commandButton>
                   </td></tr>
                   
-              <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">    
+              <input type="hidden" name="uri" id="uri" value="<%=vsd_uri%>"> 
+              <input type="hidden" name="codingSchemeNames" id="codingSchemeNames" value="<%=codingSchemeNames%>">
+              
+              
+              
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>
-            
-          </td></tr>
-        </table>
-        </div> <!-- end tabTableContentContainer -->
-        <%@ include file="/pages/templates/nciFooter.jsp" %>
-      </div>
-      <!-- end Page content -->
+           
+              </td></tr>  
+           </table>   
+           
+               
+		      <%@ include file="/pages/include/footer.jsp" %>
+		  </div>
+	</div>
+        <div class="mainbox-bottom"><img src="<%= request.getContextPath() %>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     </div>
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
-    <!-- end Main box -->
-  </div>
-</f:view>
+   <br/> 
+</f:view>    
 </body>
 </html>
