@@ -61,14 +61,6 @@
           <to-view-id>/pages/editValueSetExpression.jsp</to-view-id>
        </navigation-case>
 
-<!--
-       <navigation-case>
-          <from-action>#{ValueSetBean.resolveVSDAction}</from-action>
-          <from-outcome>resolve</from-outcome>
-          <to-view-id>/pages/resolved_value_set.jsp</to-view-id>
-       </navigation-case>
--->
-
        <navigation-case>
           <from-action>#{ValueSetBean.resolveVSDAction}</from-action>
           <from-outcome>coding_scheme_references</from-outcome>
@@ -108,7 +100,14 @@
           <from-action>#{ValueSetBean.continueResolveValueSetAction}</from-action>
           <from-outcome>error</from-outcome>
           <to-view-id>/pages/coding_scheme_references.jsp</to-view-id>
-       </navigation-case>         
+       </navigation-case> 
+       
+       <navigation-case>
+          <from-action>#{ValueSetBean.cancelResolveValueSetAction}</from-action>
+          <from-outcome>cancel</from-outcome>
+          <to-view-id>/pages/editValueSetExpression.jsp</to-view-id>
+       </navigation-case> 
+       
     </navigation-rule>   
        
        

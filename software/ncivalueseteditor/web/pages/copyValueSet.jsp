@@ -71,6 +71,8 @@
   
       <%
       String message = (String) request.getAttribute("message");
+      String requestContextPath = request.getContextPath();
+      
       if (message != null) {
           request.removeAttribute("message");
       }    
@@ -147,15 +149,20 @@
 	     <h:commandButton
 		value="Save" action="#{ValueSetBean.saveCopyAction}"
 		onclick="javascript:cursor_wait();"
-		image="#{form_requestContextPath}/images/continue.gif" alt="Save a copy" />
+		image="#{requestContextPath}/images/continue.gif" alt="Save a copy" />
 
 	 &nbsp; 
- 	 
+
+<a href="javascript:history.go(-1)">
+<img src="<%=requestContextPath%>/images/cancel.gif" border="0"></a>
+
+<!--
 	     <h:commandButton
 		value="Save" action="#{ValueSetBean.cancelCopyAction}"
 		onclick="javascript:cursor_wait();"
-		image="#{form_requestContextPath}/images/cancel.gif" alt="Cancel copy" />
-		
+		image="#{requestContextPath}/images/cancel.gif" alt="Cancel copy" />
+-->
+
 	  </td>
 
        </tr>

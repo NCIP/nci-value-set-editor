@@ -68,9 +68,9 @@
         
 <%
 
-String valueSetSearch_requestContextPath = request.getContextPath();
+String requestContextPath = request.getContextPath();
 
-System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_requestContextPath);
+System.out.println("requestContextPath: " + requestContextPath);
 
 String message = (String) request.getSession().getAttribute("message");  
 request.getSession().removeAttribute("message");  
@@ -113,7 +113,7 @@ if (codingSchemeName_vec != null) {
 Vector coding_scheme_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(codingSchemeName_vec);
 
 
-System.out.println("resolve_value_set.jsp coding_scheme_ref_vec.size() " + coding_scheme_ref_vec.size()) ;
+System.out.println("coding_scheme_references.jsp coding_scheme_ref_vec.size() " + coding_scheme_ref_vec.size()) ;
 
 
 String checked = "";
@@ -146,7 +146,7 @@ String prev_cs_urn = "";
             <tr class="textbody"><td>
 
  <h:form id="resolveValueSetForm" styleClass="search-form">            
-               
+              
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
                 <th class="dataTableHeader" scope="col" align="left">&nbsp;</th>
                 <th class="dataTableHeader" scope="col" align="left">Coding Scheme</th>
@@ -174,9 +174,9 @@ System.out.println("(" + lcv + ")" + coding_scheme_ref_str);
 		    
 		    String cs_version = (String) u.elementAt(1);
 		    
-System.out.println("resolve_value_set.jsp cs_name: " + cs_name);
+System.out.println("coding_scheme_references.jsp cs_name: " + cs_name);
 
-System.out.println("resolve_value_set.jsp cs_version: " + cs_version);
+System.out.println("coding_scheme_references.jsp cs_version: " + cs_version);
 		    
 		    String cs_tag = DataUtils.getVocabularyVersionTag(cs_name, cs_version);
 		    if (cs_tag == null) cs_tag = "";
@@ -245,25 +245,33 @@ System.out.println("resolve_value_set.jsp cs_version: " + cs_version);
             <td>&nbsp;</td>
             </tr>
             
-                  <tr><td>
+                  <tr>
+                  <td>
                     <h:commandButton id="continue_resolve" value="continue_resolve" action="#{ValueSetBean.continueResolveValueSetAction}"
                       onclick="javascript:cursor_wait();"
-                      image="#{valueSetSearch_requestContextPath}/images/continue.gif"
+                      image="#{requestContextPath}/images/continue.gif"
                       alt="Resolve"
                       tabindex="2">
                     </h:commandButton>
-                  </td></tr>
+
+&nbsp; 
+
+<a href="javascript:history.go(-1)">
+<img src="<%=requestContextPath%>/images/cancel.gif" border="0"></a>
+                 
+                     
+                  </td>
+                  </tr>
+
+              </td></tr>  
+           </table>                
                   
               <input type="hidden" name="uri" id="uri" value="<%=vsd_uri%>"> 
               <input type="hidden" name="codingSchemeNames" id="codingSchemeNames" value="<%=codingSchemeNames%>">
-              
-              
-              
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>
            
-              </td></tr>  
-           </table>   
+
            
                
 		      <%@ include file="/pages/include/footer.jsp" %>

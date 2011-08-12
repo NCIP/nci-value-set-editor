@@ -79,7 +79,11 @@ import org.LexGrid.valueSets.CodingSchemeReference;
 
 import org.LexGrid.valueSets.ValueSetDefinitionReference;
 
-
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
+import org.LexGrid.concepts.Definition;
+import org.LexGrid.commonTypes.PropertyQualifier;
+import org.LexGrid.commonTypes.Property;
+import org.LexGrid.concepts.*;
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -948,6 +952,11 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
 */
         return "coding_scheme_references";
     }
+
+
+    public String cancelResolveValueSetAction() {
+		return "cancel";
+	}
 
 
     public String continueResolveValueSetAction() {
@@ -2760,17 +2769,160 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 	}
 
 
+    public String getNCIDefinition(ResolvedConceptReference ref) {
+		if (ref == null) return null;
+		Entity concept = ref.getReferencedEntry();
+		if (concept == null) return null;
+		Definition[] definitions = concept.getDefinition();
+		Vector v = new Vector();
+		if (definitions == null) return null;
+		for (int i=0; i<definitions.length; i++) {
+			Definition definition = definitions[i];
 
+			System.out.println(definition.getPropertyName());
+			System.out.println(definition.getValue().getContent());
 
-    // To be implemented (API not available)
-    public String exportResolvedVSDToCSVAction() {
+			Source[] sources = definition.getSource();
+			for (int j=0; j<sources.length; j++)
+			{
+				Source src = sources[j];
+				String src_name = src.getContent();
+				System.out.println("\tsrc_name: " + src_name);
+				if (src_name.compareTo("NCI") == 0) {
+					v.add(definition.getValue().getContent());
+				}
+			}
 
+			PropertyQualifier[] qualifiers = definition.getPropertyQualifier();
+			for (int j=0; j<qualifiers.length; j++)
+			{
+				System.out.println("\tQualifier name: " + qualifiers[j].getPropertyQualifierName());
+				System.out.println("\tQualifier value: " + qualifiers[j].getValue().getContent());
+				String qualifier_value = qualifiers[j].getValue().getContent();
+				if (qualifier_value.compareTo("NCI") == 0) {
+					v.add(definition.getValue().getContent());
+				}
+			}
+		}
+		if (v.size() == 0) return null;
+		if (v.size() == 1) return (String) v.elementAt(0);
 
-		return "exportCSV";
-
+		String def_str = "";
+		for (int i=0; i<v.size(); i++) {
+			String def = (String) v.elementAt(i);
+			if (i == 0) {
+				def_str = def;
+			} else {
+				def_str = def_str + "|" + def;
+			}
+		}
+        return def_str;
 	}
 
-    // To be implemented (API not available)
+
+
+    public String exportResolvedVSDToCSVAction() {
+		HttpServletRequest request =
+			(HttpServletRequest) FacesContext.getCurrentInstance()
+				.getExternalContext().getRequest();
+        request.getSession().removeAttribute("message");
+
+
+        String cs_ref_key = FacesUtil.getRequestParameter("cs_ref_key");
+        AbsoluteCodingSchemeVersionReferenceList csvList = constructAbsoluteCodingSchemeVersionReferenceList(cs_ref_key);
+
+    	_message = null;
+    	_logger.debug("Exporting value.");
+
+    	String curr_uri = FacesUtil.getRequestParameter("uri");
+    	_logger.debug("Exporting value set: " + curr_uri);
+
+        ValueSetObject item = null;
+        if (_cart.containsKey(curr_uri)) {
+        	item = _cart.get(curr_uri);
+		}
+
+		if (item == null) {
+			String msg = "ERROR: Unable to identify the value set definition with URI " + curr_uri;
+			request.setAttribute("message", msg);
+			return "error";
+		}
+
+
+        String infixExpression = item.getExpression();
+		ValueSetDefinition vsd = convertToValueSetDefinition(item, infixExpression);
+		if (vsd == null) {
+			String msg = "ERROR: Unable to construct ValueSetDefinition based on the given expression.";
+			request.setAttribute("message", msg);
+			return "error";
+		}
+
+        HashMap<String, ValueSetDefinition> referencedVSDs = null;
+        StringBuffer sb = new StringBuffer();
+        try {
+        	LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+            ResolvedConceptReferencesIterator itr = ValueSetUtils.resolveValueSetDefinition(vsd, csvList, referencedVSDs);
+
+			sb.append("Code,");
+			sb.append("Name,");
+			sb.append("Terminology,");
+			sb.append("Version,");
+			sb.append("Namespace,");
+			//sb.append("Definition");
+			sb.append("\r\n");
+
+			while (itr != null && itr.hasNext()) {
+				ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
+				for (ResolvedConceptReference ref : refs) {
+					String entityDescription = "<NOT ASSIGNED>";
+					if (ref.getEntityDescription() != null) {
+						entityDescription = ref.getEntityDescription().getContent();
+					}
+
+					sb.append("\"" + ref.getConceptCode() + "\",");
+					sb.append("\"" + entityDescription + "\",");
+					sb.append("\"" + ref.getCodingSchemeName() + "\",");
+					sb.append("\"" + ref.getCodingSchemeVersion() + "\",");
+					sb.append("\"" + ref.getCodeNamespace() + "\",");
+/*
+					String definition = getNCIDefinition(ref);
+					if (definition == null) definition = "";
+					sb.append("\"" + definition + "\"");
+*/
+					sb.append("\r\n");
+				}
+			}
+		} catch (Exception ex)	{
+			sb.append("WARNING: Export to CVS action failed.");
+		}
+
+
+		String vsd_uri = vsd.getValueSetDefinitionName();//.valueSetDefiniionURI2Name(vsd_uri);
+		vsd_uri = vsd_uri.replaceAll(" ", "_");
+		vsd_uri = "resolved_" + vsd_uri + ".txt";
+
+		HttpServletResponse response = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		response.setContentType("text/csv");
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ vsd_uri);
+
+		response.setContentLength(sb.length());
+
+		try {
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+			ouputStream.flush();
+			ouputStream.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			sb.append("WARNING: Export to CVS action failed.");
+		}
+		FacesContext.getCurrentInstance().responseComplete();
+		return null;
+	}
+
+
     public String exportResolvedVSDToXMLAction() {
 		HttpServletRequest request =
 			(HttpServletRequest) FacesContext.getCurrentInstance()
@@ -2869,11 +3021,7 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 			e.printStackTrace();
 		}
 		return null;
-
-		//return "exportCSV";
-
 	}
-
 
 
 
