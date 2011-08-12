@@ -73,6 +73,9 @@
       String message = (String) request.getAttribute("message");
       String requestContextPath = request.getContextPath();
       
+      String uri_value = (String) request.getAttribute("uri_value");
+      if(uri_value == null) uri_value = "";
+      
       if (message != null) {
           request.removeAttribute("message");
       }    
@@ -91,7 +94,7 @@
 	<td align="right" class="inputLabel">
 	      URI:
 	</td>      
-        <td><input CLASS="searchbox-input" name="uri" size="75" tabindex="2"></td>
+        <td><input CLASS="searchbox-input" name="uri" value="<%=uri_value%>" size="75" tabindex="2"></td>
         
       </tr>
 
@@ -109,6 +112,7 @@
 	   
  	     Vector item_vec = DataUtils.getValueSetDefinitions();
  	     String selectValueSetReference = (String) request.getAttribute("selectValueSetReference");
+ 	     
  	     
  	     if (selectValueSetReference == null) {
  		      SelectItem item = (SelectItem) item_vec.elementAt(0);
@@ -156,12 +160,6 @@
 <a href="javascript:history.go(-1)">
 <img src="<%=requestContextPath%>/images/cancel.gif" border="0"></a>
 
-<!--
-	     <h:commandButton
-		value="Save" action="#{ValueSetBean.cancelCopyAction}"
-		onclick="javascript:cursor_wait();"
-		image="#{requestContextPath}/images/cancel.gif" alt="Cancel copy" />
--->
 
 	  </td>
 

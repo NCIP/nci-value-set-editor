@@ -525,16 +525,19 @@ System.out.println("vsd found: " + vsd.getValueSetDefinitionName());
 
      	_uri = FacesUtil.getRequestParameter("uri");
 
-        if (_uri == null || _uri.length() < 1) {
-            _message = resource.getString("error_missing_uri");
-
 			HttpServletRequest request =
 				(HttpServletRequest) FacesContext.getCurrentInstance()
 					.getExternalContext().getRequest();
 
-			String selectValueSetReference = FacesUtil.getRequestParameter("selectValueSetReference");
+        String selectValueSetReference = FacesUtil.getRequestParameter("selectValueSetReference");
+        if (_uri == null || _uri.length() < 1) {
+            _message = resource.getString("error_missing_uri");
+
+
 			request.setAttribute("selectValueSetReference", selectValueSetReference);
 			System.out.println("selectValueSetReference: " + selectValueSetReference);
+			request.setAttribute("uri_value", _uri);
+
 
             request.setAttribute("message", _message);
 
@@ -544,7 +547,24 @@ System.out.println("vsd found: " + vsd.getValueSetDefinitionName());
 			System.out.println("_uri: " + _uri);
 		}
 
+		boolean retval = DataUtils.validateVSDURI(_uri);
+		if (!retval) {
+			request.setAttribute("uri_value", _uri);
+			request.setAttribute("selectValueSetReference", selectValueSetReference);
+			_message = "WARNING: A value Set Definition with the same URI, " + _uri + ", already exists on the server.";
+			request.setAttribute("message", _message);
+			 return "error";
+		}
 
+
+		retval = validateVSDURI(_uri);
+		if (!retval) {
+			request.setAttribute("uri_value", _uri);
+			request.setAttribute("selectValueSetReference", selectValueSetReference);
+			_message = "WARNING: A value Set Definition with the same URI, " + _uri + ", already exists.";
+			request.setAttribute("message", _message);
+			 return "error";
+		}
 
         ValueSetObject item = new ValueSetObject();
 
@@ -1363,6 +1383,14 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
             _logger.debug("URI is null.");
             return "error";
         }
+        /*
+		boolean retval = validateVSDURI(_uri);
+		if (!retval) {
+			_message = "WARNING: A value Set Definition with URI " + _uri + " already exists.";
+			request.setAttribute("message", _message);
+			 return "error";
+		}
+		*/
 
         ValueSetObject item = null;
         if (_cart.containsKey(_uri)) {
@@ -1414,6 +1442,21 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
     	clear();
     	return "newvalueset";
     }
+
+    public boolean validateVSDURI(String uri) {
+		if (uri == null) return false;
+
+		if (getCount() == 0) return true;
+       for (Iterator<ValueSetObject> i = getValueSetList().iterator(); i.hasNext();) {
+            ValueSetObject item = (ValueSetObject)i.next();
+
+            if (uri.compareToIgnoreCase(item.getUri()) == 0) {
+				return false;
+            }
+        }
+        return true;
+	}
+
 
     public String removeFromCartAction() {
         int knt = 0;

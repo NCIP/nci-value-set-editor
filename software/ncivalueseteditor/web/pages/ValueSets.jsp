@@ -156,7 +156,7 @@
 		        
 		           
 		      <%@ include file="/pages/include/footer.jsp" %>
-		  </div>
+		</div>
 	</div>
         <div class="mainbox-bottom"><img src="<%= request.getContextPath() %>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     </div>

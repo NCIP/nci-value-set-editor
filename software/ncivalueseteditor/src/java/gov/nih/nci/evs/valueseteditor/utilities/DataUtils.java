@@ -217,12 +217,25 @@ public class DataUtils {
     public static HashMap formalName2CodingSchemeName = null;
     public static HashMap codingSchemeName2formalName = null;
 
-
+    public static Vector valueSetDefinitionOnServer_uri_vec = null;
 
     // ==================================================================================
    public DataUtils() {
         _isMappingHashMap = new HashMap();
    }
+
+
+    public static boolean validateVSDURI(String uri) {
+		if (valueSetDefinitionOnServer_uri_vec == null) {
+			Vector v = getValueSetDefinitions();
+		}
+		if (valueSetDefinitionOnServer_uri_vec.contains(uri)) {
+			return false;
+		}
+		return true;
+	}
+
+
 
     public static boolean isMapping(String scheme, String version) {
 		/*
@@ -740,8 +753,9 @@ public class DataUtils {
 
 	public static Vector getValueSetDefinitions() {
 		if (_valueset_item_vec != null) return _valueset_item_vec;
+
 		_valueset_item_vec = new Vector();
-		Vector key_vec = new Vector();
+		valueSetDefinitionOnServer_uri_vec = new Vector();
 		HashMap hmap = new HashMap();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
         List list = vsd_service.listValueSetDefinitionURIs();
@@ -754,13 +768,13 @@ public class DataUtils {
 					name = "<NOT ASSIGNED>";
 				}
 				hmap.put(name, vsd);
-			    key_vec.add(name);
+			    valueSetDefinitionOnServer_uri_vec.add(name);
 		    }
 		}
 
-		key_vec = SortUtils.quickSort(key_vec);
-		for (int i=0; i<key_vec.size(); i++) {
-			String key = (String) key_vec.elementAt(i);
+		valueSetDefinitionOnServer_uri_vec = SortUtils.quickSort(valueSetDefinitionOnServer_uri_vec);
+		for (int i=0; i<valueSetDefinitionOnServer_uri_vec.size(); i++) {
+			String key = (String) valueSetDefinitionOnServer_uri_vec.elementAt(i);
 			ValueSetDefinition vsd = (ValueSetDefinition) hmap.get(key);
 			_valueset_item_vec.add(new SelectItem(vsd.getValueSetDefinitionURI(), key)); // value, label
 		}
