@@ -75,6 +75,9 @@
           <%=indent%> <a href="#remove_value_set">Remove Value Set Definition</a><br/>
           
           <%=indent%> <a href="#resolve_value_set_definition">Resolve Value Set Definition</a><br/>
+          <%=indent%><%=indent%> <a href="#export_resolved_value_set_definition_csv">Export Resolved Value Set in CSV Format</a><br/>
+          <%=indent%><%=indent%> <a href="#export_resolved_value_set_definition_csv">Export Resolved Value Set in XML Format</a><br/>
+          
           <%=indent%> <a href="#export_value_set_definition">Export Value Set Definition</a><br/>
 
           <a href="#additionalInformation">Additional Information</a><br/>
@@ -688,7 +691,44 @@ So, you should exercise this command with caution.
   by clicking on the two hyperlinks, <b>Export CSV</b> and <b>Export XML</b>, respectively.
  </p>
         </div>
+ 
+ 
+           <div class="textbody">
+             <br/>
+             <table width="720px" cellpadding="0" cellspacing="0" border="0">
+               <tr>
+                 <td><a name="export_resolved_value_set_definition_csv"><b>Export Resolved Value Set in CSV Format</b></a></td>
+                 <td align="right">
+                   <a href="#"><img src="<%=arrowImage%>" 
+                     width="16" height="16" border="0" alt="top" /></a>
+                 </td>
+               </tr>
+             </table>
+  <p>
   
+  </p>
+  
+        </div>
+        
+           
+
+           <div class="textbody">
+             <br/>
+             <table width="720px" cellpadding="0" cellspacing="0" border="0">
+               <tr>
+                 <td><a name="export_resolved_value_set_definition_xml"><b>Export Resolved Value Set in XML Format</b></a></td>
+                 <td align="right">
+                   <a href="#"><img src="<%=arrowImage%>" 
+                     width="16" height="16" border="0" alt="top" /></a>
+                 </td>
+               </tr>
+             </table>
+  <p>
+  
+  </p>
+  
+        </div> 
+ 
  
           <%-- -------------------------------------------------------------- --%> 
       
@@ -696,7 +736,7 @@ So, you should exercise this command with caution.
              <br/>
              <table width="720px" cellpadding="0" cellspacing="0" border="0">
                <tr>
-                 <td><a name="export_value_set_definition"><b>Export Value Set Definition</b></a></td>
+                 <td><a name="export_resolved_value_set_definition_xml"><b>Export Value Set Definition in XML Format</b></a></td>
                  <td align="right">
                    <a href="#"><img src="<%=arrowImage%>" 
                      width="16" height="16" border="0" alt="top" /></a>
@@ -711,10 +751,6 @@ So, you should exercise this command with caution.
         
         
 
-
-
-        
- 
  
            <%-- -------------------------------------------------------------- --%> 
        
