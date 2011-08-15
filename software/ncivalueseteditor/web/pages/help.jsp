@@ -75,8 +75,8 @@
           <%=indent%> <a href="#remove_value_set">Remove Value Set Definition</a><br/>
           
           <%=indent%> <a href="#resolve_value_set_definition">Resolve Value Set Definition</a><br/>
-          <%=indent%><%=indent%> <a href="#export_resolved_value_set_definition_csv">Export Resolved Value Set in CSV Format</a><br/>
           <%=indent%><%=indent%> <a href="#export_resolved_value_set_definition_csv">Export Resolved Value Set in XML Format</a><br/>
+          <%=indent%><%=indent%> <a href="#export_resolved_value_set_definition_csv">Export Resolved Value Set in CSV Format</a><br/>
           
           <%=indent%> <a href="#export_value_set_definition">Export Value Set Definition</a><br/>
 
@@ -467,7 +467,13 @@ Press the <b>Cancel</b> button to return to the previous page without saving the
              </tr>
            </table>
 <p>
-
+To edit a component subset, open the Edit Value Set page containing the value set definition data you would 
+like to modify. 
+Click on the corresponding <b>Edit</b> hyperlink under the Action column of the Component Subset table.
+The same user interface as you have seen previously in the Add Component Subset paragraph
+will appear. Follow the same procedure to modify the component subset.
+Press <b>Save</b> to save the change to your session.
+Or, press <b>Cancel</b> to abort.
 </p>
 
         </div>   
@@ -693,6 +699,25 @@ So, you should exercise this command with caution.
         </div>
  
  
+            <div class="textbody">
+              <br/>
+              <table width="720px" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td><a name="export_resolved_value_set_definition_xml"><b>Export Resolved Value Set in XML Format</b></a></td>
+                  <td align="right">
+                    <a href="#"><img src="<%=arrowImage%>" 
+                      width="16" height="16" border="0" alt="top" /></a>
+                  </td>
+                </tr>
+              </table>
+   <p>
+   Once the value set definition is resolved into a list of concepts, you may
+   save code, name, vocabulary and namespace of each concept
+   to a file in LexGrid XML format by clicking on the Export XML hyperlink.
+  </p>
+  
+  
+ 
            <div class="textbody">
              <br/>
              <table width="720px" cellpadding="0" cellspacing="0" border="0">
@@ -705,27 +730,13 @@ So, you should exercise this command with caution.
                </tr>
              </table>
   <p>
-  
-  </p>
-  
+  You also have the option to save
+  the same data above to a file in CSV format by clicking on the Export CSV hyperlink on the
+  Resolved Value Set page.
+  </p> 
         </div>
-        
-           
+ 
 
-           <div class="textbody">
-             <br/>
-             <table width="720px" cellpadding="0" cellspacing="0" border="0">
-               <tr>
-                 <td><a name="export_resolved_value_set_definition_xml"><b>Export Resolved Value Set in XML Format</b></a></td>
-                 <td align="right">
-                   <a href="#"><img src="<%=arrowImage%>" 
-                     width="16" height="16" border="0" alt="top" /></a>
-                 </td>
-               </tr>
-             </table>
-  <p>
-  
-  </p>
   
         </div> 
  
@@ -744,13 +755,15 @@ So, you should exercise this command with caution.
                </tr>
              </table>
   <p>
-  
+  To save a value set definition to a file in LexGrid CSV format, click on the <p>Export XML</b> button on the
+  Edit Value Set page, or
+  click on the <p>Export XML</b> button on the
+  Value Set page.
+  In any event, a dialog box will appear providing you the option to either save the file to a local disk or to open the file
+  in a browser window.
   </p>
   
         </div>
-        
-        
-
  
            <%-- -------------------------------------------------------------- --%> 
        
@@ -777,9 +790,6 @@ So, you should exercise this command with caution.
    </p>
    
         </div>
-        
-        
-          
           
  		           
 		      <%@ include file="/pages/include/footer.jsp" %>
