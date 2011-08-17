@@ -255,10 +255,18 @@ System.out.println("coding_scheme_references.jsp cs_version: " + cs_version);
                     </h:commandButton>
 
 &nbsp; 
-
+<!--
 <a href="javascript:history.go(-1)">
 <img src="<%=requestContextPath%>/images/cancel.gif" border="0"></a>
-                 
+-->
+
+<h:commandButton
+	id="Cancel"
+	value="Cancel"
+	action="#{ComponentBean.cancelComponentSubsetAction}" 
+	image="#{form_requestContextPath}/images/cancel.gif" alt="Cancel editing component subset">
+</h:commandButton>
+
                      
                   </td>
                   </tr>
@@ -267,6 +275,8 @@ System.out.println("coding_scheme_references.jsp cs_version: " + cs_version);
            </table>                
                   
               <input type="hidden" name="uri" id="uri" value="<%=vsd_uri%>"> 
+              <input type="hidden" name="vs_uri" id="vs_uri" value="<%=vsd_uri%>" />
+              
               <input type="hidden" name="codingSchemeNames" id="codingSchemeNames" value="<%=codingSchemeNames%>">
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>

@@ -701,6 +701,7 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
 				co = vs.getComponent(_component_label);
 			}
 			vsb.setUri(_vs_uri);
+			vsb.setExpression(_component_label);
 	    }
 
       	_logger.debug("rel_search_association: " + _rel_search_association);

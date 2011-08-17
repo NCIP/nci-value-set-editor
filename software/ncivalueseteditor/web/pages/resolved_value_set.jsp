@@ -67,6 +67,9 @@
             
 String cs_ref_key = (String) request.getAttribute("cs_ref_key"); 
 if (cs_ref_key == null) cs_ref_key = "";
+
+System.out.println("(*) resolved_value_set.jsp cs_ref_key: " + cs_ref_key);
+
             
             		String browser_url = ApplicationProperties.getNCITurl();
 
@@ -351,16 +354,16 @@ if (cs_ref_key == null) cs_ref_key = "";
                %>
  
  
- <form> 
+ <h:form>
  <table><tr><td> 
   <h:commandButton
- 	id="Cancel"
- 	value="Cancel"
+ 	id="Close"
+ 	value="Close"
  	action="#{ValueSetBean.closeAction}"
- 	image="#{form_requestContextPath}/images/close.gif" alt="Cancel creating component subset">
+ 	image="#{form_requestContextPath}/images/close.gif" alt="Close window">
   </h:commandButton>
  </td></tr></table> 
-</form> 
+</h:form> 
 
                
                

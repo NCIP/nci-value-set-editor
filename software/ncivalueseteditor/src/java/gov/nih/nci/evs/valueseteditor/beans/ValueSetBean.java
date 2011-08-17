@@ -502,6 +502,13 @@ public class ValueSetBean {
 
     public String closeAction() {
 
+		String vs_uri = FacesUtil.getRequestParameter("uri");
+		System.out.println("(******** resolved_value_set.jsp closeAction ...vs_uri: " + vs_uri);
+
+        if (vs_uri != null) {
+			setUri(vs_uri);
+		}
+
 	    return "close";
     }
 
@@ -1008,8 +1015,6 @@ _logger.debug("===== continueResolveValueSetAction");
 
 			infixExpression = expression;
 
-
-
 			System.out.println("URI: " + curr_uri);
 			if (item.getCompListSize() > 1) {
 				if (expression == null || expression.compareTo("") == 0) {
@@ -1188,7 +1193,7 @@ _logger.debug("Resolving value set: Step 2 ");
 			try {
 				it.release();
 			} catch (Exception ex) {
-
+ex.printStackTrace();
 			}
 		}
 
