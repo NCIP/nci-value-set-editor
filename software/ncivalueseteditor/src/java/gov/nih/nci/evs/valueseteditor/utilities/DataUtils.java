@@ -1164,6 +1164,77 @@ System.out.println(	"WARNING: DataUtils.getCodingSchemeURI cannot find coding sc
 	}
 
 */
+    public static ConceptReferenceList createConceptReferenceList(
+        String[] codes, String codingSchemeName) {
+        if (codes == null) {
+            return null;
+        }
+        ConceptReferenceList list = new ConceptReferenceList();
+        for (int i = 0; i < codes.length; i++) {
+            ConceptReference cr = new ConceptReference();
+            cr.setCodingSchemeName(codingSchemeName);
+            cr.setConceptCode(codes[i]);
+            list.addConceptReference(cr);
+        }
+        return list;
+    }
+
+
+    public static Entity getConceptByCode(String scheme, String version, String code) {
+
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) {
+                _logger
+                    .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return null;
+            }
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			if (version != null)
+				versionOrTag.setVersion(version);
+			CodedNodeSet cns = getNodeSet(lbSvc, scheme, versionOrTag);
+			CodedNodeSet.PropertyType[] propertyTypes = null;
+			ConceptReferenceList crefs =
+				createConceptReferenceList(new String[] { code }, scheme);
+			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+			cns = cns.restrictToCodes(crefs);
+			boolean resolveConcepts = false;
+			ResolvedConceptReferencesIterator iterator = null;
+			SortOptionList sortCriteria = null;
+			iterator = cns.resolve(sortCriteria, null, null, null, resolveConcepts);
+			if (iterator == null) return null;
+			while (iterator.hasNext()) {
+				ResolvedConceptReference[] refs =
+					iterator.next(100).getResolvedConceptReference();
+				for (ResolvedConceptReference ref : refs) {
+					if (ref.getReferencedEntry().getEntityCode().equals(
+						code)) {
+						return ref.getReferencedEntry();
+					}
+				}
+		    }
+        } catch (Exception e) {
+            _logger.error("Method: SearchUtil.matchConceptByCode");
+            _logger.error("* ERROR: cns.resolve throws exceptions.");
+            _logger.error("* " + e.getClass().getSimpleName() + ": "
+                + e.getMessage());
+        }
+        return null;
+    }
+
+     public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag)
+        throws Exception {
+		CodedNodeSet cns = null;
+		try {
+			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+			CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY;
+			cns = cns.restrictToAnonymous(restrictToAnonymous);
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+ 	return cns;
+    }
 
 
 }

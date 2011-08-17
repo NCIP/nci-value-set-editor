@@ -1481,6 +1481,8 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
 				knt++;
                 if (_cart.containsKey(item._uri)) {
                     i.remove();
+
+                    setExpression("");
 				}
             }
         }

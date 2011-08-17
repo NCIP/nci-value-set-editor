@@ -301,12 +301,15 @@ if (obj == null) {
                       if (rcr.getEntityDescription() != null) {
                           name = rcr.getEntityDescription().getContent();
                       } else {
-      Entity entity = SearchUtils.getConceptByCode(rcr.getCodeNamespace(),
-           null, null, rcr.getConceptCode());
+                      
+      Entity entity = DataUtils.getConceptByCode(rcr.getCodeNamespace(), null, rcr.getConceptCode());
       name = entity.getEntityDescription().getContent();
 
 
+
                       }
+                      
+                      
                       if (code == null || code.indexOf("@") != -1) {
                           i++;
         if (i % 2 == 0) {
