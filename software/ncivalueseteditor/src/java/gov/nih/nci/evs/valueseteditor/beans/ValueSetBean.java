@@ -759,6 +759,18 @@ System.out.println("vsd found: " + vsd.getValueSetDefinitionName());
 		return ob;
 	}
 
+    public String cancelResolveValueSetAction() throws Exception {
+
+		String vs_uri = FacesUtil.getRequestParameter("vs_uri");
+		System.out.println("(******** cancelComponentSubsetAction ...vs_uri: " + vs_uri);
+
+        if (vs_uri != null) {
+			setUri(vs_uri);
+		}
+
+		return "cancel";
+	}
+
 
     public String cancelCopyAction() {
 
@@ -981,9 +993,6 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
     }
 
 
-    public String cancelResolveValueSetAction() {
-		return "cancel";
-	}
 
 
     public String continueResolveValueSetAction() {

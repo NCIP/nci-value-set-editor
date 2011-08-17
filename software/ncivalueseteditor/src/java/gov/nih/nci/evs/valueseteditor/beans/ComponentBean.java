@@ -752,6 +752,10 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
 		return "cancel";
 	}
 
+
+
+
+
     //KLO
     public String previewComponentAction() {
     	_message = null;
