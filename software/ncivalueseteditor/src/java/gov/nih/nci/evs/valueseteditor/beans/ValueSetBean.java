@@ -1263,6 +1263,8 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
     public String exportVSDToXMLAction() {
 
 		String expression = FacesUtil.getRequestParameter("expression");
+System.out.println("exportVSDToXMLAction expression: " + expression);
+
 		if (expression != null) expression = expression.trim();
 
 		HttpServletRequest request =
@@ -1278,6 +1280,11 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
 
     	String curr_uri = FacesUtil.getRequestParameter("uri");
     	_logger.debug("Exporting value set: " + curr_uri);
+
+
+System.out.println("exportVSDToXMLAction curr_uri: " + curr_uri);
+
+
 
     	String infixExpression = null;
     	infixExpression = expression;
@@ -1313,6 +1320,9 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
 				System.out.println("\t Algorithm: " + ob.getAlgorithm());
 				System.out.println("\n");
 			}
+		} else {
+System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri);
+
 		}
 
         //expression
@@ -2225,9 +2235,15 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
     }
 
 
-
+    // to be modified KLO
 	public Vector findParticipatingCodingSchemes(ValueSetObject vs_obj) {
-		if (vs_obj == null) return null;
+		Vector v = new Vector();
+		if (vs_obj == null) {
+			System.out.println("WARNING: vs_obj is null???");
+			v.add("NCI_Thesaurus");
+			return v;
+			//return null;
+		}
 		HashSet hset = new HashSet();
 		Vector v = new Vector();
 		if (vs_obj.getCodingScheme() != null) {
