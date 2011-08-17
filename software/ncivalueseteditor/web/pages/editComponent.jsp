@@ -803,17 +803,13 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
 <h:commandButton
 	id="Cancel"
 	value="Cancel"
-	
-	action="#{ComponentBean.saveComponentSubsetAction}" 
-	
-
-	image="#{form_requestContextPath}/images/cancel.gif" alt="Cancel creating component subset">
+	action="#{ComponentBean.cancelComponentSubsetAction}" 
+	image="#{form_requestContextPath}/images/cancel.gif" alt="Cancel editing component subset">
 </h:commandButton>
 
 </td>
 
 </tr>
-
 
               </table>
               

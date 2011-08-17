@@ -157,9 +157,15 @@
 
 	 &nbsp; 
 
+<!--
 <a href="javascript:history.go(-1)">
 <img src="<%=requestContextPath%>/images/cancel.gif" border="0"></a>
+-->
 
+	     <h:commandButton
+		value="Save" action="#{ValueSetBean.cancelCopyAction}"
+		image="#{requestContextPath}/images/cancel.gif" alt="Cancel" />
+	
 
 	  </td>
 

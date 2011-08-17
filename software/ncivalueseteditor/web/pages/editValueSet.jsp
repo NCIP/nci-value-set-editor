@@ -82,7 +82,6 @@
 	    System.out.println("ValueSetBean == null???");
 	} else {
 	    System.out.println("ValueSetBean != null");
-	
 		vs_uri = vsb.getUri();
 		String action = (String) request.getParameter("action");
 		if (action != null && action.compareTo("remove") == 0) {

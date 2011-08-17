@@ -136,11 +136,13 @@
 	     adv_search_vocabulary = "NCI Thesaurus";
 	 }
  }
- 
- System.out.println("(*) adv_search_vocabulary: " + adv_search_vocabulary);
-     
     
-    String vs_uri = (String) request.getSession().getAttribute("vs_uri");
+
+ ValueSetBean vsb = (ValueSetBean)FacesContext.getCurrentInstance()
+	     .getExternalContext().getSessionMap().get("ValueSetBean");
+
+ String vs_uri = vsb.getUri();
+ System.out.println("addComponent.jsp vs_uri: " + vs_uri);
 
     String refresh = (String) request.getParameter("refresh");
     boolean refresh_page = false;
@@ -153,7 +155,6 @@
     advSearch_requestContextPath = advSearch_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
     
     String adv_search_version = null;//request.getParameter("version");
-
 
     String search_algorithm = null;
     String search_string = "";
@@ -670,9 +671,7 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
 <h:commandButton
 	id="Cancel"
 	value="Cancel"
-	
-	action="#{ComponentBean.saveComponentSubsetAction}" 
-	
+	action="#{ComponentBean.cancelComponentSubsetAction}" 
 	image="#{form_requestContextPath}/images/cancel.gif" alt="Cancel creating component subset">
 </h:commandButton>
 

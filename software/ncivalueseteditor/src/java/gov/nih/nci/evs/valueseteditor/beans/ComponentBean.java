@@ -741,7 +741,12 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
 
     public String cancelComponentSubsetAction() throws Exception {
 
-		System.out.println("(******** cancelComponentSubsetAction ...");
+		String vs_uri = FacesUtil.getRequestParameter("vs_uri");
+		System.out.println("(******** cancelComponentSubsetAction ...vs_uri: " + vs_uri);
+
+        if (vs_uri != null) {
+			vsb.setUri(vs_uri);
+		}
 
 		return "cancel";
 	}
