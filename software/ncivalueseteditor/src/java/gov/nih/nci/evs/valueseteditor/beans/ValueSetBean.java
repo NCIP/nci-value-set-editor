@@ -2245,7 +2245,6 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
 			//return null;
 		}
 		HashSet hset = new HashSet();
-		Vector v = new Vector();
 		if (vs_obj.getCodingScheme() != null) {
 
 String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
