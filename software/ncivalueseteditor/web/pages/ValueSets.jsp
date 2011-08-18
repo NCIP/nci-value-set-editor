@@ -128,12 +128,14 @@
                         <h:commandLink action="#{ValueSetBean.resolveVSDAction}" value="Resolve"
                              rendered="#{item.isNotEmpty}">
                              <f:param name="uri" value="#{item.uri}" />
+                             <f:param name="expression" value="#{item.expression}" />
                         </h:commandLink>      
                         &#xA0; 
                         
                         <h:commandLink action="#{ValueSetBean.exportVSDToXMLAction}" value="Export"
                               rendered="#{item.isNotEmpty}">  
                               <f:param name="uri" value="#{item.uri}" />
+                              <f:param name="expression" value="#{item.expression}" />
                         </h:commandLink> 
 
                         

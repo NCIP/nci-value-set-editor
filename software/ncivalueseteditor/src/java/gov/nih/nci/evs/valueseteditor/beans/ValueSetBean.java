@@ -789,28 +789,29 @@ System.out.println("vsd found: " + vsd.getValueSetDefinitionName());
 	}
 
     public String resolveVSDAction() {
-
-
 _logger.debug("===== resolveValueSetAction");
-
-String resolved_vs_key = "";
+		String resolved_vs_key = "";
 
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
+
+
+        String expression = null;
+		expression = FacesUtil.getRequestParameter("expression");
+		if (expression != null) {
+			expression = expression.trim();
+		}
+
 
         request.getSession().removeAttribute("message");
     	_message = null;
     	String curr_uri = FacesUtil.getRequestParameter("uri");
     	_logger.debug("Resolving value set: " + curr_uri);
 
-		String expression = FacesUtil.getRequestParameter("expression");
-		if (expression != null) expression = expression.trim();
-
         ValueSetObject item = null;
         if (_cart.containsKey(curr_uri)) {
         	item = _cart.get(curr_uri);
-
 			System.out.println("URI: " + curr_uri);
 			if (item.getCompListSize() > 1) {
 				if (expression == null || expression.compareTo("") == 0) {
@@ -819,6 +820,9 @@ String resolved_vs_key = "";
 					return "error";
 				}
 			}
+
+			item.setExpression(expression);
+			setExpression(expression);
 
 			resolved_vs_key = resolved_vs_key + curr_uri;
 
@@ -844,7 +848,7 @@ _logger.debug("\t Vocabulary: " + ob.getVocabulary());
 			}
 		}
 
-        //expression
+  /*      //expression
         String infixExpression = null;
         try {
 			infixExpression = FacesUtil.getRequestParameter("expression");
@@ -866,13 +870,13 @@ _logger.debug("\t Vocabulary: " + ob.getVocabulary());
 
 
     	_logger.debug("infixExpression: " + infixExpression);
-
+*/
 		_logger.debug("Resolving value set: Step 1 ");
 
 				// To be implemented.
 
-		_logger.debug("Resolving value set: convertToValueSetDefinition infixExpression: " + infixExpression);
-				ValueSetDefinition vsd = convertToValueSetDefinition(item, infixExpression);
+		_logger.debug("Resolving value set: convertToValueSetDefinition infixExpression: " + expression);
+				ValueSetDefinition vsd = convertToValueSetDefinition(item, expression);
 
         int componentCount = item.getCompListSize();
         if (componentCount == 0) {
@@ -882,7 +886,7 @@ _logger.debug("\t Vocabulary: " + ob.getVocabulary());
 						return "error";
 		}
 
-        if (componentCount > 1 && (infixExpression == null || infixExpression.length() == 0)) {
+        if (componentCount > 1 && (expression == null || expression.length() == 0)) {
 
 						String msg = "WARNING: No value set expression has been defined.";
 						request.setAttribute("message", msg);
@@ -989,6 +993,8 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
         //request.getSession().setAttribute("dictionary", scheme);
         return "message";
 */
+
+        request.setAttribute("uri", curr_uri);
         return "coding_scheme_references";
     }
 
@@ -1009,24 +1015,22 @@ _logger.debug("===== continueResolveValueSetAction");
     	String curr_uri = FacesUtil.getRequestParameter("uri");
     	_logger.debug("***************************** continueResolveValueSetAction Resolving value set: " + curr_uri);
 
-		String expression = FacesUtil.getRequestParameter("expression");
-		if (expression != null) expression = expression.trim();
+		//String expression = FacesUtil.getRequestParameter("expression");
+		//if (expression != null) expression = expression.trim();
 		String infixExpression = null;
-
 
         ValueSetObject item = null;
         if (_cart.containsKey(curr_uri)) {
         	item = _cart.get(curr_uri);
 
-        	if (expression == null) {
-				expression = item.getExpression();
-			}
+			infixExpression = item.getExpression();;
 
-			infixExpression = expression;
+			System.out.println("continueResolveValueSetAction infixExpression: " + infixExpression);
+
 
 			System.out.println("URI: " + curr_uri);
 			if (item.getCompListSize() > 1) {
-				if (expression == null || expression.compareTo("") == 0) {
+				if (infixExpression == null || infixExpression.compareTo("") == 0) {
 					String msg = "WARNING: Please complete the value set expression.";
 					request.setAttribute("message", msg);
 					return "error";
@@ -1113,23 +1117,6 @@ _logger.debug("\t Vocabulary: " + ob.getVocabulary());
 			_logger.debug("Value set definition uri: " + vsd.getValueSetDefinitionURI());
 			_logger.debug("Value set definition name: " + vsd.getValueSetDefinitionName());
 			_logger.debug("Value set definition: definitionentrycount: " + vsd.getDefinitionEntryCount());
-
-
-			 DefinitionEntry[] entries = vsd.getDefinitionEntry();
-			 for (int k=0; k<vsd.getDefinitionEntryCount(); k++) {
-				 DefinitionEntry entry = entries[k];
-				 PropertyReference prop_ref = entry.getPropertyReference();
-				 if (prop_ref != null) {
-					_logger.debug("Value set definition: prop_ref != null." );
-
-				 } else {
-					_logger.debug("Value set definition: prop_ref == null ???" );
-
-				 }
-
-			 }
-
-
 		}
 
 
@@ -1234,24 +1221,8 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
 		}
 
         String message = "No match found.";
-
         System.out.println("result: " + message);
-
-        /*
-        int minimumSearchStringLength = Constant.MINIMUM_SEARCH_STRING_LENGTH;
-
-        if (matchAlgorithm.compareTo(Constant.EXACT_SEARCH_ALGORITHM) == 0) {
-            message = Constant.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;
-        }
-
-        else if (matchAlgorithm.compareTo(Constant.STARTWITH_SEARCH_ALGORITHM) == 0
-            && matchText.length() < minimumSearchStringLength) {
-            message = Constant.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
-        }
-        */
-
         request.getSession().setAttribute("message", message);
-        //request.getSession().setAttribute("dictionary", scheme);
         return "message";
 
     }
@@ -1259,49 +1230,37 @@ System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
 
 
 
-
     public String exportVSDToXMLAction() {
-
 		String expression = FacesUtil.getRequestParameter("expression");
-System.out.println("exportVSDToXMLAction expression: " + expression);
-
-		if (expression != null) expression = expression.trim();
+		if (expression != null) {
+			expression = expression.trim();
+			System.out.println("\nexpression: " + expression);
+		}
 
 		HttpServletRequest request =
 			(HttpServletRequest) FacesContext.getCurrentInstance()
 				.getExternalContext().getRequest();
         request.getSession().removeAttribute("message");
 
-		//request.getSession().setAttribute("expression", expression);
-
     	_message = null;
     	_logger.debug("Exporting value.");
-    	//<input type="hidden" id="uri" name="uri" value="<%=curr_uri%>" />
 
     	String curr_uri = FacesUtil.getRequestParameter("uri");
     	_logger.debug("Exporting value set: " + curr_uri);
 
-
 System.out.println("exportVSDToXMLAction curr_uri: " + curr_uri);
-
-
-
-    	String infixExpression = null;
-    	infixExpression = expression;
-
 
         ValueSetObject item = null;
         if (_cart.containsKey(curr_uri)) {
         	item = _cart.get(curr_uri);
-        	item.setExpression(expression);
-
-
 			if (item.getCompListSize() > 1 && expression.compareTo("") == 0) {
 				String msg = "WARNING: Please complete the value set expression.";
 				request.setAttribute("message", msg);
 				return "error";
 			}
 
+			item.setExpression(expression);
+			setExpression(expression);
 
 			System.out.println("URI: " + curr_uri);
 			System.out.println("ConceptDomain: " + item.getConceptDomain());
@@ -1325,11 +1284,11 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
 
 		}
 
-        //expression
-
+/*
         try {
-			infixExpression = FacesUtil.getRequestParameter("expression");
+			String infixExpression = FacesUtil.getRequestParameter("expression");
 			if (infixExpression != null) {
+				infixExpression = infixExpression.trim();
 				System.out.println("\ninfixExpression: " + infixExpression);
 				RPN rpn = new RPN(infixExpression);
 				Vector v = rpn.convertToPostfixExpression(infixExpression);
@@ -1338,19 +1297,16 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
 					System.out.println(s);
 				}
 
-				item.setExpression(infixExpression);
-				setExpression(infixExpression);
-
 
 		    }
 	    } catch (Exception e) {
 			//e.printStackTrace();
 			System.out.println("RPN error...");
 		}
-
+*/
 
         // To be implemented.
-		ValueSetDefinition vsd = convertToValueSetDefinition(item, infixExpression);
+		ValueSetDefinition vsd = convertToValueSetDefinition(item, expression);
 		if (vsd == null) {
 			String msg = "ERROR: Unable to construct ValueSetDefinition based on the expression.";
 			request.setAttribute("message", msg);
@@ -1397,7 +1353,6 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
 
 
     public String saveMetadataAction() {
-
     	_message = null;
         _logger.debug("Saving metadata to cart.");
 
@@ -1438,15 +1393,9 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
      	_description = FacesUtil.getRequestParameter("vsd_description");
     	item.setDescription(_description);
 
-
-    	//_organizations = FacesUtil.getRequestParameter("organizations");
-    	//item.setOrganizations(_organizations);
-
     	item.setConceptDomain(_selectedConceptDomain);
-
-    	_selectedOntology = FacesUtil.getRequestParameter("codingScheme");
-
     	item.setCodingScheme(_selectedOntology);
+
     	item.setSources(_selectedSource);
 
         _cart.put(_uri,item);
@@ -2237,14 +2186,20 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
 
     // to be modified KLO
 	public Vector findParticipatingCodingSchemes(ValueSetObject vs_obj) {
+
+System.out.println("Calling ValuSetBean.findParticipatingCodingSchemes...");
+
 		Vector v = new Vector();
 		if (vs_obj == null) {
 			System.out.println("WARNING: vs_obj is null???");
 			v.add("NCI_Thesaurus");
 			return v;
-			//return null;
 		}
+
 		HashSet hset = new HashSet();
+
+System.out.println("vs_obj.getCodingScheme(): " + vs_obj.getCodingScheme());
+
 		if (vs_obj.getCodingScheme() != null) {
 
 String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
