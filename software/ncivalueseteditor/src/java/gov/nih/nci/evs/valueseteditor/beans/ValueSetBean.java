@@ -1818,6 +1818,7 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
     private String _transitivity = null;
 	private String _selectedDirection = null;
 	private String _selectValueSetReference = null;
+	private String _selectCodingSchemeReference = null;
 
 
         public ComponentObject() {
@@ -1832,7 +1833,13 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
         	this._selectValueSetReference = selectValueSetReference;
         }
 
+        public String getCodingSchemeReference() {
+        	return _selectCodingSchemeReference;
+        }
 
+        public void setCodingSchemeReference(String selectCodingSchemeReference) {
+        	this._selectCodingSchemeReference = selectCodingSchemeReference;
+        }
 
 
         public String getCodes() {
@@ -2089,7 +2096,7 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
 
 		} else if (type.compareTo("EntireVocabulary") == 0) {
             CodingSchemeReference codingSchemeReference = new CodingSchemeReference();
-            codingSchemeReference.setCodingScheme(ob.getVocabulary());
+            codingSchemeReference.setCodingScheme(ob.getCodingSchemeReference());
             entry.setCodingSchemeReference(codingSchemeReference);
 
 		} else if (type.compareTo("ValueSetReference") == 0) {
@@ -2556,9 +2563,7 @@ System.out.println("processing #1 " + operand_1.getLabel());
 								EntityReference entity_ref = new EntityReference();
 								entity_ref.setEntityCode(code);
 									String cs_name = DataUtils.getCodingSchemeName(operand_1.getVocabulary(), null);
-									//entity_ref.setEntityCodeNamespace(operand_1.getVocabulary());
 								entity_ref.setEntityCodeNamespace(cs_name);
-								//entity_ref.setEntityCodeNamespace(operand_1.getVocabulary());
 								entry.setEntityReference(entity_ref);
 								entry.setRuleOrder(ruleOrderCount);
 								entry.setOperator(DefinitionOperator.OR);

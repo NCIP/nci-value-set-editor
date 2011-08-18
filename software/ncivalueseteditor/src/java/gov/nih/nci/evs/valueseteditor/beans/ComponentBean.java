@@ -640,7 +640,12 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
 			_selectValueSetReference = FacesUtil.getRequestParameter("selectValueSetReference");
 			_logger.debug("_selectValueSetReference: " + _selectValueSetReference);
 
+		} else if (_type.compareTo("EntireVocabulary") == 0) {
+            //setCodingSchemeReference(CodingSchemeReference codingSchemeReference)
+
 		}
+
+
 
      	//selectedDirection
 
@@ -722,6 +727,10 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
 
         co.setValueSetReference(_selectValueSetReference);
 
+		if (_type.compareTo("EntireVocabulary") == 0) {
+			String cs_name = DataUtils.getCodingSchemeName(_vocabulary, null);
+            co.setCodingSchemeReference(cs_name);
+		}
 
         if (_codes == null) _codes = "";
         co.setCodes(_codes);

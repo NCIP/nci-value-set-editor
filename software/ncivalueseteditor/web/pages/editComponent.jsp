@@ -194,15 +194,12 @@
 	   component_obj = vs_obj.getComponent(component_label);
 
 	   if (component_obj != null) {
-	       System.out.println("******************* editComponent.jsp dumpComponentObject:");
 	       ValueSetBean.dumpComponentObject(component_obj);
         
 		_label = component_obj.getLabel();
 		_description = component_obj.getDescription();
 		_vocabulary = component_obj.getVocabulary();
-		
-System.out.println("_vocabulary: " + _vocabulary);		
-		
+	
 
 		_type = component_obj.getType();
 		_matchText = component_obj.getMatchText();
@@ -258,6 +255,8 @@ System.out.println("_vocabulary: " + _vocabulary);
         selectSearchOption = (String) request.getParameter("opt");
         _type = selectSearchOption;
         
+        _vocabulary = adv_search_vocabulary;
+        
         label = (String) request.getParameter("label");
         description = (String) request.getParameter("description");
         
@@ -278,27 +277,7 @@ System.out.println("_vocabulary: " + _vocabulary);
         selectSearchOption = "Property";
     }
 
-
-/*
-
-System.out.println("_label: " + _label);
-System.out.println("_description: " + _description);
-System.out.println("_vocabulary: " + _vocabulary);
-System.out.println("_type: " + _type);
-System.out.println("_matchText: " + _matchText);
-
-System.out.println("_codes: " + _codes);
-
-System.out.println("_propertyName: " + _propertyName);
-
-System.out.println("_algorithm: " + _algorithm);
-System.out.println("_focusConceptCode: " + _focusConceptCode);
-System.out.println("_rel_search_association: " + _rel_search_association);
-System.out.println("_transitivity: " + _transitivity);
-System.out.println("_selectedDirection: " + _selectedDirection);
-*/
-
-    
+   
 
     //SearchStatusBean bean = null;
     String message = (String) request.getAttribute("message");
@@ -392,13 +371,23 @@ System.out.println("_selectedDirection: " + _selectedDirection);
                          
   <%                      
   Vector vocabulary_vec = DataUtils.getOntologyNames(); 
+  
   if (adv_search_vocabulary == null) {
   	 if (vocabulary_vec.contains("NCI_Thesaurus")) {
   	     adv_search_vocabulary = "NCI_Thesaurus";
   	 } else if (vocabulary_vec.contains("NCI Thesaurus")) {
   	     adv_search_vocabulary = "NCI Thesaurus";
   	 }
- }
+  }
+  
+  if (selectSearchOption != null && selectSearchOption.compareTo("EntireVocabulary") == 0) {
+        adv_search_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null); ;
+  }
+  
+  
+  
+  
+ 
   %>                       
                          
                          
@@ -475,6 +464,8 @@ System.out.println("_selectedDirection: " + _selectedDirection);
 
  <%
  if (selectSearchOption != null && selectSearchOption.compareTo("EntireVocabulary") == 0) {
+ 
+ 
  
  
  } else if (selectSearchOption != null && selectSearchOption.compareTo("Relationship") == 0) {
