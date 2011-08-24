@@ -569,6 +569,7 @@ System.out.println("adv_search_version: " + adv_search_version);
               <input type="hidden" name="version" id="version" value="<%=adv_search_version%>">
 
               <input type="hidden" name="adv_search_type" id="adv_search_type" value="<%=adv_search_type%>" />
+              <input type="hidden" id="tab" name="tab" value="valueset" /> 
          
             </h:form>
             

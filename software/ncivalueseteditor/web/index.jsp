@@ -7,6 +7,10 @@
 	<title>NCI Value Set Editor</title>
 </head>
 <body>
-	<jsp:forward page="/pages/welcome.jsf" />
+	<jsp:forward page="/pages/welcome.jsf" >
+	    <jsp:param name="tab" value="home" />
+	</jsp:forward>    
+
+
 </body>
 </html>

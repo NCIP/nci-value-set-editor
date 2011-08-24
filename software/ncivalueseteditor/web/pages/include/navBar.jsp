@@ -4,8 +4,8 @@
 <%
 String bgcolor = "#A4A4A4";
 String tab = request.getParameter("tab");
-if (tab == null || tab.compareTo("null") == 0) tab = "welcome";
-if (tab.compareTo("welcome") == 0) {
+if (tab == null || tab.compareTo("null") == 0) tab = "valueset";
+if (tab.compareTo("home") == 0) {
     bgcolor = "#5C5C5C";
 } 
 %>
@@ -14,7 +14,7 @@ if (tab.compareTo("welcome") == 0) {
 
 	      <td bgcolor="<%=bgcolor%>">
 
-        <a href="<%=request.getContextPath() %>"  class="mainMenuLink" >Home</a>
+        <a href="<%=request.getContextPath() %>" /pages/welcome.jsf?tab=home"  class="mainMenuLink" >Home</a>
 
 	      </td>
 

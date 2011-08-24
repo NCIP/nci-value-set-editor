@@ -572,7 +572,7 @@ if (expression == null) expression = "";
 
 
          <input type="hidden" id="uri" name="uri" value="<%=curr_uri%>" />   
-		
+	 <input type="hidden" id="tab" name="tab" value="valueset" /> 	
     </h:form>
 		           
 		        

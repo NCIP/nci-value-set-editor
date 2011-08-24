@@ -372,7 +372,8 @@
 	
 <%    }%>	
 
-          <input type="hidden" id="vs_uri" name="vs_uri" value="<%=vs_uri%>" />  
+          <input type="hidden" id="vs_uri" name="vs_uri" value="<%=vs_uri%>" />
+          <input type="hidden" id="tab" name="tab" value="valueset" />  
 		
     </h:form>
 		           

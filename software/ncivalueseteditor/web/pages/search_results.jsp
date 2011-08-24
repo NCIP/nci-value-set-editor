@@ -421,6 +421,10 @@ if (obj == null) {
 	image="#{form_requestContextPath}/images/close.gif" alt="Cancel creating component subset">
  </h:commandButton>
 </td></tr></table> 
+
+
+<input type="hidden" id="tab" name="tab" value="valueset" /> 
+
 </form> 
         
         

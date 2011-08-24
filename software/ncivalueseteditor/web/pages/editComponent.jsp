@@ -770,6 +770,8 @@ if (rel_search_association == null || rel_search_association.compareTo("") == 0)
                     
  
                   <% }%>
+                  
+                  <input type="hidden" id="tab" name="tab" value="valueset" /> 
 
 <tr>
 

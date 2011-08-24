@@ -363,6 +363,8 @@ System.out.println("(*) resolved_value_set.jsp cs_ref_key: " + cs_ref_key);
  	image="#{form_requestContextPath}/images/close.gif" alt="Close window">
   </h:commandButton>
  </td></tr></table> 
+ 
+ <input type="hidden" id="tab" name="tab" value="valueset" /> 
 </h:form> 
 
                
