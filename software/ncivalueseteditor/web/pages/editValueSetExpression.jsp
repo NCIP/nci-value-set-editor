@@ -373,10 +373,17 @@ if (expression == null) expression = "";
 <%	
 	} else if (componentCount > 0){
 		Collection<ComponentObject> objs = vsb.getComponentObjectList();
-		
-		
-		
+			
+		ArrayList co_list = new ArrayList();
 		Iterator it = objs.iterator();
+		while (it.hasNext()) {
+		    ComponentObject co = (ComponentObject) it.next();
+		    co_list.add(co);
+		}
+		
+		SortUtils.quickSort(co_list);
+		
+		it = co_list.iterator();
 		int lcv = 0;
 		while (it.hasNext()) {
 
