@@ -1180,6 +1180,80 @@ System.out.println(	"WARNING: DataUtils.getCodingSchemeURI cannot find coding sc
     }
 
 
+    public static Entity getConceptByCode(String codingSchemeName, String vers, String ltag, String code) {
+        try {
+			if (code == null) {
+				System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
+				return null;
+			}
+			if (code.indexOf("@") != -1) return null; // anonymous class
+
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            if (lbSvc == null) {
+                System.out.println("lbSvc == null???");
+                return null;
+            }
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            if (vers != null) versionOrTag.setVersion(vers);
+
+            ConceptReferenceList crefs = createConceptReferenceList(
+                    new String[] { code }, codingSchemeName);
+
+            CodedNodeSet cns = null;
+            try {
+				try {
+					cns = getNodeSet(lbSvc, codingSchemeName, versionOrTag);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+                if (cns == null) {
+					System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
+					return null;
+				}
+
+                cns = cns.restrictToCodes(crefs);
+ 				ResolvedConceptReferenceList matches = null;
+				try {
+					matches = cns.resolveToList(null, null, null, 1);
+				} catch (Exception e) {
+					System.out.println("cns.resolveToList failed???");
+				}
+
+                if (matches == null) {
+                    System.out.println("Concept not found.");
+                    return null;
+                }
+                int count = matches.getResolvedConceptReferenceCount();
+                // Analyze the result ...
+                if (count == 0)
+                    return null;
+                if (count > 0) {
+                    try {
+                        ResolvedConceptReference ref = (ResolvedConceptReference) matches
+                                .enumerateResolvedConceptReference()
+                                .nextElement();
+                        Entity entry = ref.getReferencedEntry();
+                        return entry;
+                    } catch (Exception ex1) {
+                        System.out.println("Exception entry == null");
+                        return null;
+                    }
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+
+
+/*
     public static Entity getConceptByCode(String scheme, String version, String code) {
 
         try {
@@ -1221,7 +1295,7 @@ System.out.println(	"WARNING: DataUtils.getCodingSchemeURI cannot find coding sc
         }
         return null;
     }
-
+*/
      public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag)
         throws Exception {
 		CodedNodeSet cns = null;

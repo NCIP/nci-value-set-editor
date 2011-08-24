@@ -93,8 +93,7 @@
 	
 	String expression = "";
 	String selectedOntology = "";
-	
-	
+		
    
        	ValueSetBean vsb = (ValueSetBean)FacesContext.getCurrentInstance()
 			     .getExternalContext().getSessionMap().get("ValueSetBean");
@@ -121,17 +120,23 @@
 	    if (organizations == null) organizations = "";
 	    
 	    selectedOntology = DataUtils.getFormalName(vsb.getSelectedOntology(), null);
+	    
 	    if (selectedOntology == null) {
-System.out.println("(?????) Unable to find formalname for: " + vsb.getSelectedOntology());	
+//System.out.println("(?????) Unable to find formalname for: " + vsb.getSelectedOntology());	
 selectedOntology = "NCI Thesaurus";
+
 	    } else {
 	    
 System.out.println("(*****) selectedOntology: " + selectedOntology);	
 	    }
 	    
-	    
 
 curr_uri = vsb.getUri();
+if (curr_uri == null) {
+    curr_uri = (String) request.getAttribute("vs_uri");
+}
+
+
 System.out.println("(*) curr_uri: " + curr_uri);
 
 expression = vsb.getExpression();
@@ -140,6 +145,8 @@ if (expression == null) expression = "";
 	    componentCount = vsb.getComponentCount();
 	    
 		Collection<ComponentObject> objs = vsb.getComponentObjectList();
+		
+		
 		if (objs != null) {
 			Iterator it = objs.iterator();
 			while (it.hasNext()) {
@@ -366,6 +373,9 @@ if (expression == null) expression = "";
 <%	
 	} else if (componentCount > 0){
 		Collection<ComponentObject> objs = vsb.getComponentObjectList();
+		
+		
+		
 		Iterator it = objs.iterator();
 		int lcv = 0;
 		while (it.hasNext()) {

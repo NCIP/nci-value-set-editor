@@ -125,6 +125,7 @@
 		      <%@ include file="/pages/include/navBar.jsp" %>
 
 <%
+
     String adv_search_vocabulary = (String) request.getSession().getAttribute("dictionary");
 
                       
@@ -194,18 +195,19 @@
         selectSearchOption = "Property";
     }
 
-    String message = (String) request.getAttribute("message");
-    if (message != null) {
-        request.removeAttribute("message");
-    }
+
+     String warning_msg= (String) request.getAttribute("message");
+     if (warning_msg != null && warning_msg.compareTo("null") != 0) {
+	 request.removeAttribute("message");
+     %>
+	<p class="textbodyred"><%=warning_msg%></p>
+     <%
+     }
+
     
     // to be modified:
     String code_enumeration = "";
 
- 
-    if (!refresh_page || message != null) {
-  
-    }
 
     adv_search_type = selectSearchOption;
 
@@ -251,7 +253,10 @@
 if (adv_search_vocabulary == null) {
     adv_search_vocabulary = (String) request.getSession().getAttribute("vocabulary");
 }
- 
+  String adv_search_vocabulary_cs = adv_search_vocabulary;
+  if (adv_search_vocabulary_cs != null) {
+  	adv_search_vocabulary_cs = DataUtils.getCodingSchemeName(adv_search_vocabulary_cs, null);
+  } 
 
 %>
 
@@ -298,17 +303,19 @@ if (adv_search_vocabulary == null) {
                           
                           for (int k=0; k<vocabulary_vec.size(); k++) {
                           
-                                String t2 = (String) vocabulary_vec.elementAt(k);
-                                if (adv_search_vocabulary != null && t2.compareTo(adv_search_vocabulary) == 0) {
- %>                               
-                                    <option value="<%=t2%>" selected><%=t2%></option>
- <%                                   
-                                } else {
- %>                            
- 
-                                    <option value="<%=t2%>" ><%=t2%></option>
-<%
-                                }
+                                 String t2 = (String) vocabulary_vec.elementAt(k);
+                                 String t2_temp = DataUtils.getCodingSchemeName(t2, null);
+                               
+                                 if (t2_temp != null && adv_search_vocabulary_cs != null && t2_temp.compareTo(adv_search_vocabulary_cs) == 0) {
+  %>                               
+                                     <option value="<%=t2%>" selected><%=t2%></option>
+  <%                                   
+                                 } else {
+  %>                            
+  
+                                     <option value="<%=t2%>" ><%=t2%></option>
+ <%
+                                 }
                                 
                           }
 %>

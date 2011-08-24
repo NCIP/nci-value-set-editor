@@ -599,6 +599,11 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
 
         System.out.println("vsb.getUri(): " + vsb.getUri());
 
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+
         // Validate input
         if (vsb.getUri() == null || vsb.getUri().length() < 1) {
             _message = resource.getString("error_missing_uri");
@@ -644,8 +649,6 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
             //setCodingSchemeReference(CodingSchemeReference codingSchemeReference)
 
 		}
-
-
 
      	//selectedDirection
 
@@ -706,7 +709,7 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
 				co = vs.getComponent(_component_label);
 			}
 			vsb.setUri(_vs_uri);
-			vsb.setExpression(_component_label);
+			//vsb.setExpression(_component_label);
 	    }
 
       	_logger.debug("rel_search_association: " + _rel_search_association);
@@ -714,12 +717,17 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
         co.setLabel(_label);
         co.setDescription(_description);
         co.setType(_type);
+
+        if (_matchText != null) _matchText = _matchText.trim();
+
         co.setMatchText(_matchText);
         co.setAlgorithm(_algo);
         co.setVocabulary(_vocabulary);
         co.setPropertyName(_propertyName);
 
+        if (_focusConceptCode != null) _focusConceptCode = _focusConceptCode.trim();
         co.setFocusConceptCode(_focusConceptCode);
+
         co.setRel_search_association(_rel_search_association);
         co.setInclude_focus_node(_include_focus_node);
         co.setTransitivity(_transitivity);
@@ -735,27 +743,58 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
         if (_codes == null) _codes = "";
         co.setCodes(_codes);
 
+        if (_focusConceptCode != null && _focusConceptCode.compareTo("") != 0 && _vocabulary != null) {
+			_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
+			if (DataUtils.getConceptByCode(_vocabulary, null, null, _focusConceptCode) == null) {
+				_message = "WARNING: Invalid code " + _focusConceptCode + ".";
+				request.setAttribute("message", _message);
+				request.setAttribute("selectSearchOption", _type);
+
+				return "error";
+			}
+		}
+
+        if (_type.compareToIgnoreCase("Code") == 0) {
+			if (_matchText != null && _matchText.compareTo("") != 0 && _vocabulary != null) {
+				_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
+				if (DataUtils.getConceptByCode(_vocabulary, null, null, _matchText) == null) {
+					_message = "WARNING: Invalid code " + _matchText + ".";
+					request.setAttribute("message", _message);
+					request.setAttribute("selectSearchOption", _type);
+
+					return "error";
+				}
+			}
+		}
+
 		_logger.debug("vs.getCompList().put(_label, co) " + _label);
 
         vs.getCompList().put(_label, co);
+        if (_expression != null && vs.getExpression() != null && vs.getCompListSize() == 1) {
+			vs.setExpression(_expression);
+		}
+
         //vs.setExpression(_expression);
 
         _message = resource.getString("action_saved");
-
         _logger.debug("saveComponentSubsetAction returns success");
-
-
-
         return "success";
     }
 
     public String cancelComponentSubsetAction() throws Exception {
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
 
 		String vs_uri = FacesUtil.getRequestParameter("vs_uri");
 		System.out.println("(******** cancelComponentSubsetAction ...vs_uri: " + vs_uri);
 
         if (vs_uri != null) {
 			vsb.setUri(vs_uri);
+
+			request.setAttribute("vs_uri", vs_uri);
 		}
 
 		return "cancel";

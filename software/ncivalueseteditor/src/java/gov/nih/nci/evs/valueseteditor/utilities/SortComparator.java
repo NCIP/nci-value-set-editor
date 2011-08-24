@@ -8,6 +8,11 @@ import org.apache.log4j.*;
 import org.LexGrid.valueSets.ValueSetDefinition;
 
 
+import gov.nih.nci.evs.valueseteditor.beans.*;
+
+
+
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -119,6 +124,12 @@ public class SortComparator implements Comparator<Object> {
                 return vsd.getValueSetDefinitionURI();
             return vsd.getValueSetDefinitionName();
         }
+
+        else if (c instanceof ValueSetBean.ComponentObject) {
+            ValueSetBean.ComponentObject co = (ValueSetBean.ComponentObject) c;
+            return co.getLabel();
+        }
+
 
         else if (c instanceof String) {
             String s = (String) c;

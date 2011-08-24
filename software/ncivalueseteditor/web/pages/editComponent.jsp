@@ -133,10 +133,19 @@
 
 <%
 
+
+System.out.println("editComponent.jsp Step 1");
+
+
+
     String edit_action = (String) request.getParameter("action");
     System.out.println("editComponent.jsp edit_action: " + edit_action);
 
     String vs_uri = (String) request.getParameter("uri");
+    if (vs_uri == null) {
+    	vs_uri = (String) request.getAttribute("vs_uri");
+    }
+    
     System.out.println("editComponent.jsp vs_uri: " + vs_uri);
 
     String component_label = (String) request.getParameter("label");
@@ -184,9 +193,13 @@
     // find component object
 	ValueSetBean vsb = (ValueSetBean)FacesContext.getCurrentInstance()
 			     .getExternalContext().getSessionMap().get("ValueSetBean");
-	//ValueSetObject vs_obj = vsb.getValueSet(vs_uri);
+
 	ValueSetObject vs_obj = vsb.getCurrentValueSet();
 	ComponentObject component_obj = null;
+
+
+System.out.println("editComponent.jsp -- Step 2");
+
 
 	if (vs_obj == null) {
 	   System.out.println("(*) vs_obj == null???");
@@ -199,6 +212,9 @@
 		_label = component_obj.getLabel();
 		_description = component_obj.getDescription();
 		_vocabulary = component_obj.getVocabulary();
+		
+		
+System.out.println("debugging editComponent.jsp _vocabulary: " + _vocabulary);
 	
 
 		_type = component_obj.getType();
@@ -234,6 +250,10 @@
 		description = _description;
 		
 		adv_search_vocabulary = _vocabulary;
+		
+System.out.println("debugging editComponent.jsp adv_search_vocabulary: " + _vocabulary);
+		
+		
 	   }
 	}
 
@@ -270,7 +290,6 @@
         
 
     } 
-
     
 
     if (selectSearchOption == null || selectSearchOption.compareTo("null") == 0) {
@@ -279,19 +298,17 @@
 
    
 
-    //SearchStatusBean bean = null;
-    String message = (String) request.getAttribute("message");
-    if (message != null) {
-        request.removeAttribute("message");
-    }
+     String warning_msg= (String) request.getAttribute("message");
+     if (warning_msg != null && warning_msg.compareTo("null") != 0) {
+	 request.removeAttribute("message");
+     %>
+	<p class="textbodyred"><%=warning_msg%></p>
+     <%
+     }
+    
     
     // to be modified:
     String code_enumeration = "";
-
- 
-    if (!refresh_page || message != null) {
-  
-    }
 
     adv_search_type = selectSearchOption;
 
@@ -384,10 +401,11 @@
         adv_search_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null); ;
   }
   
-  
-  
-  
- 
+  String adv_search_vocabulary_cs = adv_search_vocabulary;
+  if (adv_search_vocabulary_cs != null) {
+  	adv_search_vocabulary_cs = DataUtils.getCodingSchemeName(adv_search_vocabulary_cs, null);
+  }
+   
   %>                       
                          
                          
@@ -397,17 +415,9 @@
                            for (int k=0; k<vocabulary_vec.size(); k++) {
                            
                                  String t2 = (String) vocabulary_vec.elementAt(k);
-                                 String t2_temp = t2;
+                                 String t2_temp = DataUtils.getCodingSchemeName(t2, null);
                                  
-                                 t2 = DataUtils.getCodingSchemeName(t2, null);
-                                 
-                                 if (t2 == null) {
-                                 System.out.println("??? Unable to getCodingSchemeName " + t2_temp);
-                                     t2 = t2_temp;
-                                 }
-
-
-                                 if (adv_search_vocabulary != null && t2.compareTo(adv_search_vocabulary) == 0) {
+                                 if (t2_temp != null && adv_search_vocabulary_cs != null && t2_temp.compareTo(adv_search_vocabulary_cs) == 0) {
   %>                               
                                      <option value="<%=t2%>" selected><%=t2%></option>
   <%                                   
@@ -606,7 +616,7 @@
                           <select id="selectProperty" name="selectProperty" size="1" tabindex="6">
                           <%
                             t = "ALL";
-                            if (t.compareTo(_propertyName) == 0) {
+                            if (_propertyName != null && t.compareTo(_propertyName) == 0) {
                           %>
                               <option value="<%=t%>" selected><%=t%></option>
                           <%} else {%>
@@ -618,7 +628,7 @@
                             if (property_vec != null) {
 				    for (int i=0; i<property_vec.size(); i++) {
 				      t = (String) property_vec.elementAt(i);
-				      if (t.compareTo(_propertyName) == 0) {
+				      if (_propertyName != null && t.compareTo(_propertyName) == 0) {
 				  %>
 					<option value="<%=t%>" selected><%=t%></option>
 				  <%  } else { %>
@@ -809,7 +819,7 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
 
               <input type="hidden" name="vs_uri" id="vs_uri" value="<%=vs_uri%>" />
               <input type="hidden" name="component_label" id="component_label" value="<%=component_label%>" />
-             <input type="hidden" name="action" id="action" value="edit" />
+              <input type="hidden" name="action" id="action" value="edit" />
               
     
             </h:form>
