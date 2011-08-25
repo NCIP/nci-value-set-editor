@@ -707,8 +707,8 @@ So, you should exercise this command with caution.
  Or, click on the <b>Cancel</b> button to abort the <b>Resolve</b> operation.
  
  <p>
- If the <p>Resolve</p> operation is successful, a Resolved Value Set Definiion page will appear.
- The page would contain code, name, and namespace of all concepts contained in this value set. 
+ If the <b>Resolve</b> operation is successful, a Resolved Value Set Definiion page will appear.
+ This page would contain code, name, and namespace of all concepts contained in this value set. 
  </p>
  <p>
   You may export this list of concepts to a file in either Comma Separated Value (CSV), or LexGrid XML format
