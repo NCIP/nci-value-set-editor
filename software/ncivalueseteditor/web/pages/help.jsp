@@ -18,13 +18,19 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
   <script type="text/javascript">
     function newPopup(url) {    	  
-    	  var centerWidth = (window.screen.width - 500) / 2;
+    	var centerWidth = (window.screen.width - 500) / 2;
         var centerHeight = (window.screen.height - 400) / 2;
         window.open(url,'_blank',
         	   'top=' + centerHeight +
         	   ',left=' + centerWidth +
         	   ', height=200, width=300, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');
     }
+    
+	function openNewWindow(url) {
+	    window.open(url, '_blank', 'top=100, left=100, height=740, width=780, status=no, menubar=yes, resizable=yes, scrollbars=yes, toolbar=yes, location=no, directories=no');
+	}    
+    
+    
   </script>
 </head>
 <body>
@@ -266,7 +272,17 @@ The metadata of a value set definition contain the following data elements:
 
           <ul>
             <li>
-              <b>URI</b>: A unique identifier of a value set definition for computer processing.
+              <b>URI</b>: Uniform Resource Identifier (URI) is a unique identifier for tracking  
+                          its corresponding value set definition throughout a user session.
+                          The value of a URI must be unique and must differ from the URI of any value set 
+                          definitions already exists on the server.
+                          The value would be made non-editable once it is assigned.
+                          
+                          Refer to 
+                          <a href="#" onclick="javascript:openNewWindow('http://labs.apache.org/webarch/uri/rfc/rfc3986.html')" >
+                          Uniform Resource Identifier (URI): Generic Syntax
+                          </a>
+                          for information regarding URI naming convension.
             </li>
             <li>
               <b>Name</b>: A human readable name of a value set definition; for example: FDA SPL Color Terminology              
@@ -299,7 +315,7 @@ The metadata of a value set definition contain the following data elements:
 <p>
 Press the <b>Save Metadata</b> button to save metadata you entered. 
 If all data are entered properly, an <a href="#edit_component_subset">Edit Component Subset</a> page will appear.
-A "Change saved." message will also show. 
+A message will appear indicating the change has been saved properly.
 </p>
          
         </div>          
@@ -319,7 +335,7 @@ A "Change saved." message will also show.
            </table>
 <p>
 To change the value of a metadata element, enter or select a new value of the field and press the
-<b>Save</b> button. A message will appear indicating the change has been saved properly.
+<b>Save Metadata</b> button. A message will appear indicating the change has been saved properly.
 </p>
 
         </div>       
@@ -357,8 +373,10 @@ Specify a value for each of the following data elements:
 </p>
           <ul>
             <li>
-              <b>Label</b>: A short notation for representing the component subset; for example, S1.
-              It would be used in formulating a <a href="#create_value_set_expression">value set expression</a>.
+              <b>Label</b>: A label for tracking the component subset within a value set definition; for example, S1.
+                            The value would be made non-editable once it is assigned to a component subset.              
+                            Component subset lables would be used in 
+                            constructing <a href="#create_value_set_expression">value set expression</a>.
             </li>
             <li>
               <b>Name</b>: A human readable name of a component subset; for example: The Blue color.              

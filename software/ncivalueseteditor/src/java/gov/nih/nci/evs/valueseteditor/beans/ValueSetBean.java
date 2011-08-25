@@ -485,6 +485,13 @@ public class ValueSetBean {
 		return _new_vsd;
 	}
 
+/*
+    public boolean getIsNew() {
+		if (_uri == null) return true;
+		return false;
+		//return _new_vsd;
+	}
+*/
 
     public boolean getIsNotEmpty() {
 		if (getCount() == 0) {
@@ -1362,14 +1369,6 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
             _logger.debug("URI is null.");
             return "error";
         }
-        /*
-		boolean retval = validateVSDURI(_uri);
-		if (!retval) {
-			_message = "WARNING: A value Set Definition with URI " + _uri + " already exists.";
-			request.setAttribute("message", _message);
-			 return "error";
-		}
-		*/
 
         ValueSetObject item = null;
         if (_cart.containsKey(_uri)) {
@@ -1413,6 +1412,12 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
     	_logger.debug("Creating new value set.");
 
     	clear();
+
+		HttpServletRequest request =
+			(HttpServletRequest) FacesContext.getCurrentInstance()
+				.getExternalContext().getRequest();
+
+    	request.setAttribute("isNewVSD", "true");
     	return "newvalueset";
     }
 
@@ -1498,6 +1503,8 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
 
     	_message = null;
     	_logger.debug("Add component.");
+
+    	request.setAttribute("isNewComponent", "true");
 
         return "addcomponent";
     }

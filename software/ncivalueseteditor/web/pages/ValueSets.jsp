@@ -153,10 +153,6 @@
 			</c:choose>
 		</table>
 	</h:form>
-		        
-		        
-		        
-		           
 		      <%@ include file="/pages/include/footer.jsp" %>
 		</div>
 	</div>

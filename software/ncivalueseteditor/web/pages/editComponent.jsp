@@ -136,8 +136,6 @@
 
 System.out.println("editComponent.jsp Step 1");
 
-
-
     String edit_action = (String) request.getParameter("action");
     System.out.println("editComponent.jsp edit_action: " + edit_action);
 
@@ -361,7 +359,7 @@ System.out.println("debugging editComponent.jsp adv_search_vocabulary: " + _voca
                              Label:
                          </td>
                          <td>
-                     <input CLASS="searchbox-input" name="Label" value="<%=_label%>" size="75" tabindex="1">
+                     <input CLASS="searchbox-input" name="Label" value="<%=_label%>" size="75" tabindex="1" readonly="true">
                          </td>
                 </tr>
  

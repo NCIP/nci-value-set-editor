@@ -78,11 +78,17 @@
 	String check_true = "";
 	String check_false = "";
 	
+	boolean vs_uri_readonly = true;
+	String is_new_vsd = (String) request.getAttribute("isNewVSD");
+	request.removeAttribute("isNewVSD");
+	
+	
 	if (vsb == null) {
 	    System.out.println("ValueSetBean == null???");
 	} else {
 	    System.out.println("ValueSetBean != null");
 		vs_uri = vsb.getUri();
+		
 		String action = (String) request.getParameter("action");
 		if (action != null && action.compareTo("remove") == 0) {
 			String component_label = request.getParameter("label");
@@ -90,7 +96,11 @@
 			vs_obj.removeComponent(component_label);
 		}
 	    
-	    isNewVSD = vsb.getIsNewVSD();
+            
+            if (is_new_vsd != null && is_new_vsd.compareTo("true") == 0) {
+                vs_uri_readonly = false;
+            }
+ 
 	    
 	    isActive = vsb.getIsActive();
 	    if (isActive.compareTo("true") == 0) check_true = "checked";
@@ -118,12 +128,7 @@
 	    
 	}
 
-        System.out.println("componentCount: " + componentCount);
-
 	%>
-	
-	
-	
 	
 		      
      <h:form id="valueSetFormId">
@@ -144,7 +149,19 @@
       </tr>
       <tr>
         <td align="right"><h:outputLabel for="uri" value="URI" styleClass="inputLabel"  /></td>
-        <td><h:inputText id="uri" value="#{ValueSetBean.uri}" size="75" /></td>
+        
+        <%
+        if (vs_uri_readonly) {
+        %>
+            <td><h:inputText id="uri" value="#{ValueSetBean.uri}" size="75" readonly="true" /></td>
+        <%    
+        } else {
+        %>
+            <td><h:inputText id="uri" value="#{ValueSetBean.uri}" size="75" /></td>
+        <%    
+        }
+        %>
+        
       </tr>
       
       <tr>

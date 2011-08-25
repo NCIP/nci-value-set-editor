@@ -116,10 +116,16 @@
        <navigation-case>
           <from-action>#{ValueSetBean.saveMetadataAction}</from-action>
           <from-outcome>success</from-outcome>
+          <to-view-id>/pages/editValueSetExpression.jsp</to-view-id>
+       </navigation-case>
+
+       <navigation-case>
+          <from-action>#{ValueSetBean.saveMetadataAction}</from-action>
           <from-outcome>error</from-outcome>
           <to-view-id>/pages/editValueSet.jsp</to-view-id>
        </navigation-case>
-
+       
+       
        <navigation-case>
           <from-action>#{ValueSetBean.addComponentAction}</from-action>
           <from-outcome>addcomponent</from-outcome>

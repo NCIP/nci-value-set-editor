@@ -192,7 +192,7 @@ if (expression == null) expression = "";
       </tr>
       <tr>
         <td align="right"><h:outputLabel for="uri" value="URI" styleClass="inputLabel"  /></td>
-        <td><h:inputText id="uri" value="#{ValueSetBean.uri}" size="75"  /></td>
+        <td><h:inputText id="uri" value="#{ValueSetBean.uri}" size="75"  readonly="true"/></td>
       </tr>
       
       
@@ -223,14 +223,6 @@ if (expression == null) expression = "";
       <tr>
         <td align="right"><h:outputLabel for="codingScheme" value="Default Coding Scheme" styleClass="inputLabel"  /></td>
         <td>
-
-<!--            
-	   <h:selectOneMenu id="codingScheme" value="#{ValueSetBean.selectedOntology}" >
-	        <f:selectItems value="#{ValueSetBean.ontologyList}" />
-	  </h:selectOneMenu>            
--->
-
-
 
 
                            <select id="codingScheme" name="codingScheme" size="1">

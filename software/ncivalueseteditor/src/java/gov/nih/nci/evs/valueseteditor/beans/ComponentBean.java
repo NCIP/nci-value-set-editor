@@ -698,7 +698,7 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
 
         ValueSetBean.ComponentObject co = null;
         String _edit_action = FacesUtil.getRequestParameter("action");
-        if (_edit_action == null) {
+        if (_edit_action == null || _edit_action.compareTo("edit") != 0) {
 			co = vsb.new ComponentObject();
 		} else {
 			String _vs_uri = FacesUtil.getRequestParameter("vs_uri");

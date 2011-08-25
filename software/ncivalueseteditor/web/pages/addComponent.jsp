@@ -258,6 +258,22 @@ if (adv_search_vocabulary == null) {
   	adv_search_vocabulary_cs = DataUtils.getCodingSchemeName(adv_search_vocabulary_cs, null);
   } 
 
+
+
+boolean co_label_readonly = true;
+String is_new_component = (String) request.getAttribute("isNewComponent");
+request.removeAttribute("isNewComponent");
+
+System.out.println("************* is_new_component " + is_new_component);
+
+if (is_new_component != null && is_new_component.compareTo("true") == 0) {
+    co_label_readonly = false;
+}
+	    
+System.out.println("(*) co_label_readonly: " + co_label_readonly);
+
+
+
 %>
 
  <font size="4"><b>Component Set</b></font><br/>
@@ -271,7 +287,19 @@ if (adv_search_vocabulary == null) {
                              Label:
                          </td>
                          <td>
-                     <input CLASS="searchbox-input" name="Label" value="<%=label%>" size="75" tabindex="1">
+                         
+                     <%    
+                     if (co_label_readonly) {
+                     %>
+                         <input CLASS="searchbox-input" name="Label" value="<%=label%>" size="75" tabindex="1" readonly="true" />
+                     <%    
+                     } else {
+                     %>
+                         <input CLASS="searchbox-input" name="Label" value="<%=label%>" size="75" tabindex="1" />
+                     <%    
+                     }
+                     %>
+                     
                          </td>
                 </tr>
  
