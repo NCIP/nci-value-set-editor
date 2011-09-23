@@ -170,29 +170,57 @@
     String label = null;
     String description = null;
     String selectSearchOption = null;
-
-    if (refresh_page) {
-        adv_search_vocabulary = (String) request.getParameter("dictionary");
+    String direction = null;
         
-        selectSearchOption = (String) request.getParameter("opt");
+    String preview = null;//(String) request.getParameter("preview");
+    preview = (String) request.getSession().getAttribute("preview");
+    if (preview != null && preview.compareTo("true") == 0) {
+    
+        adv_search_vocabulary = (String) request.getSession().getAttribute("preview_adv_search_vocabulary");
+        selectSearchOption = (String) request.getSession().getAttribute("preview_selectSearchOption");
+        label = (String) request.getSession().getAttribute("preview_label");
+        description = (String) request.getSession().getAttribute("preview_description");
+        search_string = (String) request.getSession().getAttribute("preview_search_string");
+        search_algorithm = (String) request.getSession().getAttribute("preview_search_algorithm");
+        adv_search_source = (String) request.getSession().getAttribute("preview_adv_search_source");
+        rel_search_association = (String) request.getSession().getAttribute("preview_rel_search_association");
+        selectProperty = (String) request.getSession().getAttribute("preview_selectProperty");
+        selectValueSetReference = (String) request.getSession().getAttribute("preview_selectValueSetReference");
+        direction = (String) request.getSession().getAttribute("direction");
+      
         
-        label = (String) request.getParameter("label");
-        description = (String) request.getParameter("description");
-        
-        search_string = (String) request.getParameter("text");
-        search_algorithm = (String) request.getParameter("algorithm");
-        adv_search_source = (String) request.getParameter("sab");
-        rel_search_association = (String) request.getParameter("rel");
-        selectProperty = (String) request.getParameter("prop");
-        selectValueSetReference = (String) request.getParameter("ref_uri");
-
+        request.getSession().removeAttribute("preview_adv_search_vocabulary");   
+        request.getSession().removeAttribute("preview_selectSearchOption");   
+        request.getSession().removeAttribute("preview_label");   
+        request.getSession().removeAttribute("preview_description");
+        request.getSession().removeAttribute("preview_search_string");   
+        request.getSession().removeAttribute("preview_search_algorithm");   
+        request.getSession().removeAttribute("preview_adv_search_source");   
+        request.getSession().removeAttribute("preview_rel_search_association");   
+        request.getSession().removeAttribute("preview_selectProperty");   
+        request.getSession().removeAttribute("preview_selectValueSetReference");   
+        request.getSession().removeAttribute("preview");    
     } else {
-        selectSearchOption = (String) request.getAttribute("selectSearchOption");
-        search_string = (String) request.getSession().getAttribute("matchText");
-    }
+	    if (refresh_page) {
+		adv_search_vocabulary = (String) request.getParameter("dictionary");
+		selectSearchOption = (String) request.getParameter("opt");
+		label = (String) request.getParameter("label");
+		description = (String) request.getParameter("description");
+		search_string = (String) request.getParameter("text");
+		search_algorithm = (String) request.getParameter("algorithm");
+		adv_search_source = (String) request.getParameter("sab");
+		rel_search_association = (String) request.getParameter("rel");
+		selectProperty = (String) request.getParameter("prop");
+		selectValueSetReference = (String) request.getParameter("ref_uri");
 
-    if (selectSearchOption == null || selectSearchOption.compareTo("null") == 0) {
-        selectSearchOption = "Property";
+	    } else {
+		selectSearchOption = (String) request.getAttribute("selectSearchOption");
+		search_string = (String) request.getSession().getAttribute("matchText");
+	    }
+
+	    if (selectSearchOption == null || selectSearchOption.compareTo("null") == 0) {
+		selectSearchOption = "Property";
+	    }
     }
 
 
@@ -629,12 +657,32 @@ if (rel_search_association == null || rel_search_association.compareTo("") == 0)
                                      
  
                          <td>
-                         
+
+
+                    <td align="left" class="inputItem">
+                    <%
+                          if (direction != null && direction.compareTo("Backward") == 0) {
+		    %>
+		                  <input type="radio" id="direction" name="direction" value="Forward" alt="Forward" tabindex="5">Forward&nbsp;
+				  <input type="radio" id="direction" name="direction" value="Backward" alt="Backward" checked tabindex="6">Backward;
+		<%
+		} else {
+		%>	  
+				  <input type="radio" id="direction" name="direction" value="Forward" alt="Forward" checked tabindex="5">Forward&nbsp;
+				  <input type="radio" id="direction" name="direction" value="Backward" alt="Backward"  tabindex="6">Backward;
+		<%
+		}
+                %> 
+                    </td>
+                </tr> 
+                
+                
+  <!--              
  <h:selectOneRadio id="direction"
  	value="#{ComponentBean.selectedDirection}" styleClass="inputItem" >
  	<f:selectItems value="#{ComponentBean.directionList}"/>
  </h:selectOneRadio>
- 
+   -->
                          </td> 
                      </tr>         
  
@@ -688,7 +736,7 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
 <h:commandButton
 	id="Preview"
 	value="Preview"
-	action="#{ComponentBean.resolveComponentSubsetAction}" 
+	action="#{ComponentBean.previewComponentSubsetAction}" 
 	image="#{form_requestContextPath}/images/preview.gif" alt="Preview component subset concepts" >
 </h:commandButton>
 &nbsp;

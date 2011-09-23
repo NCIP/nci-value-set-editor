@@ -36,7 +36,11 @@
 
 
     function resetExpression() {
-        document.valueSetEditForm.expression.value = '';
+        //document.valueSetEditForm.expression.value = '';
+        
+        var expression = document.getElementById('expression');
+        expression.value = ''; 
+
     }   
 
 

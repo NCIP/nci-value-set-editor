@@ -37,9 +37,19 @@
 	<div id="main-area">
 	          <%@ include file="/pages/include/applicationBanner.jsp" %>
 	          <%@ include file="/pages/include/quickLinks.jsp" %>
+	          
+	          
 		  <div class="pagecontent">
-		      <%@ include file="/pages/include/navBar.jsp" %>
-		      
+ 
+
+
+	<table cellpadding="0" cellspacing="0" border="0" width="715">
+	  <tr>
+	    <td align="left"><font size="4"><b>WELCOME TO NCI EVS Value Set Editor</b></font></td>
+	  </tr>
+	</table>  
+	<hr />
+	
 		      
              <%
              String warning_msg= (String) request.getAttribute("message");

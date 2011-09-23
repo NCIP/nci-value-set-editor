@@ -387,7 +387,7 @@ public class ComponentBean {
 
 
     public ValueSetBean.ComponentObject getComponentObject() {
-		System.out.println("(******** getComponentObject ...");
+		System.out.println("(********************************************************** getComponentObject ...");
     	_message = null;
 
         if (vsb.getUri() == null || vsb.getUri().length() < 1) {
@@ -397,7 +397,9 @@ public class ComponentBean {
     	_description = FacesUtil.getRequestParameter("Description");
     	_vocabulary = FacesUtil.getRequestParameter("Vocabulary");
      	_type = FacesUtil.getRequestParameter("selectSearchOption");
-     	_logger.debug("Type: " + _type);
+     	//_logger.debug("Type: " + _type);
+
+     	_selectedDirection = FacesUtil.getRequestParameter("direction");
 
      	if (_type.compareTo("EnumerationOfCodes") == 0) {
 			_codes = FacesUtil.getRequestParameter("codes");
@@ -418,14 +420,6 @@ public class ComponentBean {
  System.out.println("_matchText: " + _matchText);
  System.out.println("_propertyName: " + _propertyName);
 
-
-      	/*
-        if (_label == null || _label.length() < 1) {
-            _message = resource.getString("error_missing_label");
-            System.out.println("ERROR: " + _message);
-            return "error";
-        }
-        */
 
         ValueSetBean.ComponentObject co = null;
         try{
@@ -452,6 +446,10 @@ public class ComponentBean {
         co.setRel_search_association(_rel_search_association);
         co.setInclude_focus_node(_include_focus_node);
         co.setTransitivity(_transitivity);
+
+System.out.println("(********* getComponentObject ********* _selectedDirection: " + _selectedDirection);
+
+
         co.setSelectedDirection(_selectedDirection);
         co.setValueSetReference(_selectValueSetReference);
         if (_codes == null) _codes = "";
@@ -461,6 +459,205 @@ public class ComponentBean {
 
         return co;
     }
+
+
+
+    public String previewComponentSubsetAction() throws Exception {
+
+        ResolvedConceptReferencesIterator iterator = null;
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+/*
+    	_label = FacesUtil.getRequestParameter("Label");
+    	_description = FacesUtil.getRequestParameter("Description");
+    	_vocabulary = FacesUtil.getRequestParameter("Vocabulary");
+     	_type = FacesUtil.getRequestParameter("selectSearchOption");
+     	_logger.debug("Type: " + _type);
+*/
+
+        String label = (String) request.getParameter("Label");
+        _label = label;
+
+        String description = (String) request.getParameter("Description");
+        _description = description;
+
+        String adv_search_vocabulary = (String) request.getParameter("Vocabulary");
+        _vocabulary = adv_search_vocabulary;
+
+        String selectSearchOption = (String) request.getParameter("selectSearchOption");
+        _type = selectSearchOption;
+
+        String codes = (String) request.getParameter("codes");
+        _codes = codes;
+
+        String selectValueSetReference = (String) request.getParameter("selectValueSetReference");
+        _selectValueSetReference = selectValueSetReference;
+
+        String focusConceptCode = (String) request.getParameter("focusConceptCode");
+        _focusConceptCode = focusConceptCode;
+
+        String search_string = (String) request.getParameter("matchText");
+
+        String search_algorithm = (String) request.getParameter("search_algorithm");
+        _algo = search_algorithm;
+
+        String code_enumeration = (String) request.getParameter("code_enumeration");
+        String selectProperty = (String) request.getParameter("selectProperty");
+        _propertyName = selectProperty;
+
+        String rel_search_association = (String) request.getParameter("rel_search_association");
+        _rel_search_association = rel_search_association;
+        String direction = (String) request.getParameter("direction");
+
+        String matchText = (String) request.getParameter("matchText");
+        _matchText = matchText;
+
+        String include_focus_node_checkbox = (String) request.getParameter("include_focus_node_checkbox");
+        _include_focus_node = include_focus_node_checkbox;
+
+        String transitivity_checkbox = (String) request.getParameter("transitivity_checkbox");
+        _transitivity = transitivity_checkbox;
+
+/*
+
+        if (_label == null || _label.length() < 1) {
+            _message = resource.getString("error_missing_label");
+
+            System.out.println("ERROR: " + _message);
+            return "error";
+        }
+
+        _logger.debug("Saving component.");
+
+        ValueSetObject vs = vsb.getCurrentValueSet();
+
+        if (vs == null) {
+			_logger.debug("ValueSetObject is NULL???");
+		}
+
+        ValueSetBean.ComponentObject co = null;
+        String _edit_action = FacesUtil.getRequestParameter("action");
+        if (_edit_action == null || _edit_action.compareTo("edit") != 0) {
+			co = vsb.new ComponentObject();
+		} else {
+			String _vs_uri = FacesUtil.getRequestParameter("vs_uri");
+			String _component_label = FacesUtil.getRequestParameter("component_label");
+
+			if (_vs_uri != null && _component_label != null) {
+				//vs = vsb.getValueSet(_vs_uri);
+				co = vs.getComponent(_component_label);
+			}
+			vsb.setUri(_vs_uri);
+			//vsb.setExpression(_component_label);
+	    }
+
+      	_logger.debug("rel_search_association: " + _rel_search_association);
+
+        co.setLabel(_label);
+        co.setDescription(_description);
+        co.setType(_type);
+
+        if (_matchText != null) _matchText = _matchText.trim();
+
+        co.setMatchText(_matchText);
+        co.setAlgorithm(_algo);
+        co.setVocabulary(_vocabulary);
+        co.setPropertyName(_propertyName);
+
+        if (_focusConceptCode != null) _focusConceptCode = _focusConceptCode.trim();
+        co.setFocusConceptCode(_focusConceptCode);
+
+        co.setRel_search_association(_rel_search_association);
+        co.setInclude_focus_node(_include_focus_node);
+        co.setTransitivity(_transitivity);
+        co.setSelectedDirection(_selectedDirection);
+
+        co.setValueSetReference(_selectValueSetReference);
+
+		if (_type.compareTo("EntireVocabulary") == 0) {
+			String cs_name = DataUtils.getCodingSchemeName(_vocabulary, null);
+            co.setCodingSchemeReference(cs_name);
+		}
+
+        if (_codes == null) _codes = "";
+        co.setCodes(_codes);
+
+        if (_focusConceptCode != null && _focusConceptCode.compareTo("") != 0 && _vocabulary != null) {
+			_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
+			if (DataUtils.getConceptByCode(_vocabulary, null, null, _focusConceptCode) == null) {
+				_message = "WARNING: Invalid code " + _focusConceptCode + ".";
+				request.setAttribute("message", _message);
+				request.setAttribute("selectSearchOption", _type);
+
+				return "error";
+			}
+		}
+
+        if (_type.compareToIgnoreCase("Code") == 0) {
+			if (_matchText != null && _matchText.compareTo("") != 0 && _vocabulary != null) {
+				_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
+				if (DataUtils.getConceptByCode(_vocabulary, null, null, _matchText) == null) {
+					_message = "WARNING: Invalid code " + _matchText + ".";
+					request.setAttribute("message", _message);
+					request.setAttribute("selectSearchOption", _type);
+
+					return "error";
+				}
+			}
+		}
+
+*/
+
+
+
+
+System.out.println("\nlabel: " + label);
+System.out.println("description: " + description);
+System.out.println("adv_search_vocabulary: " + adv_search_vocabulary);
+System.out.println("selectSearchOption: " + selectSearchOption);
+System.out.println("focusConceptCode: " + focusConceptCode);
+System.out.println("selectValueSetReference: " + selectValueSetReference);
+System.out.println("search_string: " + search_string);
+System.out.println("search_algorithm: " + search_algorithm);
+System.out.println("code_enumeration: " + code_enumeration);
+System.out.println("selectProperty: " + selectProperty);
+System.out.println("rel_search_association: " + rel_search_association);
+System.out.println("direction: " + direction);
+System.out.println("\n");
+
+
+
+
+        request.getSession().setAttribute("preview_adv_search_vocabulary", adv_search_vocabulary);
+        request.getSession().setAttribute("preview_selectSearchOption", selectSearchOption);
+        request.getSession().setAttribute("preview_label", label);
+        request.getSession().setAttribute("preview_description", description);
+        request.getSession().setAttribute("preview_search_string", search_string);
+        request.getSession().setAttribute("preview_search_algorithm", search_algorithm);
+        request.getSession().setAttribute("preview_rel_search_association", rel_search_association);
+        request.getSession().setAttribute("preview_selectProperty", selectProperty);
+        request.getSession().setAttribute("preview_selectValueSetReference", selectValueSetReference);
+        request.getSession().setAttribute("preview_direction", direction);
+        request.getSession().setAttribute("preview", "true");
+
+		ValueSetBean.ComponentObject ob = getComponentObject();
+		ValueSetObject vs_obj = vsb.getCurrentValueSet();
+
+		//KLO, 092111
+		vs_obj = new ValueSetBean().copyValueSetObject(vs_obj);
+		boolean retval = vs_obj.addComponent(ob);
+
+		request.getSession().setAttribute("vs_obj", vs_obj);
+
+		request.getSession().setAttribute("ComponentObjectLabel", _label);
+		request.getSession().setAttribute("ComponentDescription", _description);
+
+		return "comp_obj_coding_scheme_references";
+
+
+    }
+
 
 
     public String resolveComponentSubsetAction() throws Exception {
@@ -478,10 +675,6 @@ public class ComponentBean {
 
 		ValueSetBean.ComponentObject ob = getComponentObject();
 		ValueSetObject vs_obj = vsb.getCurrentValueSet();
-
-		/*
-		ValueSetDefinition vsd = createTemporaryValueSetDefinition(vs_obj, ob);
-		*/
 
 		String infixExpression = null;
 		boolean retval = vs_obj.addComponent(ob);
@@ -506,7 +699,7 @@ public class ComponentBean {
 
 
         if (iterator == null) {
-			String message = "Unable to resolve component subset.";
+			String message = "Unable to resolve component set.";
 			request.getSession().setAttribute("message", message);
 			return "message";
 		} else {
@@ -527,70 +720,147 @@ public class ComponentBean {
 
 		IteratorBean iteratorBean = null;
 
-		String key = (String) request.getSession().getAttribute("key");
+		String key = null;
+		/*
+		(String) request.getSession().getAttribute("key");
 		if (key != null && key.compareTo("null") != 0) {
 			IteratorBean it_bean = iteratorBeanManager.removeIteratorBean(key);
 			ResolvedConceptReferencesIterator it = it_bean.getIterator();
 			it.release();
 		}
-
+		*/
 
 		key = vsd.getValueSetDefinitionURI();
-System.out.println("resolveComponentSubsetAction key " + key);
 
 		iteratorBean = new IteratorBean(iterator);
 		iteratorBean.setKey(key);
 		iteratorBeanManager.addIteratorBean(iteratorBean);
 
 		int size = iteratorBean.getSize();
-
-System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size);
-
 		if (size > 0) {
 			String match_size = Integer.toString(size);
 			request.getSession().setAttribute("match_size", match_size);
 			request.getSession().setAttribute("page_string", "1");
 			request.getSession().setAttribute("key", key);
 
-			/*
-
-			request.getSession().setAttribute("new_search", Boolean.TRUE);
-
-			request.getSession().setAttribute("dictionary", scheme);
-
-			_logger
-				.debug("UserSessionBean request.getSession().setAttribute dictionary: "
-					+ scheme);
-*/
-
             System.out.println("search_results -- numbe of matches: " + size);
+            request.getSession().setAttribute("label", _label);
 			return "search_results";
 		}
 
         String message = "No match found.";
-
         System.out.println("search_results " + message);
-
-        /*
-        int minimumSearchStringLength = Constant.MINIMUM_SEARCH_STRING_LENGTH;
-
-        if (matchAlgorithm.compareTo(Constant.EXACT_SEARCH_ALGORITHM) == 0) {
-            message = Constant.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;
-        }
-
-        else if (matchAlgorithm.compareTo(Constant.STARTWITH_SEARCH_ALGORITHM) == 0
-            && matchText.length() < minimumSearchStringLength) {
-            message = Constant.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
-        }
-        */
-
         request.getSession().setAttribute("message", message);
-        //request.getSession().setAttribute("dictionary", scheme);
         return "message";
-
 
     }
 
+
+    public String continueResolveComponentSubsetAction() throws Exception {
+
+        ResolvedConceptReferencesIterator iterator = null;
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+ValueSetObject vs_obj = (ValueSetObject) request.getSession().getAttribute("vs_obj");//vsb.getValueSet(vsd_uri);
+
+if (vs_obj == null) {
+	String message = "ERROR: Value set object is not found in session.";
+	request.getSession().setAttribute("message", message);
+	return "message";
+}
+
+
+
+/*
+
+    	_label = FacesUtil.getRequestParameter("Label");
+    	_description = FacesUtil.getRequestParameter("Description");
+    	_vocabulary = FacesUtil.getRequestParameter("Vocabulary");
+     	_type = FacesUtil.getRequestParameter("selectSearchOption");
+     	_logger.debug("Type: " + _type);
+
+		ValueSetBean.ComponentObject ob = getComponentObject();
+		ValueSetObject vs_obj = vsb.getCurrentValueSet();
+
+
+		String infixExpression = null;
+		boolean retval = vs_obj.addComponent(ob);
+		if (!retval) {
+			vs_obj.addComponent("temp_label", ob);
+		}
+*/
+        String infixExpression = null;
+		ValueSetDefinition vsd = new ValueSetBean().convertToValueSetDefinition(vs_obj, infixExpression);
+
+		HashMap<String, ValueSetDefinition> referencedVSDs = null;
+
+        iterator = ValueSetUtils.resolveValueSetDefinition(vsd, referencedVSDs);
+
+        if (iterator != null) {
+			try {
+				int numRemaining = iterator.numberRemaining();
+				System.out.println("number of matches: " + numRemaining);
+			} catch (Exception ex) {
+				System.out.println("numRemaining exception???");
+			}
+		}
+
+
+        if (iterator == null) {
+			String message = "WARNING: Unable to resolve component set.";
+			request.getSession().setAttribute("message", message);
+			return "message";
+		} else {
+			System.out.println("resolveComponentSubsetAction iterator != null");
+		}
+
+		IteratorBeanManager iteratorBeanManager =
+			(IteratorBeanManager) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap()
+				.get("iteratorBeanManager");
+
+		if (iteratorBeanManager == null) {
+			iteratorBeanManager = new IteratorBeanManager();
+			FacesContext.getCurrentInstance().getExternalContext()
+				.getSessionMap()
+				.put("iteratorBeanManager", iteratorBeanManager);
+		}
+
+		IteratorBean iteratorBean = null;
+/*
+		String key = (String) request.getSession().getAttribute("key");
+		if (key != null && key.compareTo("null") != 0) {
+			IteratorBean it_bean = iteratorBeanManager.removeIteratorBean(key);
+			ResolvedConceptReferencesIterator it = it_bean.getIterator();
+			it.release();
+		}
+*/
+		String key = vsd.getValueSetDefinitionURI();
+
+		iteratorBean = new IteratorBean(iterator);
+		iteratorBean.setKey(key);
+		iteratorBeanManager.addIteratorBean(iteratorBean);
+
+		int size = iteratorBean.getSize();
+		if (size > 0) {
+			String match_size = Integer.toString(size);
+			request.getSession().setAttribute("match_size", match_size);
+			request.getSession().setAttribute("page_string", "1");
+			request.getSession().setAttribute("key", key);
+
+            System.out.println("search_results -- numbe of matches: " + size);
+            request.getSession().setAttribute("label", _label);
+			return "search_results";
+		}
+
+        String message = "No match found.";
+        System.out.println("search_results " + message);
+        request.getSession().setAttribute("message", message);
+        return "message";
+
+    }
 
 
     public String saveComponentSubsetAction() throws Exception {
@@ -800,17 +1070,29 @@ System.out.println("resolveComponentSubsetAction iteratorBean.getSize() " + size
 		return "cancel";
 	}
 
+    public String closeResolvedComponentSubsetAction() throws Exception {
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+/*
+		String vs_uri = FacesUtil.getRequestParameter("vs_uri");
+		System.out.println("(******** cancelComponentSubsetAction ...vs_uri: " + vs_uri);
+
+        if (vs_uri != null) {
+			vsb.setUri(vs_uri);
+
+			request.setAttribute("vs_uri", vs_uri);
+		}
+*/
+
+		return "close";
+	}
 
 
 
 
-    //KLO
-    public String previewComponentAction() {
-    	_message = null;
-    	_logger.debug("Previewing component.");
-
-    	return "previewcomponent";
-    }
 
 
 

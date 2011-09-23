@@ -4,7 +4,7 @@
 <FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/search_results.jsf?" >
   <table>
     <tr>
-      <td class="texttitle-blue" align=left>
+      <td class="textbody" align=left>
     
 <%    
 
@@ -81,7 +81,7 @@ IteratorBean itrBean = iteratorBeanMgr.getIteratorBean(search_key);
           </td>
     </tr>
     <tr>
-      <td class="texttitle-blue" align=left>
+      <td class="textbody" align=left>
         Show
   
   <select name=resultsPerPage size=1 onChange="paginationForm.submit();">

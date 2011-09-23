@@ -680,6 +680,19 @@ body
  color: #444444;
 }
 
+
+
+a.hideLink
+{
+ height: 1px;
+ width: 1px;
+ position: absolute;
+ overflow: hidden;
+ top: -999px;
+}
+
+
+
 #quicklinks li ul li a:hover
 {
  background-color: #e5e5e5;

@@ -855,29 +855,7 @@ _logger.debug("\t Vocabulary: " + ob.getVocabulary());
 			}
 		}
 
-  /*      //expression
-        String infixExpression = null;
-        try {
-			infixExpression = FacesUtil.getRequestParameter("expression");
-			if (infixExpression != null) {
-				System.out.println("\ninfixExpression: " + infixExpression);
-				RPN rpn = new RPN(infixExpression);
-				Vector v = rpn.convertToPostfixExpression(infixExpression);
-				for (int i=0; i<v.size(); i++) {
-					String s = (String) v.elementAt(i);
-					System.out.println(s);
-				}
-				item.setExpression(infixExpression);
-				setExpression(infixExpression);
-			}
-	    } catch (Exception e) {
-			//e.printStackTrace();
-			System.out.println("infixExpression is null???");
-		}
 
-
-    	_logger.debug("infixExpression: " + infixExpression);
-*/
 		_logger.debug("Resolving value set: Step 1 ");
 
 				// To be implemented.
@@ -929,77 +907,6 @@ _logger.debug("\t Vocabulary: " + ob.getVocabulary());
 
 
 		}
-
-/*
-_logger.debug("Resolving value set: Step 2 ");
-
-        HashMap<String, ValueSetDefinition> referencedVSDs = null;
-        ResolvedConceptReferencesIterator iterator = ValueSetUtils.resolveValueSetDefinition(vsd, referencedVSDs);
-
-		if (iterator == null) {
-			String msg = "WARNING: Unable to resolve the value set definition.";
-			request.setAttribute("message", msg);
-			return "error";
-
-		}
-
-		IteratorBeanManager iteratorBeanManager =
-			(IteratorBeanManager) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap()
-				.get("iteratorBeanManager");
-
-		if (iteratorBeanManager == null) {
-			iteratorBeanManager = new IteratorBeanManager();
-			FacesContext.getCurrentInstance().getExternalContext()
-				.getSessionMap()
-				.put("iteratorBeanManager", iteratorBeanManager);
-		}
-
-		IteratorBean iteratorBean = null;
-
-		String key = (String) request.getSession().getAttribute("resolved_vs_key");
-		if (key != null && key.compareTo("null") != 0) {
-			IteratorBean it_bean = iteratorBeanManager.removeIteratorBean(key);
-			ResolvedConceptReferencesIterator it = it_bean.getIterator();
-			try {
-				it.release();
-			} catch (Exception ex) {
-
-			}
-		}
-
-
-		key = resolved_vs_key;//vsd.getValueSetDefinitionURI();
-System.out.println("resolveValueSetAction key " + key);
-
-		iteratorBean = new IteratorBean(iterator);
-		iteratorBean.setKey(key);
-		iteratorBeanManager.addIteratorBean(iteratorBean);
-
-		int size = iteratorBean.getSize();
-
-System.out.println("resolveValueSetAction iteratorBean.getSize() " + size);
-
-		if (size > 0) {
-			request.getSession().setAttribute("value_set_object", item);
-			String match_size = Integer.toString(size);
-			request.getSession().setAttribute("match_size", match_size);
-			request.getSession().setAttribute("page_string", "1");
-			request.getSession().setAttribute("resolved_vs_key", key);
-
-
-            System.out.println("search_results -- numbe of matches: " + size);
-			return "coding_scheme_references";
-		}
-
-        String message = "No match found.";
-
-        System.out.println("result: " + message);
-
-        request.getSession().setAttribute("message", message);
-        //request.getSession().setAttribute("dictionary", scheme);
-        return "message";
-*/
 
         request.setAttribute("uri", curr_uri);
         return "coding_scheme_references";
@@ -3064,6 +2971,20 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 		return null;
 	}
 
+    public ValueSetObject copyValueSetObject(ValueSetObject vs_obj) {
+		ValueSetObject new_vs_obj = new ValueSetObject();
 
+        new_vs_obj.setOwner(vs_obj.getOwner());
+        new_vs_obj.setIsActive(vs_obj.getIsActive());
+        new_vs_obj.setStatus(vs_obj.getStatus());
+        new_vs_obj.setCodingScheme(vs_obj.getCodingScheme());
+		new_vs_obj.setName(vs_obj.getName());
+		new_vs_obj.setDescription(vs_obj.getDescription());
+		new_vs_obj.setUri(vs_obj.getUri());
+        new_vs_obj.setConceptDomain(vs_obj.getConceptDomain());
+        new_vs_obj.setOrganizations(vs_obj.getOrganizations());
+        return new_vs_obj;
+
+	}
 
 } // End of ValueSetBean

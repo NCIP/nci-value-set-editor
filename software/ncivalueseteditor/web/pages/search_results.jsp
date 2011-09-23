@@ -137,7 +137,12 @@ request.setAttribute("key", key);
       _logger.warn("iteratorBean NOT FOUND???" + key);
       System.out.println("iteratorBean NOT FOUND???" + key);
     }
-String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
+    
+String label = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("label"));
+if (label == null) {
+	label = "";
+}
+
  
 int pageNum = 0; 
 int pageSize = Integer.parseInt( resultsPerPage );
@@ -244,13 +249,15 @@ String match_size = new Integer(size).toString();
             <table>
               <tr>
                 <td class="texttitle-blue">Result for:</td>
-                <td class="texttitle-gray"><%=matchText%></td>
+                <td class="texttitle-gray"><%=label%></td>
               </tr>
             </table>
           </tr>
           <tr>
             <td><hr></td>
           </tr>
+          
+          <!--
           <tr>
             <td>
                <%
@@ -266,6 +273,10 @@ String match_size = new Integer(size).toString();
                %>
             </td>
           </tr>
+          
+          -->
+          
+          
           <tr>
             <td class="textbody">
             <!--
@@ -302,7 +313,7 @@ if (obj == null) {
                           name = rcr.getEntityDescription().getContent();
                       } else {
                       
-      Entity entity = DataUtils.getConceptByCode(rcr.getCodeNamespace(), null, rcr.getConceptCode());
+      Entity entity = DataUtils.getConceptByCode(rcr.getCodeNamespace(), coding_scheme_version, null, rcr.getConceptCode());
       name = entity.getEntityDescription().getContent();
 
 
@@ -401,31 +412,20 @@ if (obj == null) {
         
  
  
-<form> 
+<h:form id="closeResolvedComponentSetForm">   
 <table><tr><td>
 
-<!--
  <h:commandButton
- 	id="Save"
- 	value="Save"
- 	action="#{ComponentBean.saveComponentSubsetAction}" 
- 	image="#{form_requestContextPath}/images/save.gif" alt="Save component subset data">
- </h:commandButton>
- &nbsp; 
--->
-
- <h:commandButton
-	id="Cancel"
-	value="Cancel"
-	action="#{ComponentBean.cancelComponentSubsetAction}"
-	image="#{form_requestContextPath}/images/close.gif" alt="Cancel creating component subset">
+	id="Close"
+	value="Close"
+	action="#{ComponentBean.closeResolvedComponentSubsetAction}"
+	image="#{form_requestContextPath}/images/close.gif" alt="Close">
  </h:commandButton>
 </td></tr></table> 
 
-
 <input type="hidden" id="tab" name="tab" value="valueset" /> 
 
-</form> 
+</h:form> 
         
         
 		           

@@ -94,6 +94,7 @@
 			String component_label = request.getParameter("label");
 			ValueSetObject vs_obj = vsb.getValueSet(vs_uri);
 			vs_obj.removeComponent(component_label);
+			isNewVSD = false;
 		}
 	    
             
