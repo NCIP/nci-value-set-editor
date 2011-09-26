@@ -96,7 +96,13 @@
       if (document.forms["addComponentForm"].matchText != null) {
             text = document.forms["addComponentForm"].matchText.value;
       }
-      
+
+      var dir = "Forward";
+      var radioObj = document.forms["addComponentForm"].direction;
+      if (radioObj != null) {
+          if (radioObj[1].checked) dir = "Backward";
+      }
+       
       window.location.href="/ncivalueseteditor/pages/addComponent.jsf?refresh=1"
           + "&opt="+ selectSearchOption
           + "&label="+ label
@@ -106,6 +112,7 @@
           + "&ref_uri="+ selectValueSetReference
           + "&prop="+ selectProperty
           + "&rel="+ rel_search_association
+          + "&dir="+ dir
           + "&dictionary="+ dictionary;
     }
    
@@ -655,9 +662,6 @@ if (rel_search_association == null || rel_search_association.compareTo("") == 0)
                             Direction:
                         </td> 
                                      
- 
-                         <td>
-
 
                     <td align="left" class="inputItem">
                     <%
@@ -776,6 +780,9 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
               <input type="hidden" name="adv_search_type" id="adv_search_type" value="<%=adv_search_type%>" />
               
               <input type="hidden" name="vs_uri" id="vs_uri" value="<%=vs_uri%>" />
+              
+              
+              <input type="hidden" name="state" id="state" value="add_component" />
               
          
             </h:form>

@@ -102,6 +102,12 @@
       if (document.forms["addComponentForm"].matchText != null) {
             text = document.forms["addComponentForm"].matchText.value;
       }     
+ 
+      var dir = "Forward";
+      var radioObj = document.forms["addComponentForm"].direction;
+      if (radioObj != null) {
+          if (radioObj[1].checked) dir = "Backward";
+      }
       
       window.location.href="/ncivalueseteditor/pages/editComponent.jsf?refresh=1"
           + "&opt="+ selectSearchOption
@@ -112,6 +118,7 @@
           + "&ref_uri="+ selectValueSetReference
           + "&prop="+ selectProperty
           + "&rel="+ rel_search_association
+          + "&dir="+ dir
           + "&dictionary="+ dictionary;
 
     }
@@ -133,21 +140,34 @@
 
 <%
 
+String edit_action = null;
+String vs_uri = null;
+String component_label = null;
 
-System.out.println("editComponent.jsp Step 1");
+String closeResolvedComponentSubset = (String) request.getSession().getAttribute("closeResolvedComponentSubset");
 
-    String edit_action = (String) request.getParameter("action");
-    System.out.println("editComponent.jsp edit_action: " + edit_action);
+System.out.println("(*) editComponent.jsp closeResolvedComponentSubset: " + closeResolvedComponentSubset);
 
-    String vs_uri = (String) request.getParameter("uri");
+
+if (closeResolvedComponentSubset != null) {
+    request.getSession().removeAttribute("closeResolvedComponentSubset");
+    edit_action = (String) request.getSession().getAttribute("action");
+    vs_uri = (String) request.getSession().getAttribute("vs_uri");
+    component_label = (String) request.getSession().getAttribute("label");
+} else {
+    edit_action = (String) request.getParameter("action");
+    vs_uri = (String) request.getParameter("uri");
     if (vs_uri == null) {
     	vs_uri = (String) request.getAttribute("vs_uri");
     }
-    
-    System.out.println("editComponent.jsp vs_uri: " + vs_uri);
+    component_label = (String) request.getParameter("label");
+}
 
-    String component_label = (String) request.getParameter("label");
-    System.out.println("editComponent.jsp component_label: " + component_label);
+System.out.println("(*) editComponent.jsp edit_action: " + edit_action);
+System.out.println("(*) editComponent.jsp vs_uri: " + vs_uri);
+System.out.println("(*) editComponent.jsp component_label: " + component_label);
+
+
 
     String form_requestContextPath = request.getContextPath();
 
@@ -258,7 +278,7 @@ System.out.println("debugging editComponent.jsp adv_search_vocabulary: " + _voca
 
         
     
-        String refresh = (String) request.getParameter("refresh");
+    String refresh = (String) request.getParameter("refresh");
 
     boolean refresh_page = false;
     if (refresh != null) {
@@ -266,28 +286,61 @@ System.out.println("debugging editComponent.jsp adv_search_vocabulary: " + _voca
     }
     
   
-  //if (adv_search_vocabulary == null) adv_search_vocabulary = "NCI_Thesaurus"; // to be modified
 
-    if (refresh_page) {
-        adv_search_vocabulary = (String) request.getParameter("dictionary");
-        selectSearchOption = (String) request.getParameter("opt");
-        _type = selectSearchOption;
+    String preview = null;//(String) request.getParameter("preview");
+    String direction = null;
+    preview = (String) request.getSession().getAttribute("preview");
+    if (preview != null && preview.compareTo("true") == 0) {
+    
+        adv_search_vocabulary = (String) request.getSession().getAttribute("preview_adv_search_vocabulary");
+        selectSearchOption = (String) request.getSession().getAttribute("preview_selectSearchOption");
         
-        _vocabulary = adv_search_vocabulary;
-        
-        label = (String) request.getParameter("label");
-        description = (String) request.getParameter("description");
-        
-        search_string = (String) request.getParameter("text");
-        search_algorithm = (String) request.getParameter("algorithm");
-        adv_search_source = (String) request.getParameter("sab");
-        rel_search_association = (String) request.getParameter("rel");
-        selectProperty = (String) request.getParameter("prop");
-        
-        selectValueSetReference = (String) request.getParameter("ref_uri");
-        
+        label = (String) request.getSession().getAttribute("preview_label");
+        description = (String) request.getSession().getAttribute("preview_description");
+        search_string = (String) request.getSession().getAttribute("preview_search_string");
 
-    } 
+_matchText = search_string;
+        
+        search_algorithm = (String) request.getSession().getAttribute("preview_search_algorithm");
+        adv_search_source = (String) request.getSession().getAttribute("preview_adv_search_source");
+        rel_search_association = (String) request.getSession().getAttribute("preview_rel_search_association");
+        selectProperty = (String) request.getSession().getAttribute("preview_selectProperty");
+        selectValueSetReference = (String) request.getSession().getAttribute("preview_selectValueSetReference");
+        direction = (String) request.getSession().getAttribute("direction");
+      
+        
+        request.getSession().removeAttribute("preview_adv_search_vocabulary");   
+        request.getSession().removeAttribute("preview_selectSearchOption");   
+        request.getSession().removeAttribute("preview_label");   
+        request.getSession().removeAttribute("preview_description");
+        request.getSession().removeAttribute("preview_search_string");   
+        request.getSession().removeAttribute("preview_search_algorithm");   
+        request.getSession().removeAttribute("preview_adv_search_source");   
+        request.getSession().removeAttribute("preview_rel_search_association");   
+        request.getSession().removeAttribute("preview_selectProperty");   
+        request.getSession().removeAttribute("preview_selectValueSetReference");   
+        request.getSession().removeAttribute("preview");    
+    } else {
+	    if (refresh_page) {
+		adv_search_vocabulary = (String) request.getParameter("dictionary");
+		selectSearchOption = (String) request.getParameter("opt");
+		_type = selectSearchOption;
+
+		_vocabulary = adv_search_vocabulary;
+
+		label = (String) request.getParameter("label");
+		description = (String) request.getParameter("description");
+
+		search_string = (String) request.getParameter("text");
+		search_algorithm = (String) request.getParameter("algorithm");
+		adv_search_source = (String) request.getParameter("sab");
+		rel_search_association = (String) request.getParameter("rel");
+		selectProperty = (String) request.getParameter("prop");
+
+		selectValueSetReference = (String) request.getParameter("ref_uri");
+		direction = (String) request.getParameter("dir");
+	    } 
+    }
     
 
     if (selectSearchOption == null || selectSearchOption.compareTo("null") == 0) {
@@ -701,11 +754,37 @@ if (rel_search_association == null || rel_search_association.compareTo("") == 0)
                                      
  
                          <td>
-                         
+ 
+ 
+ <!--
  <h:selectOneRadio id="direction"
  	value="#{ComponentBean.selectedDirection}" styleClass="inputItem" >
  	<f:selectItems value="#{ComponentBean.directionList}"/>
  </h:selectOneRadio>
+ -->
+ 
+ 
+ 
+                     <td align="left" class="inputItem">
+                     <%
+                           if (direction != null && direction.compareTo("Backward") == 0) {
+ 		    %>
+ 		                  <input type="radio" id="direction" name="direction" value="Forward" alt="Forward" tabindex="5">Forward&nbsp;
+ 				  <input type="radio" id="direction" name="direction" value="Backward" alt="Backward" checked tabindex="6">Backward;
+ 		<%
+ 		} else {
+ 		%>	  
+ 				  <input type="radio" id="direction" name="direction" value="Forward" alt="Forward" checked tabindex="5">Forward&nbsp;
+ 				  <input type="radio" id="direction" name="direction" value="Backward" alt="Backward"  tabindex="6">Backward;
+ 		<%
+ 		}
+                 %> 
+                    </td>
+                    
+                    
+ 
+ 
+ 
  
                          </td> 
                      </tr>         
@@ -784,7 +863,7 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
 <h:commandButton
 	id="Preview"
 	value="Preview"
-	action="#{ComponentBean.resolveComponentSubsetAction}" 
+	action="#{ComponentBean.previewComponentSubsetAction}" 
 	image="#{form_requestContextPath}/images/preview.gif" alt="Preview component subset concepts" >
 </h:commandButton>
 &nbsp;
@@ -820,6 +899,9 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
               <input type="hidden" name="vs_uri" id="vs_uri" value="<%=vs_uri%>" />
               <input type="hidden" name="component_label" id="component_label" value="<%=component_label%>" />
               <input type="hidden" name="action" id="action" value="edit" />
+              
+              
+              <input type="hidden" name="state" id="state" value="edit_component" />
               
     
             </h:form>

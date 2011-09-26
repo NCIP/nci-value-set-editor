@@ -347,9 +347,11 @@
 		   <td width="110px">
 		     <a href="<%= request.getContextPath() %>/pages/editComponent.jsf?action=edit&uri=<%=vs_uri%>&label=<%=label%>" tabindex="15">Edit</a>
 		      &#xA0;
+		      
 		     <a href="<%= request.getContextPath() %>/pages/editValueSet.jsf?action=remove&uri=<%=vs_uri%>&label=<%=label%>" tabindex="15"
 		           onclick="return confirm('Are you sure you want to delete?')">Delete</a>
 		      &#xA0;
+		      
 		   </td>
 
                    </tr>

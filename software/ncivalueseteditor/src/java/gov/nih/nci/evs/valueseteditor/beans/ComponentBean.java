@@ -468,13 +468,9 @@ System.out.println("(********* getComponentObject ********* _selectedDirection: 
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-/*
-    	_label = FacesUtil.getRequestParameter("Label");
-    	_description = FacesUtil.getRequestParameter("Description");
-    	_vocabulary = FacesUtil.getRequestParameter("Vocabulary");
-     	_type = FacesUtil.getRequestParameter("selectSearchOption");
-     	_logger.debug("Type: " + _type);
-*/
+
+        String state = (String) request.getParameter("state");
+        request.getSession().setAttribute("state", state);
 
         String label = (String) request.getParameter("Label");
         _label = label;
@@ -519,98 +515,6 @@ System.out.println("(********* getComponentObject ********* _selectedDirection: 
         String transitivity_checkbox = (String) request.getParameter("transitivity_checkbox");
         _transitivity = transitivity_checkbox;
 
-/*
-
-        if (_label == null || _label.length() < 1) {
-            _message = resource.getString("error_missing_label");
-
-            System.out.println("ERROR: " + _message);
-            return "error";
-        }
-
-        _logger.debug("Saving component.");
-
-        ValueSetObject vs = vsb.getCurrentValueSet();
-
-        if (vs == null) {
-			_logger.debug("ValueSetObject is NULL???");
-		}
-
-        ValueSetBean.ComponentObject co = null;
-        String _edit_action = FacesUtil.getRequestParameter("action");
-        if (_edit_action == null || _edit_action.compareTo("edit") != 0) {
-			co = vsb.new ComponentObject();
-		} else {
-			String _vs_uri = FacesUtil.getRequestParameter("vs_uri");
-			String _component_label = FacesUtil.getRequestParameter("component_label");
-
-			if (_vs_uri != null && _component_label != null) {
-				//vs = vsb.getValueSet(_vs_uri);
-				co = vs.getComponent(_component_label);
-			}
-			vsb.setUri(_vs_uri);
-			//vsb.setExpression(_component_label);
-	    }
-
-      	_logger.debug("rel_search_association: " + _rel_search_association);
-
-        co.setLabel(_label);
-        co.setDescription(_description);
-        co.setType(_type);
-
-        if (_matchText != null) _matchText = _matchText.trim();
-
-        co.setMatchText(_matchText);
-        co.setAlgorithm(_algo);
-        co.setVocabulary(_vocabulary);
-        co.setPropertyName(_propertyName);
-
-        if (_focusConceptCode != null) _focusConceptCode = _focusConceptCode.trim();
-        co.setFocusConceptCode(_focusConceptCode);
-
-        co.setRel_search_association(_rel_search_association);
-        co.setInclude_focus_node(_include_focus_node);
-        co.setTransitivity(_transitivity);
-        co.setSelectedDirection(_selectedDirection);
-
-        co.setValueSetReference(_selectValueSetReference);
-
-		if (_type.compareTo("EntireVocabulary") == 0) {
-			String cs_name = DataUtils.getCodingSchemeName(_vocabulary, null);
-            co.setCodingSchemeReference(cs_name);
-		}
-
-        if (_codes == null) _codes = "";
-        co.setCodes(_codes);
-
-        if (_focusConceptCode != null && _focusConceptCode.compareTo("") != 0 && _vocabulary != null) {
-			_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
-			if (DataUtils.getConceptByCode(_vocabulary, null, null, _focusConceptCode) == null) {
-				_message = "WARNING: Invalid code " + _focusConceptCode + ".";
-				request.setAttribute("message", _message);
-				request.setAttribute("selectSearchOption", _type);
-
-				return "error";
-			}
-		}
-
-        if (_type.compareToIgnoreCase("Code") == 0) {
-			if (_matchText != null && _matchText.compareTo("") != 0 && _vocabulary != null) {
-				_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
-				if (DataUtils.getConceptByCode(_vocabulary, null, null, _matchText) == null) {
-					_message = "WARNING: Invalid code " + _matchText + ".";
-					request.setAttribute("message", _message);
-					request.setAttribute("selectSearchOption", _type);
-
-					return "error";
-				}
-			}
-		}
-
-*/
-
-
-
 
 System.out.println("\nlabel: " + label);
 System.out.println("description: " + description);
@@ -625,7 +529,6 @@ System.out.println("selectProperty: " + selectProperty);
 System.out.println("rel_search_association: " + rel_search_association);
 System.out.println("direction: " + direction);
 System.out.println("\n");
-
 
 
 
@@ -1072,28 +975,49 @@ if (vs_obj == null) {
 
     public String closeResolvedComponentSubsetAction() throws Exception {
 
+System.out.println("(*) closeResolvedComponentSubsetAction ...");
+
+
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-/*
-		String vs_uri = FacesUtil.getRequestParameter("vs_uri");
-		System.out.println("(******** cancelComponentSubsetAction ...vs_uri: " + vs_uri);
+        // find vs_uri and component_label
+		ValueSetObject vs_obj = (ValueSetObject) request.getSession().getAttribute("vs_obj");
+		String vs_uri = vs_obj.getUri();
 
-        if (vs_uri != null) {
-			vsb.setUri(vs_uri);
+System.out.println("(*) closeResolvedComponentSubsetAction vs_uri ..." + vs_uri);
 
-			request.setAttribute("vs_uri", vs_uri);
+
+		String component_label = (String) request.getSession().getAttribute("ComponentObjectLabel");
+
+
+System.out.println("(*) closeResolvedComponentSubsetAction component_label ..." + component_label);
+
+
+        ValueSetObject existing_vs_obj = vsb.getValueSet(vs_uri);
+        ValueSetBean.ComponentObject component = existing_vs_obj.getComponent(component_label);
+        if (component == null) {
+			request.getSession().setAttribute("closeResolvedComponentSubset", "true");
+
+
+System.out.println("(*) closeResolvedComponentSubsetAction returns add_component ...");
+
+			return "add_component";
 		}
-*/
 
-		return "close";
+        request.getSession().setAttribute("closeResolvedComponentSubset", "true");
+        request.getSession().setAttribute("action", "edit");
+        request.getSession().setAttribute("vs_uri", vs_uri);
+        request.getSession().setAttribute("label", component_label);
+
+
+        System.out.println("(*) closeResolvedComponentSubsetAction returns edit_component ...");
+
+
+        request.getSession().removeAttribute("vs_obj");
+        return "edit_component";
 	}
-
-
-
-
-
 
 
 	public String _searchOption = "code";

@@ -187,32 +187,24 @@
       <navigation-case>
        <description>closeResolvedComponentSubsetAction</description>
        <from-action>#{ComponentBean.closeResolvedComponentSubsetAction}</from-action>
-       <from-outcome>close</from-outcome>
+       <from-outcome>add_component</from-outcome>
        <to-view-id>/pages/addComponent.jsp</to-view-id>
       </navigation-case>
-     
+
+     <from-view-id>/pages/search_results.jsp</from-view-id>
+      <navigation-case>
+       <description>closeResolvedComponentSubsetAction</description>
+       <from-action>#{ComponentBean.closeResolvedComponentSubsetAction}</from-action>
+       <from-outcome>edit_component</from-outcome>
+       <to-view-id>/pages/editComponent.jsp</to-view-id>
+      </navigation-case>
+      
    </navigation-rule>
    
 
    <navigation-rule>
      <from-view-id>/pages/addComponent.jsp</from-view-id>
        
-     <navigation-case>
-       <description>resolveComponentSubset</description>
-       <from-action>#{ComponentBean.resolveComponentSubsetAction}</from-action>
-       <from-outcome>search_results</from-outcome>
-       <to-view-id>/pages/search_results.jsp</to-view-id>
-    </navigation-case>
-
-<!--    
-    <navigation-case>
-       <description>resolveComponentSubset</description>
-       <from-action>#{ComponentBean.resolveComponentSubsetAction}</from-action>
-       <from-outcome>single_search_results</from-outcome>
-       <to-view-id>/pages/single_search_results.jsp</to-view-id>
-    </navigation-case>
--->
-
     <navigation-case>
        <description>previewComponentSubset</description>
        <from-action>#{ComponentBean.previewComponentSubsetAction}</from-action>
@@ -227,7 +219,13 @@
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/addComponent.jsp</to-view-id>
     </navigation-case>
-        
+
+     <navigation-case>
+       <description>resolveComponentSubset</description>
+       <from-action>#{ComponentBean.resolveComponentSubsetAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>        
 
     <navigation-case>
        <description>resolveComponentSubsetError</description>
@@ -262,7 +260,37 @@
     
    <navigation-rule>
      <from-view-id>/pages/editComponent.jsp</from-view-id>
-       
+
+    <navigation-case>
+       <description>previewComponentSubset</description>
+       <from-action>#{ComponentBean.previewComponentSubsetAction}</from-action>
+       <from-outcome>comp_obj_coding_scheme_references</from-outcome>
+       <to-view-id>/pages/comp_obj_coding_scheme_references.jsp</to-view-id>
+    </navigation-case>
+
+
+    <navigation-case>
+       <description>previewComponentSubset</description>
+       <from-action>#{ComponentBean.previewComponentSubsetAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/editComponent.jsp</to-view-id>
+    </navigation-case>
+
+     <navigation-case>
+       <description>resolveComponentSubset</description>
+       <from-action>#{ComponentBean.resolveComponentSubsetAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>        
+
+    <navigation-case>
+       <description>resolveComponentSubsetError</description>
+       <from-action>#{ComponentBean.resolveComponentSubsetAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/editComponent.jsp</to-view-id>
+    </navigation-case>
+    
+<!--    
      <navigation-case>
        <description>resolveComponentSubset</description>
        <from-action>#{ComponentBean.resolveComponentSubsetAction}</from-action>
@@ -283,8 +311,7 @@
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/editComponent.jsp</to-view-id>
     </navigation-case>
-         
-       
+-->         
        
        <navigation-case>
           <from-action>#{ComponentBean.saveComponentSubsetAction}</from-action>
@@ -324,13 +351,6 @@
           <to-view-id>/pages/addComponent.jsp</to-view-id>
        </navigation-case>
 
-/*       
-       <navigation-case>
-          <from-action>#{ValueSetBean.resolveVSDAction}</from-action>
-          <from-outcome>resolve</from-outcome>
-          <to-view-id>/pages/resolved_value_set.jsp</to-view-id>
-       </navigation-case>
-*/
 
        <navigation-case>
           <from-action>#{ValueSetBean.resolveVSDAction}</from-action>

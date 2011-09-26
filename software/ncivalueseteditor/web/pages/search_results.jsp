@@ -83,15 +83,10 @@ if (search_results_dictionary == null) {
    
 }
 
-boolean isMapping = DataUtils.isMapping(search_results_dictionary, null);
-boolean isExtension = DataUtils.isExtension(search_results_dictionary, null);
 
 String search_results_version = null;//info.version;
 
-/*
-HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
-HashMap name_hmap = new HashMap();
-*/
+
 String vocabulary_name = null;
 String short_vocabulary_name = null;
 String coding_scheme_version = null;
