@@ -922,6 +922,49 @@ if (vs_obj == null) {
 
 		_logger.debug("vs.getCompList().put(_label, co) " + _label);
 
+		String incompleteDataEntry = "WARNING: Incomplete data entry.";
+
+
+		if (_type.compareTo("EntireVocabulary") == 0) {
+			if (isNull(_vocabulary)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				return "error";
+			}
+		} else if (_type.compareTo("Code") == 0) {
+			if (isNull(_vocabulary) || isNull(_matchText)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				return "error";
+			}
+		} else if (_type.compareTo("Name") == 0) {
+			if (isNull(_vocabulary) || isNull(_matchText)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				return "error";
+			}
+		} else if (_type.compareTo("Property") == 0) {
+			if (isNull(_vocabulary) || isNull(_matchText) || isNull(_algo) || isNull(_propertyName)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				return "error";
+			}
+
+		} else if (_type.compareTo("Relationship") == 0) {
+
+			if (isNull(_vocabulary) || isNull(_focusConceptCode) || isNull(_rel_search_association) || isNull(_selectedDirection)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				return "error";
+			}
+			if (isNull(_transitivity) || isNull(_include_focus_node) || isNull(_rel_search_association)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				return "error";
+			}
+		} else if (_type.compareTo("EnumerationOfCodes") == 0) {
+
+			if (isNull(_vocabulary) || isNull(_codes)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				return "error";
+			}
+		}
+
+
         vs.getCompList().put(_label, co);
         if (_expression != null && vs.getExpression() != null && vs.getCompListSize() == 1) {
 			vs.setExpression(_expression);
@@ -1052,6 +1095,12 @@ if (vs_obj == null) {
 
 	}
 
+    public boolean isNull(String s) {
+		if (s == null) return true;
+		s = s.trim();
+		if (s.compareTo("") == 0 || s.compareTo("null") == 0) return true;
+		return false;
+	}
 
 
 } // End of ComponentBean

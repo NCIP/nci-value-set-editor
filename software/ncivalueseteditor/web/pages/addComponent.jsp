@@ -395,7 +395,7 @@ System.out.println("(*) co_label_readonly: " + co_label_readonly);
                      <%    
                      if (co_label_readonly) {
                      %>
-                         <input CLASS="searchbox-input" name="Label" value="<%=label%>" size="75" tabindex="1" readonly="true" />
+                         <input CLASS="searchbox-input" name="Label" value="<%=label%>" size="75" tabindex="1" />
                      <%    
                      } else {
                      %>
