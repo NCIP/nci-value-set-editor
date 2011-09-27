@@ -35,7 +35,7 @@
 
         <div class="mainbox-top"><img src="<%= request.getContextPath() %>/images/mainbox-top.gif" width="745" height="5" alt="Mainbox Top" /></div>
 	<div id="main-area">
-	          <%@ include file="/pages/include/applicationBanner.jsp" %>
+	          <%@ include file="/pages/include/applicationBannerNoHome.jsp" %>
 	          <%@ include file="/pages/include/quickLinks.jsp" %>
 	          
 	          
