@@ -528,6 +528,10 @@ System.out.println("search_algorithm: " + search_algorithm);
 System.out.println("code_enumeration: " + code_enumeration);
 System.out.println("selectProperty: " + selectProperty);
 System.out.println("rel_search_association: " + rel_search_association);
+
+System.out.println("include_focus_node_checkbox: " + include_focus_node_checkbox);
+System.out.println("transitivity_checkbox: " + transitivity_checkbox);
+
 System.out.println("direction: " + direction);
 System.out.println("\n");
 System.out.println("previewComponentSubsetAction***************************************");
@@ -545,6 +549,11 @@ System.out.println("previewComponentSubsetAction********************************
         request.getSession().setAttribute("preview_selectProperty", selectProperty);
         request.getSession().setAttribute("preview_selectValueSetReference", selectValueSetReference);
         request.getSession().setAttribute("preview_direction", direction);
+
+        request.getSession().setAttribute("preview_include_focus_node_checkbox", include_focus_node_checkbox);
+        request.getSession().setAttribute("preview_transitivity_checkbox", transitivity_checkbox);
+
+
         request.getSession().setAttribute("preview", "true");
 
 		ValueSetBean.ComponentObject ob = getComponentObject();

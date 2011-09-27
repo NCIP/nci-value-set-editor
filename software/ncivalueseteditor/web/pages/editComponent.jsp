@@ -28,7 +28,10 @@
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
+  
   <script type="text/javascript">
+  
     function newPopup(url) {    	  
     	var centerWidth = (window.screen.width - 500) / 2;
         var centerHeight = (window.screen.height - 400) / 2;
@@ -125,7 +128,7 @@
    
   </script>
 </head>
-<body>
+<body onload="noBack();">
 <f:view>
     <%@ include file="/pages/include/header.jsp" %>
     <div class="center-page">
@@ -207,6 +210,9 @@ System.out.println("(*) editComponent.jsp component_label: " + component_label);
         
         String adv_search_vocabulary = null;
         String adv_search_version = null;//request.getParameter("version");
+
+ String include_focus_node_checkbox = null;   
+ String transitivity_checkbox = null; 
          
         
     // find component object
@@ -322,6 +328,10 @@ System.out.println("FOCUSCONCEPTCODE: " + direction);
         
 System.out.println("DIRECTION: " + direction);
 
+include_focus_node_checkbox = (String) request.getSession().getAttribute("preview_include_focus_node_checkbox");
+transitivity_checkbox = (String) request.getSession().getAttribute("preview_transitivity_checkbox");
+
+
       
         
         request.getSession().removeAttribute("preview_adv_search_vocabulary");   
@@ -339,6 +349,8 @@ System.out.println("DIRECTION: " + direction);
         request.getSession().removeAttribute("preview_focusConceptCode");
         request.getSession().removeAttribute("preview_direction");   
         
+        request.getSession().removeAttribute("preview_include_focus_node_checkbox"); 
+        request.getSession().removeAttribute("preview_transitivity_checkbox"); 
         
         
     } else {
@@ -372,7 +384,7 @@ System.out.println("DIRECTION: " + direction);
 
      String warning_msg= (String) request.getSession().getAttribute("message");
      if (warning_msg != null && warning_msg.compareTo("null") != 0) {
-	 request.removeAttribute("message");
+	 request.getSession().removeAttribute("message");
      %>
 	<p class="textbodyred"><%=warning_msg%></p>
      <%
@@ -821,7 +833,7 @@ if (rel_search_association == null || rel_search_association.compareTo("") == 0)
                              <% 
                              if (_include_focus_node != null && _include_focus_node.compareTo("true") == 0) {
                              %>
-                                 <input type="checkbox" name="include_focus_node_checkbox" value="true" checked />
+                                 <input type="checkbox" name="include_focus_node_checkbox" value="true" checked="yes" />
                              <%    
                              } else {
                              %>
@@ -841,17 +853,19 @@ if (rel_search_association == null || rel_search_association.compareTo("") == 0)
                          </td> 
  
                           <td>
-                             <% 
-                             if (_transitivity != null && _transitivity.compareTo("true") == 0) {
-                             %>
-                                 <input type="checkbox" name="transitivity_checkbox" value="true" checked/>
-                             <%    
-                             } else {
-                             %>
-                                 <input type="checkbox" name="transitivity_checkbox" value="true" />
-                             <%    
-                             }
-                             %>
+                          
+                          
+ <%
+if (transitivity_checkbox != null && transitivity_checkbox.compareTo("true") == 0) {
+%>
+    <input type="checkbox" name="transitivity_checkbox" value="true" checked="yes" />
+<%
+} else {
+%>
+    <input type="checkbox" name="transitivity_checkbox" value="true" />
+<%
+}
+%>      
                           
                              
                          

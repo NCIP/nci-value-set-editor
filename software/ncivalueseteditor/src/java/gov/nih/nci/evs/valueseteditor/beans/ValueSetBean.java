@@ -1982,28 +1982,68 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
 			entry.setPropertyReference(pr);
 
 		} else if (type.compareTo("Relationship") == 0) {
+
 			EntityReference entity_ref = new EntityReference();
 			entity_ref.setEntityCode(ob.getFocusConceptCode());
+
+
+System.out.println("(DEBUG) FocusConceptCode: " + ob.getFocusConceptCode());
+
+
+
 			String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 			entity_ref.setEntityCodeNamespace(cs_name);
 
+System.out.println("(DEBUG) cs_name: " + cs_name);
+
+
             if (ob.getInclude_focus_node() != null && ob.getInclude_focus_node().compareToIgnoreCase("true") == 0) {
 				entity_ref.setLeafOnly(Boolean.FALSE);
+
+System.out.println("(DEBUG) setLeafOnly to Boolean.FALSE: ");
+
+
 			} else {
 				entity_ref.setLeafOnly(Boolean.TRUE);
+
+System.out.println("(DEBUG) setLeafOnly to Boolean.TRUE: ");
 			}
+
+
+
+
 			entity_ref.setReferenceAssociation(ob.getRel_search_association());
+
+System.out.println("(DEBUG) Rel_search_association: " + ob.getRel_search_association());
+
 
             if (ob.getTransitivity() != null && ob.getTransitivity().compareToIgnoreCase("true") == 0) {
 				entity_ref.setTransitiveClosure(Boolean.TRUE);
+
+System.out.println("(DEBUG) setTransitiveClosure Boolean.TRUE ");
+
+
 			} else {
 				entity_ref.setTransitiveClosure(Boolean.FALSE);
+
+
+System.out.println("(DEBUG) setTransitiveClosure Boolean.FALSE ");
+
 			}
+
+
 
             if (ob.getSelectedDirection() != null && ob.getSelectedDirection().compareToIgnoreCase("forward") == 0) {
 				entity_ref.setTargetToSource(Boolean.FALSE);
+
+System.out.println("(DEBUG) setTargetToSource Boolean.FALSE ");
+
+
 			} else {
 				entity_ref.setTargetToSource(Boolean.TRUE);
+
+System.out.println("(DEBUG) setTargetToSource Boolean.TRUE ");
+
 			}
 			entry.setEntityReference(entity_ref);
 
@@ -2325,7 +2365,7 @@ cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
 	}
 
 	public List translateValueSetExpression(ValueSetObject vs_obj, String expression) {
-		System.out.println("\t\ttranslateValueSetExpression expression: " + expression);
+		System.out.println("translateValueSetExpression expression: " + expression);
 
 		List list = new ArrayList();
 		if (expression == null) {
@@ -2333,6 +2373,10 @@ cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
 			Iterator it = map.keySet().iterator();
 			while (it.hasNext()) {
 				String key = (String) it.next();
+
+				System.out.println("translateValueSetExpression key: " + key);
+
+
 				ComponentObject ob = (ComponentObject) map.get(key);
 				list.add(ob);
 			}
