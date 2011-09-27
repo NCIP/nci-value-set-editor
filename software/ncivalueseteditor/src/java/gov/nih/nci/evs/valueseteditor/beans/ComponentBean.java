@@ -387,7 +387,6 @@ public class ComponentBean {
 
 
     public ValueSetBean.ComponentObject getComponentObject() {
-		System.out.println("(********************************************************** getComponentObject ...");
     	_message = null;
 
         if (vsb.getUri() == null || vsb.getUri().length() < 1) {
@@ -417,10 +416,6 @@ public class ComponentBean {
       	_propertyName = FacesUtil.getRequestParameter("selectProperty");
       	_rel_search_association = FacesUtil.getRequestParameter("rel_search_association");
 
- System.out.println("_matchText: " + _matchText);
- System.out.println("_propertyName: " + _propertyName);
-
-
         ValueSetBean.ComponentObject co = null;
         try{
         	co = new ValueSetBean().instantiateComponentObject();
@@ -447,15 +442,10 @@ public class ComponentBean {
         co.setInclude_focus_node(_include_focus_node);
         co.setTransitivity(_transitivity);
 
-System.out.println("(********* getComponentObject ********* _selectedDirection: " + _selectedDirection);
-
-
         co.setSelectedDirection(_selectedDirection);
         co.setValueSetReference(_selectValueSetReference);
         if (_codes == null) _codes = "";
         co.setCodes(_codes);
-
-		System.out.println("ComponentObject instantiated...type: " + co.getType());
 
         return co;
     }
@@ -515,7 +505,7 @@ System.out.println("(********* getComponentObject ********* _selectedDirection: 
         String transitivity_checkbox = (String) request.getParameter("transitivity_checkbox");
         _transitivity = transitivity_checkbox;
 
-
+/*
 System.out.println("previewComponentSubsetAction***************************************");
 System.out.println("\nlabel: " + label);
 System.out.println("description: " + description);
@@ -535,7 +525,7 @@ System.out.println("transitivity_checkbox: " + transitivity_checkbox);
 System.out.println("direction: " + direction);
 System.out.println("\n");
 System.out.println("previewComponentSubsetAction***************************************");
-
+*/
 
 
         request.getSession().setAttribute("preview_adv_search_vocabulary", adv_search_vocabulary);
@@ -689,38 +679,11 @@ if (vs_obj == null) {
 
         // find vs_uri and component_label
 		String vs_uri = vs_obj.getUri();
-
-System.out.println("(*) closeResolvedComponentSubsetAction vs_uri ..." + vs_uri);
-
-
 		String component_label = (String) request.getSession().getAttribute("ComponentObjectLabel");
-
-
-System.out.println("(*) closeResolvedComponentSubsetAction component_label ..." + component_label);
-
 
         ValueSetObject existing_vs_obj = vsb.getValueSet(vs_uri);
         ValueSetBean.ComponentObject component = existing_vs_obj.getComponent(component_label);
 
-
-/*
-
-    	_label = FacesUtil.getRequestParameter("Label");
-    	_description = FacesUtil.getRequestParameter("Description");
-    	_vocabulary = FacesUtil.getRequestParameter("Vocabulary");
-     	_type = FacesUtil.getRequestParameter("selectSearchOption");
-     	_logger.debug("Type: " + _type);
-
-		ValueSetBean.ComponentObject ob = getComponentObject();
-		ValueSetObject vs_obj = vsb.getCurrentValueSet();
-
-
-		String infixExpression = null;
-		boolean retval = vs_obj.addComponent(ob);
-		if (!retval) {
-			vs_obj.addComponent("temp_label", ob);
-		}
-*/
         String infixExpression = null;
 		ValueSetDefinition vsd = new ValueSetBean().convertToValueSetDefinition(vs_obj, infixExpression);
 
@@ -746,28 +709,8 @@ System.out.println("(*) closeResolvedComponentSubsetAction component_label ..." 
 			System.out.println("continueResolveComponentSubsetAction iterator != null");
 		}
 
-/*
-		IteratorBeanManager iteratorBeanManager =
-			(IteratorBeanManager) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap()
-				.get("iteratorBeanManager");
-
-		if (iteratorBeanManager == null) {
-			iteratorBeanManager = new IteratorBeanManager();
-			FacesContext.getCurrentInstance().getExternalContext()
-				.getSessionMap()
-				.put("iteratorBeanManager", iteratorBeanManager);
-		}
-*/
 		IteratorBean iteratorBean = null;
-/*
-		String key = (String) request.getSession().getAttribute("key");
-		if (key != null && key.compareTo("null") != 0) {
-			IteratorBean it_bean = iteratorBeanManager.removeIteratorBean(key);
-			ResolvedConceptReferencesIterator it = it_bean.getIterator();
-			it.release();
-		}
-*/
+
 		String key = vsd.getValueSetDefinitionURI();
 
 		iteratorBean = new IteratorBean(iterator);
@@ -800,10 +743,7 @@ System.out.println("(*) closeResolvedComponentSubsetAction component_label ..." 
 
 
     public String saveComponentSubsetAction() throws Exception {
-		System.out.println("(******** saveComponentSubsetAction ...");
     	_message = null;
-
-        System.out.println("vsb.getUri(): " + vsb.getUri());
 
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
@@ -1008,9 +948,6 @@ System.out.println("(*) closeResolvedComponentSubsetAction component_label ..." 
 
     public String closeResolvedComponentSubsetAction() throws Exception {
 
-System.out.println("(*) closeResolvedComponentSubsetAction ...");
-
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -1019,22 +956,12 @@ System.out.println("(*) closeResolvedComponentSubsetAction ...");
 		ValueSetObject vs_obj = (ValueSetObject) request.getSession().getAttribute("vs_obj");
 		String vs_uri = vs_obj.getUri();
 
-System.out.println("(*) closeResolvedComponentSubsetAction vs_uri ..." + vs_uri);
-
-
 		String component_label = (String) request.getSession().getAttribute("ComponentObjectLabel");
-
-
-System.out.println("(*) closeResolvedComponentSubsetAction component_label ..." + component_label);
-
 
         ValueSetObject existing_vs_obj = vsb.getValueSet(vs_uri);
         ValueSetBean.ComponentObject component = existing_vs_obj.getComponent(component_label);
         if (component == null) {
 			request.getSession().setAttribute("closeResolvedComponentSubset", "true");
-
-
-System.out.println("(*) closeResolvedComponentSubsetAction returns add_component ...");
             request.getSession().setAttribute("preview", "true");
 			return "add_component";
 		}
@@ -1043,10 +970,6 @@ System.out.println("(*) closeResolvedComponentSubsetAction returns add_component
         request.getSession().setAttribute("action", "edit");
         request.getSession().setAttribute("vs_uri", vs_uri);
         request.getSession().setAttribute("label", component_label);
-
-
-        System.out.println("(*) closeResolvedComponentSubsetAction returns edit_component ...");
-
 
         request.getSession().removeAttribute("vs_obj");
         request.getSession().setAttribute("preview", "true");
@@ -1058,7 +981,6 @@ System.out.println("(*) closeResolvedComponentSubsetAction returns add_component
 
 	public void setSearchOption(String searchOption) {
 		this._searchOption = searchOption;
-		System.out.println("(*) radio button pressed -- reset _searchOption to " + _searchOption);
 	}
 
 	public String getSearchOption() {
@@ -1067,9 +989,6 @@ System.out.println("(*) closeResolvedComponentSubsetAction returns add_component
 
 
     public void searchOptionChangedEvent(ValueChangeEvent event) {
-
-		System.out.println("(*) radio button pressed ");
-
         if (event.getNewValue() == null) {
 			System.out.println("(*) event.getNewValue() == null??? ");
             return;
