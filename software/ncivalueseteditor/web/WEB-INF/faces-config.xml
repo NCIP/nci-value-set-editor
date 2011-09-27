@@ -193,6 +193,27 @@
        <from-outcome>edit_component</from-outcome>
        <to-view-id>/pages/editComponent.jsp</to-view-id>
       </navigation-case>  
+
+      <navigation-case>
+       <description>cancel</description>
+       <from-action>#{ComponentBean.cancelResolveComponentSubsetAction}</from-action>
+       <from-outcome>add_component</from-outcome>
+       <to-view-id>/pages/addComponent.jsp</to-view-id>
+      </navigation-case>      
+
+      <navigation-case>
+       <description>cancel</description>
+       <from-action>#{ComponentBean.cancelResolveComponentSubsetAction}</from-action>
+       <from-outcome>edit_component</from-outcome>
+       <to-view-id>/pages/editComponent.jsp</to-view-id>
+      </navigation-case>  
+
+      <navigation-case>
+       <description>message</description>
+       <from-action>#{ComponentBean.cancelResolveComponentSubsetAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/comp_obj_coding_scheme_references.jsp</to-view-id>
+      </navigation-case>  
       
     </navigation-rule>  
       

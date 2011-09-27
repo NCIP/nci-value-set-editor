@@ -1017,6 +1017,33 @@ if (vs_obj == null) {
         setVocabulary(newValue);
 	}
 
+	public String cancelResolveComponentSubsetAction() {
+        ResolvedConceptReferencesIterator iterator = null;
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+ValueSetObject vs_obj = (ValueSetObject) request.getSession().getAttribute("vs_obj");//vsb.getValueSet(vsd_uri);
+
+if (vs_obj == null) {
+	String message = "ERROR: Value set object is not found in session.";
+	request.getSession().setAttribute("message", message);
+	return "message";
+}
+
+		String vs_uri = vs_obj.getUri();
+		String component_label = (String) request.getSession().getAttribute("ComponentObjectLabel");
+
+        ValueSetObject existing_vs_obj = vsb.getValueSet(vs_uri);
+        ValueSetBean.ComponentObject component = existing_vs_obj.getComponent(component_label);
+
+        if (component == null) {
+			return "add_component";
+		}
+		return "edit_component";
+
+	}
+
 
 
 } // End of ComponentBean

@@ -273,7 +273,7 @@ System.out.println("coding_scheme_references.jsp cs_version: " + cs_version);
 			<h:commandButton
 				id="Cancel"
 				value="Cancel"
-				action="#{ComponentBean.cancelComponentSubsetAction}" 
+				action="#{ComponentBean.cancelResolveComponentSubsetAction}" 
 				image="#{form_requestContextPath}/images/cancel.gif" alt="Cancel Resolve Component Set">
 			</h:commandButton>
 
