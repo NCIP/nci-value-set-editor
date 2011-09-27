@@ -198,6 +198,7 @@ System.out.println("(*) editComponent.jsp component_label: " + component_label);
         
         String adv_search_source = "ALL";
         String adv_search_type = null;
+        String focusConceptCode = null;
 
         String t = null;
         String selectSearchOption = null;
@@ -300,13 +301,27 @@ System.out.println("debugging editComponent.jsp adv_search_vocabulary: " + _voca
         search_string = (String) request.getSession().getAttribute("preview_search_string");
 
 _matchText = search_string;
+System.out.println("_matchText: " + _matchText);
         
         search_algorithm = (String) request.getSession().getAttribute("preview_search_algorithm");
         adv_search_source = (String) request.getSession().getAttribute("preview_adv_search_source");
         rel_search_association = (String) request.getSession().getAttribute("preview_rel_search_association");
         selectProperty = (String) request.getSession().getAttribute("preview_selectProperty");
         selectValueSetReference = (String) request.getSession().getAttribute("preview_selectValueSetReference");
-        direction = (String) request.getSession().getAttribute("direction");
+        
+        _focusConceptCode = (String) request.getSession().getAttribute("preview_focusConceptCode");
+        if (_focusConceptCode == null || _focusConceptCode.compareTo("null") == 0) {
+            _focusConceptCode = "";
+        }
+        
+
+System.out.println("FOCUSCONCEPTCODE: " + direction);
+
+        direction = (String) request.getSession().getAttribute("preview_direction");
+        
+        
+System.out.println("DIRECTION: " + direction);
+
       
         
         request.getSession().removeAttribute("preview_adv_search_vocabulary");   
@@ -319,7 +334,13 @@ _matchText = search_string;
         request.getSession().removeAttribute("preview_rel_search_association");   
         request.getSession().removeAttribute("preview_selectProperty");   
         request.getSession().removeAttribute("preview_selectValueSetReference");   
-        request.getSession().removeAttribute("preview");    
+        request.getSession().removeAttribute("preview"); 
+        
+        request.getSession().removeAttribute("preview_focusConceptCode");
+        request.getSession().removeAttribute("preview_direction");   
+        
+        
+        
     } else {
 	    if (refresh_page) {
 		adv_search_vocabulary = (String) request.getParameter("dictionary");
@@ -349,7 +370,7 @@ _matchText = search_string;
 
    
 
-     String warning_msg= (String) request.getAttribute("message");
+     String warning_msg= (String) request.getSession().getAttribute("message");
      if (warning_msg != null && warning_msg.compareTo("null") != 0) {
 	 request.removeAttribute("message");
      %>
@@ -752,8 +773,6 @@ if (rel_search_association == null || rel_search_association.compareTo("") == 0)
                             Direction:
                         </td> 
                                      
- 
-                         <td>
  
  
  <!--

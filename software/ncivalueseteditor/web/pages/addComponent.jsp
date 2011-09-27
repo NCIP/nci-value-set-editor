@@ -133,6 +133,10 @@
 
 <%
 
+
+System.out.println("=================== addComponent.jsp ======================================= ");
+
+
     String adv_search_vocabulary = (String) request.getSession().getAttribute("dictionary");
 
                       
@@ -171,6 +175,7 @@
     String rel_search_association = null;
     String adv_search_source = null;
     String adv_search_type = null;
+    String focusConceptCode = "";
 
     String t = null;
     
@@ -181,6 +186,12 @@
         
     String preview = null;//(String) request.getParameter("preview");
     preview = (String) request.getSession().getAttribute("preview");
+    
+    
+ System.out.println("(*****KLO*****) addComponent.jsp preview: " + preview);        
+   
+    
+    
     if (preview != null && preview.compareTo("true") == 0) {
     
         adv_search_vocabulary = (String) request.getSession().getAttribute("preview_adv_search_vocabulary");
@@ -193,8 +204,16 @@
         rel_search_association = (String) request.getSession().getAttribute("preview_rel_search_association");
         selectProperty = (String) request.getSession().getAttribute("preview_selectProperty");
         selectValueSetReference = (String) request.getSession().getAttribute("preview_selectValueSetReference");
-        direction = (String) request.getSession().getAttribute("direction");
+        direction = (String) request.getSession().getAttribute("preview_direction");
+        
+        
+System.out.println("(****) addComponent.jsp preview_direction: " + direction);        
+        
       
+        focusConceptCode = (String) request.getSession().getAttribute("preview_focusConceptCode");
+        if (focusConceptCode == null || focusConceptCode.compareTo("null") == 0) {
+            focusConceptCode = "";
+        }
         
         request.getSession().removeAttribute("preview_adv_search_vocabulary");   
         request.getSession().removeAttribute("preview_selectSearchOption");   
@@ -205,9 +224,15 @@
         request.getSession().removeAttribute("preview_adv_search_source");   
         request.getSession().removeAttribute("preview_rel_search_association");   
         request.getSession().removeAttribute("preview_selectProperty");   
+        request.getSession().removeAttribute("preview_direction");   
         request.getSession().removeAttribute("preview_selectValueSetReference");   
         request.getSession().removeAttribute("preview");    
     } else {
+    
+    
+ System.out.println("(*****KLO*****) addComponent.jsp preview: " + preview);        
+    
+    
 	    if (refresh_page) {
 		adv_search_vocabulary = (String) request.getParameter("dictionary");
 		selectSearchOption = (String) request.getParameter("opt");
@@ -231,7 +256,7 @@
     }
 
 
-     String warning_msg= (String) request.getAttribute("message");
+     String warning_msg= (String) request.getSession().getAttribute("message");
      if (warning_msg != null && warning_msg.compareTo("null") != 0) {
 	 request.removeAttribute("message");
      %>
@@ -306,6 +331,10 @@ if (is_new_component != null && is_new_component.compareTo("true") == 0) {
 }
 	    
 System.out.println("(*) co_label_readonly: " + co_label_readonly);
+
+
+
+
 
 
 
@@ -438,7 +467,7 @@ System.out.println("(*) co_label_readonly: " + co_label_readonly);
                               Focus concept code:
                           </td>
      <td>                   
-     <input CLASS="inputLabel" name="focusConceptCode" value="<%=search_string%>" tabindex="3">
+     <input CLASS="inputLabel" name="focusConceptCode" value="<%=focusConceptCode%>" tabindex="3">
      </td>
      </tr>
  <% 

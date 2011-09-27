@@ -127,13 +127,13 @@
        
        <navigation-case>
           <from-action>#{ValueSetBean.addComponentAction}</from-action>
-          <from-outcome>addcomponent</from-outcome>
+          <from-outcome>add_component</from-outcome>
           <to-view-id>/pages/addComponent.jsp</to-view-id>
        </navigation-case>
        
        <navigation-case>
           <from-action>#{ValueSetBean.editComponentAction}</from-action>
-          <from-outcome>editcomponent</from-outcome>
+          <from-outcome>edit_component</from-outcome>
           <to-view-id>/pages/editComponent.jsp</to-view-id>
        </navigation-case>     
        
@@ -179,6 +179,21 @@
        <from-outcome>search_results</from-outcome>
        <to-view-id>/pages/search_results.jsp</to-view-id>
       </navigation-case>
+      
+      <navigation-case>
+       <description>nomatch</description>
+       <from-action>#{ComponentBean.continueResolveComponentSubsetAction}</from-action>
+       <from-outcome>add_component</from-outcome>
+       <to-view-id>/pages/addComponent.jsp</to-view-id>
+      </navigation-case>      
+
+      <navigation-case>
+       <description>nomatch</description>
+       <from-action>#{ComponentBean.continueResolveComponentSubsetAction}</from-action>
+       <from-outcome>edit_component</from-outcome>
+       <to-view-id>/pages/editComponent.jsp</to-view-id>
+      </navigation-case>  
+      
     </navigation-rule>  
       
       
@@ -347,7 +362,7 @@
 
        <navigation-case>
           <from-action>#{ValueSetBean.addComponentAction}</from-action>
-          <from-outcome>addcomponent</from-outcome>
+          <from-outcome>add_component</from-outcome>
           <to-view-id>/pages/addComponent.jsp</to-view-id>
        </navigation-case>
 

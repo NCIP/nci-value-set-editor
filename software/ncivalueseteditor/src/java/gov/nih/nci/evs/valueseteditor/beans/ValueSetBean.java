@@ -1413,7 +1413,7 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
 
     	request.setAttribute("isNewComponent", "true");
 
-        return "addcomponent";
+        return "add_component";
     }
 
 
@@ -1427,7 +1427,6 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
     	//String labelParam = FacesUtil.getRequestParameter("labelParam");
         String vs_uri = FacesUtil.getRequestParameter("vs_uri");
     	String labelParam = FacesUtil.getRequestParameter("component_label");
-
 
     	_logger.debug("Edit component: " + labelParam);
 
@@ -1444,7 +1443,7 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
         request.setAttribute("component_object", component_obj);
         request.setAttribute("component_label", labelParam);
 
-    	return "editcomponent";
+    	return "edit_component";
     }
 
     public String removeComponentAction() {

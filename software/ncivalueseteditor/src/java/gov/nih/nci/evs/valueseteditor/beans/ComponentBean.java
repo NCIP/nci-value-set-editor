@@ -516,6 +516,7 @@ System.out.println("(********* getComponentObject ********* _selectedDirection: 
         _transitivity = transitivity_checkbox;
 
 
+System.out.println("previewComponentSubsetAction***************************************");
 System.out.println("\nlabel: " + label);
 System.out.println("description: " + description);
 System.out.println("adv_search_vocabulary: " + adv_search_vocabulary);
@@ -529,12 +530,14 @@ System.out.println("selectProperty: " + selectProperty);
 System.out.println("rel_search_association: " + rel_search_association);
 System.out.println("direction: " + direction);
 System.out.println("\n");
+System.out.println("previewComponentSubsetAction***************************************");
 
 
 
         request.getSession().setAttribute("preview_adv_search_vocabulary", adv_search_vocabulary);
         request.getSession().setAttribute("preview_selectSearchOption", selectSearchOption);
         request.getSession().setAttribute("preview_label", label);
+        request.getSession().setAttribute("preview_focusConceptCode", focusConceptCode);
         request.getSession().setAttribute("preview_description", description);
         request.getSession().setAttribute("preview_search_string", search_string);
         request.getSession().setAttribute("preview_search_algorithm", search_algorithm);
@@ -675,6 +678,21 @@ if (vs_obj == null) {
 }
 
 
+        // find vs_uri and component_label
+		String vs_uri = vs_obj.getUri();
+
+System.out.println("(*) closeResolvedComponentSubsetAction vs_uri ..." + vs_uri);
+
+
+		String component_label = (String) request.getSession().getAttribute("ComponentObjectLabel");
+
+
+System.out.println("(*) closeResolvedComponentSubsetAction component_label ..." + component_label);
+
+
+        ValueSetObject existing_vs_obj = vsb.getValueSet(vs_uri);
+        ValueSetBean.ComponentObject component = existing_vs_obj.getComponent(component_label);
+
 
 /*
 
@@ -716,9 +734,10 @@ if (vs_obj == null) {
 			request.getSession().setAttribute("message", message);
 			return "message";
 		} else {
-			System.out.println("resolveComponentSubsetAction iterator != null");
+			System.out.println("continueResolveComponentSubsetAction iterator != null");
 		}
 
+/*
 		IteratorBeanManager iteratorBeanManager =
 			(IteratorBeanManager) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap()
@@ -730,7 +749,7 @@ if (vs_obj == null) {
 				.getSessionMap()
 				.put("iteratorBeanManager", iteratorBeanManager);
 		}
-
+*/
 		IteratorBean iteratorBean = null;
 /*
 		String key = (String) request.getSession().getAttribute("key");
@@ -744,7 +763,7 @@ if (vs_obj == null) {
 
 		iteratorBean = new IteratorBean(iterator);
 		iteratorBean.setKey(key);
-		iteratorBeanManager.addIteratorBean(iteratorBean);
+		//iteratorBeanManager.addIteratorBean(iteratorBean);
 
 		int size = iteratorBean.getSize();
 		if (size > 0) {
@@ -753,17 +772,22 @@ if (vs_obj == null) {
 			request.getSession().setAttribute("page_string", "1");
 			request.getSession().setAttribute("key", key);
 
+			request.getSession().setAttribute("iteratorBean", iteratorBean);
+
             System.out.println("search_results -- numbe of matches: " + size);
             request.getSession().setAttribute("label", _label);
 			return "search_results";
 		}
 
         String message = "No match found.";
-        System.out.println("search_results " + message);
         request.getSession().setAttribute("message", message);
-        return "message";
 
-    }
+        if (component == null) {
+			System.out.println("search_results " + message);
+			return "add_component";
+		}
+		return "edit_component";
+   }
 
 
     public String saveComponentSubsetAction() throws Exception {
@@ -1002,7 +1026,7 @@ System.out.println("(*) closeResolvedComponentSubsetAction component_label ..." 
 
 
 System.out.println("(*) closeResolvedComponentSubsetAction returns add_component ...");
-
+            request.getSession().setAttribute("preview", "true");
 			return "add_component";
 		}
 
@@ -1016,6 +1040,7 @@ System.out.println("(*) closeResolvedComponentSubsetAction returns add_component
 
 
         request.getSession().removeAttribute("vs_obj");
+        request.getSession().setAttribute("preview", "true");
         return "edit_component";
 	}
 

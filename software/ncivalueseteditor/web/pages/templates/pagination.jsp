@@ -16,11 +16,14 @@ request.setAttribute("key", search_key);
 <input type="hidden" id="version" version="key" value="<%=search_results_version%>" />
 <%
 
-
+/*
 IteratorBeanManager iteratorBeanMgr = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
 .getSessionMap().get("iteratorBeanManager");
 
 IteratorBean itrBean = iteratorBeanMgr.getIteratorBean(search_key);
+*/
+IteratorBean itrBean = (IteratorBean) request.getSession().getAttribute("iteratorBean");
+
 
 %>
        <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%></b>

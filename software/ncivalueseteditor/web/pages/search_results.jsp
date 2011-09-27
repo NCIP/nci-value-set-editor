@@ -5,6 +5,9 @@
 <%@ page import="gov.nih.nci.evs.valueseteditor.properties.*" %>
 
 
+<%@ page import="gov.nih.nci.evs.valueseteditor.beans.IteratorBean" %>
+
+
 <%@ page import="java.io.*" %>
 <%@ page import="java.util.*"%>
 
@@ -120,18 +123,19 @@ String selectedResultsPerPage = resultsPerPage;
 _logger.debug("search_result.jsp " + key);
 request.setAttribute("key", key);
 
-          IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
-                .getSessionMap().get("iteratorBeanManager");
 
 
+System.out.println("(*) get iteratorBean from session ********************************");
 
-          IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
-          
+IteratorBean iteratorBean = (IteratorBean) request.getSession().getAttribute("iteratorBean");
 
-    if (iteratorBean == null){
-      _logger.warn("iteratorBean NOT FOUND???" + key);
-      System.out.println("iteratorBean NOT FOUND???" + key);
-    }
+if (iteratorBean == null){
+	_logger.warn("iteratorBean NOT FOUND???" + key);
+	System.out.println("iteratorBean NOT FOUND???" + key);
+} else {
+System.out.println("(*) iteratorBean != null ");
+
+}
     
 String label = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("label"));
 if (label == null) {
@@ -141,11 +145,17 @@ if (label == null) {
  
 int pageNum = 0; 
 int pageSize = Integer.parseInt( resultsPerPage );
-int size = iteratorBean.getSize();    
+int size = iteratorBean.getSize(); 
+
+
+
+
 List list = null;
 int num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
+System.out.println("size: " + size);
 System.out.println("num_pages: " + num_pages);
+
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 if (page_number != null) {
@@ -167,8 +177,8 @@ try {
    int prev_size = size;
    size = iteratorBean.getSize();
    
-System.out.println( "(*) prev_size: " + prev_size);
-System.out.println( "(*) size: " + size);
+	System.out.println( "(*) prev_size: " + prev_size);
+	System.out.println( "(*) size: " + size);
 
 
    if (size != prev_size) {
