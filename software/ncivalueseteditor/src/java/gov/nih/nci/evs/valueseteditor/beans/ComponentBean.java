@@ -753,6 +753,8 @@ if (vs_obj == null) {
         // Validate input
         if (vsb.getUri() == null || vsb.getUri().length() < 1) {
             _message = resource.getString("error_missing_uri");
+
+            request.getSession().setAttribute("message", _message);
             System.out.println("ERROR: " + _message);
             return "error";
         }
@@ -829,6 +831,7 @@ if (vs_obj == null) {
 
         if (_label == null || _label.length() < 1) {
             _message = resource.getString("error_missing_label");
+            request.getSession().setAttribute("message", _message);
 
             System.out.println("ERROR: " + _message);
             return "error";
@@ -896,6 +899,8 @@ if (vs_obj == null) {
 				request.setAttribute("message", _message);
 				request.setAttribute("selectSearchOption", _type);
 
+				request.getSession().setAttribute("message", _message);
+
 				return "error";
 			}
 		}
@@ -907,6 +912,8 @@ if (vs_obj == null) {
 					_message = "WARNING: Invalid code " + _matchText + ".";
 					request.setAttribute("message", _message);
 					request.setAttribute("selectSearchOption", _type);
+
+					request.getSession().setAttribute("message", _message);
 
 					return "error";
 				}
@@ -924,6 +931,7 @@ if (vs_obj == null) {
 
         _message = resource.getString("action_saved");
         _logger.debug("saveComponentSubsetAction returns success");
+        System.out.println("saveComponentSubsetAction returns success");
         return "success";
     }
 

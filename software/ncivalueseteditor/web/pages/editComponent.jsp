@@ -30,6 +30,13 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   
+  <script type="text/javascript"> 
+      window.history.forward();
+      function noBack() {
+         window.history.forward();
+      }
+  </script> 
+  
   <script type="text/javascript">
   
     function newPopup(url) {    	  
@@ -128,7 +135,10 @@
    
   </script>
 </head>
-<body onload="noBack();">
+
+<body onload="noBack();"    onpageshow="if (event.persisted) noBack();" onunload=""> 
+
+
 <f:view>
     <%@ include file="/pages/include/header.jsp" %>
     <div class="center-page">

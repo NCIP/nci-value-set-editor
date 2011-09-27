@@ -10,6 +10,10 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.io.*" %>
 <%@ page import="java.util.*"%>
+
+<%@ page import="java.util.ResourceBundle"%>
+
+
 <%@ page import="org.apache.log4j.*" %>
 <%@ page import="javax.faces.model.*" %>
 
@@ -24,6 +28,13 @@
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
+
+  <script type="text/javascript"> 
+      window.history.forward();
+      function noBack() {
+         window.history.forward();
+      }
+  </script> 
 
   <script type="text/javascript">
     function newPopup(url) {    	  
@@ -120,7 +131,11 @@
    
   </script>
 </head>
-<body onload="noBack();">
+
+
+<body onload="noBack();"    onpageshow="if (event.persisted) noBack();" onunload=""> 
+
+
 <f:view>
     <%@ include file="/pages/include/header.jsp" %>
     <div class="center-page">
@@ -134,6 +149,9 @@
 		      <%@ include file="/pages/include/navBar.jsp" %>
 
 <%
+
+ResourceBundle resource = ResourceBundle.getBundle("gov.nih.nci.evs.valueseteditor.resources.Resources");
+boolean co_label_readonly = true;
 
 
 System.out.println("=================== addComponent.jsp ======================================= ");
@@ -242,7 +260,6 @@ System.out.println("(****) addComponent.jsp preview_direction: " + direction);
     } else {
     
     
- System.out.println("(*****KLO*****) addComponent.jsp preview: " + preview);        
     
     
 	    if (refresh_page) {
@@ -271,6 +288,12 @@ System.out.println("(****) addComponent.jsp preview_direction: " + direction);
      String warning_msg= (String) request.getSession().getAttribute("message");
      if (warning_msg != null && warning_msg.compareTo("null") != 0) {
 	 request.getSession().removeAttribute("message");
+	 
+	 if (warning_msg.compareTo(resource.getString("error_missing_label")) == 0) {
+	      co_label_readonly = false;
+	 }
+	 
+	 
      %>
 	<p class="textbodyred"><%=warning_msg%></p>
      <%
@@ -332,7 +355,12 @@ if (adv_search_vocabulary == null) {
 
 
 
-boolean co_label_readonly = true;
+
+
+
+
+
+
 String is_new_component = (String) request.getAttribute("isNewComponent");
 request.removeAttribute("isNewComponent");
 
