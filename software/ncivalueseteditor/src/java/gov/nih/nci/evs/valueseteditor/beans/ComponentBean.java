@@ -451,13 +451,7 @@ public class ComponentBean {
     }
 
 
-
-    public String previewComponentSubsetAction() throws Exception {
-
-        ResolvedConceptReferencesIterator iterator = null;
-        HttpServletRequest request =
-            (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
+    public String validateComponentForm(HttpServletRequest request) {
 
         String state = (String) request.getParameter("state");
         request.getSession().setAttribute("state", state);
@@ -505,28 +499,157 @@ public class ComponentBean {
         String transitivity_checkbox = (String) request.getParameter("transitivity_checkbox");
         _transitivity = transitivity_checkbox;
 
+        String _message = null;
+
+        if (_focusConceptCode != null && _focusConceptCode.compareTo("") != 0 && _vocabulary != null) {
+			_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
+			if (DataUtils.getConceptByCode(_vocabulary, null, null, _focusConceptCode) == null) {
+				_message = "WARNING: Invalid code " + _focusConceptCode + ".";
+				request.getSession().setAttribute("message", _message);
+				request.getSession().setAttribute("selectSearchOption", _type);
+				request.getSession().setAttribute("message", _message);
+			}
+		}
+
+        else if (_type.compareToIgnoreCase("Code") == 0) {
+			if (_matchText != null && _matchText.compareTo("") != 0 && _vocabulary != null) {
+				_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
+				if (DataUtils.getConceptByCode(_vocabulary, null, null, _matchText) == null) {
+					_message = "WARNING: Invalid code " + _matchText + ".";
+					request.getSession().setAttribute("message", _message);
+					request.getSession().setAttribute("selectSearchOption", _type);
+					request.getSession().setAttribute("message", _message);
+				}
+			}
+		}
+
+		String incompleteDataEntry = "WARNING: Incomplete data entry.";
+
+
+		if (_type.compareTo("EntireVocabulary") == 0) {
+			if (isNull(_vocabulary)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				_message = incompleteDataEntry;
+			}
+		} else if (_type.compareTo("Code") == 0) {
+			if (isNull(_vocabulary) || isNull(_matchText)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				_message = incompleteDataEntry;
+			}
+		} else if (_type.compareTo("Name") == 0) {
+			if (isNull(_vocabulary) || isNull(_matchText)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				_message = incompleteDataEntry;
+			}
+		} else if (_type.compareTo("Property") == 0) {
+			if (isNull(_vocabulary) || isNull(_matchText) || isNull(_algo) || isNull(_propertyName)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				_message = incompleteDataEntry;
+			}
+
+		} else if (_type.compareTo("Relationship") == 0) {
+
+			if (isNull(_vocabulary) || isNull(_focusConceptCode) || isNull(_rel_search_association) || isNull(_selectedDirection)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				_message = incompleteDataEntry;
+			}
+			if (isNull(_transitivity) || isNull(_include_focus_node) || isNull(_rel_search_association)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				_message = incompleteDataEntry;
+			}
+		} else if (_type.compareTo("EnumerationOfCodes") == 0) {
+
+			if (isNull(_vocabulary) || isNull(_codes)) {
+				request.getSession().setAttribute("message", incompleteDataEntry);
+				_message = incompleteDataEntry;
+			}
+		}
+
+	    if (_message != null) {
+
+			request.getSession().setAttribute("preview_adv_search_vocabulary", adv_search_vocabulary);
+			request.getSession().setAttribute("preview_selectSearchOption", selectSearchOption);
+			request.getSession().setAttribute("preview_label", label);
+			request.getSession().setAttribute("label", label);
+			request.getSession().setAttribute("preview_focusConceptCode", focusConceptCode);
+			request.getSession().setAttribute("preview_description", description);
+			request.getSession().setAttribute("preview_search_string", search_string);
+			request.getSession().setAttribute("preview_search_algorithm", search_algorithm);
+			request.getSession().setAttribute("preview_rel_search_association", rel_search_association);
+			request.getSession().setAttribute("preview_selectProperty", selectProperty);
+			request.getSession().setAttribute("preview_selectValueSetReference", selectValueSetReference);
+			request.getSession().setAttribute("preview_direction", direction);
+			request.getSession().setAttribute("preview_include_focus_node_checkbox", include_focus_node_checkbox);
+			request.getSession().setAttribute("preview_transitivity_checkbox", transitivity_checkbox);
+			request.getSession().setAttribute("preview", "true");
+
+
+
+		}
+
+		return _message;
+	}
+
+
+    public String previewComponentSubsetAction() throws Exception {
+
+        ResolvedConceptReferencesIterator iterator = null;
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String message = validateComponentForm(request);
+        if (message != null) {
+			request.getSession().setAttribute("message", message);
+			return "message";
+		}
+
 /*
-System.out.println("previewComponentSubsetAction***************************************");
-System.out.println("\nlabel: " + label);
-System.out.println("description: " + description);
-System.out.println("adv_search_vocabulary: " + adv_search_vocabulary);
-System.out.println("selectSearchOption: " + selectSearchOption);
-System.out.println("focusConceptCode: " + focusConceptCode);
-System.out.println("selectValueSetReference: " + selectValueSetReference);
-System.out.println("search_string: " + search_string);
-System.out.println("search_algorithm: " + search_algorithm);
-System.out.println("code_enumeration: " + code_enumeration);
-System.out.println("selectProperty: " + selectProperty);
-System.out.println("rel_search_association: " + rel_search_association);
+        String state = (String) request.getParameter("state");
+        request.getSession().setAttribute("state", state);
 
-System.out.println("include_focus_node_checkbox: " + include_focus_node_checkbox);
-System.out.println("transitivity_checkbox: " + transitivity_checkbox);
+        String label = (String) request.getParameter("Label");
+        _label = label;
 
-System.out.println("direction: " + direction);
-System.out.println("\n");
-System.out.println("previewComponentSubsetAction***************************************");
-*/
+        String description = (String) request.getParameter("Description");
+        _description = description;
 
+        String adv_search_vocabulary = (String) request.getParameter("Vocabulary");
+        _vocabulary = adv_search_vocabulary;
+
+        String selectSearchOption = (String) request.getParameter("selectSearchOption");
+        _type = selectSearchOption;
+
+        String codes = (String) request.getParameter("codes");
+        _codes = codes;
+
+        String selectValueSetReference = (String) request.getParameter("selectValueSetReference");
+        _selectValueSetReference = selectValueSetReference;
+
+        String focusConceptCode = (String) request.getParameter("focusConceptCode");
+        _focusConceptCode = focusConceptCode;
+
+        String search_string = (String) request.getParameter("matchText");
+
+        String search_algorithm = (String) request.getParameter("search_algorithm");
+        _algo = search_algorithm;
+
+        String code_enumeration = (String) request.getParameter("code_enumeration");
+        String selectProperty = (String) request.getParameter("selectProperty");
+        _propertyName = selectProperty;
+
+        String rel_search_association = (String) request.getParameter("rel_search_association");
+        _rel_search_association = rel_search_association;
+        String direction = (String) request.getParameter("direction");
+
+        String matchText = (String) request.getParameter("matchText");
+        _matchText = matchText;
+
+        String include_focus_node_checkbox = (String) request.getParameter("include_focus_node_checkbox");
+        _include_focus_node = include_focus_node_checkbox;
+
+        String transitivity_checkbox = (String) request.getParameter("transitivity_checkbox");
+        _transitivity = transitivity_checkbox;
 
         request.getSession().setAttribute("preview_adv_search_vocabulary", adv_search_vocabulary);
         request.getSession().setAttribute("preview_selectSearchOption", selectSearchOption);
@@ -539,12 +662,13 @@ System.out.println("previewComponentSubsetAction********************************
         request.getSession().setAttribute("preview_selectProperty", selectProperty);
         request.getSession().setAttribute("preview_selectValueSetReference", selectValueSetReference);
         request.getSession().setAttribute("preview_direction", direction);
-
         request.getSession().setAttribute("preview_include_focus_node_checkbox", include_focus_node_checkbox);
         request.getSession().setAttribute("preview_transitivity_checkbox", transitivity_checkbox);
-
-
         request.getSession().setAttribute("preview", "true");
+*/
+
+
+
 
 		ValueSetBean.ComponentObject ob = getComponentObject();
 		ValueSetObject vs_obj = vsb.getCurrentValueSet();
@@ -554,17 +678,15 @@ System.out.println("previewComponentSubsetAction********************************
 		boolean retval = vs_obj.addComponent(ob);
 
 		request.getSession().setAttribute("vs_obj", vs_obj);
-
 		request.getSession().setAttribute("ComponentObjectLabel", _label);
 		request.getSession().setAttribute("ComponentDescription", _description);
 
 		return "comp_obj_coding_scheme_references";
 
-
     }
 
 
-
+/*
     public String resolveComponentSubsetAction() throws Exception {
 
         ResolvedConceptReferencesIterator iterator = null;
@@ -626,14 +748,7 @@ System.out.println("previewComponentSubsetAction********************************
 		IteratorBean iteratorBean = null;
 
 		String key = null;
-		/*
-		(String) request.getSession().getAttribute("key");
-		if (key != null && key.compareTo("null") != 0) {
-			IteratorBean it_bean = iteratorBeanManager.removeIteratorBean(key);
-			ResolvedConceptReferencesIterator it = it_bean.getIterator();
-			it.release();
-		}
-		*/
+
 
 		key = vsd.getValueSetDefinitionURI();
 
@@ -659,7 +774,7 @@ System.out.println("previewComponentSubsetAction********************************
         return "message";
 
     }
-
+*/
 
     public String continueResolveComponentSubsetAction() throws Exception {
 
@@ -743,28 +858,47 @@ if (vs_obj == null) {
 
 
     public String saveComponentSubsetAction() throws Exception {
-    	_message = null;
+
+		String vs_uri = vsb.getUri();
+
+    	_label = FacesUtil.getRequestParameter("Label");
+    	_logger.debug("Label: " + _label);
+
 
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-
         // Validate input
         if (vsb.getUri() == null || vsb.getUri().length() < 1) {
             _message = resource.getString("error_missing_uri");
-
             request.getSession().setAttribute("message", _message);
+            request.getSession().setAttribute("label", _label);
+            return "message";
+        }
+
+        String message = validateComponentForm(request);
+        if (message != null) {
+			request.getSession().setAttribute("message", message);
+			return "message";
+		}
+
+
+        if (_label == null || _label.length() < 1) {
+            _message = resource.getString("error_missing_label");
+            request.getSession().setAttribute("message", _message);
+
             System.out.println("ERROR: " + _message);
             return "error";
         }
 
-        //_expression = FacesUtil.getRequestParameter("expression");
-        //if (_expression == null) _expression = "";
+		String component_label = _label;
+        ValueSetObject existing_vs_obj = vsb.getValueSet(vs_uri);
+        ValueSetBean.ComponentObject component = existing_vs_obj.getComponent(component_label);
 
-    	_label = FacesUtil.getRequestParameter("Label");
-    	_logger.debug("Label: " + _label);
+        ValueSetObject vs = vsb.getCurrentValueSet();
 
+/*
     	_description = FacesUtil.getRequestParameter("Description");
     	_logger.debug("Description: " + _description);
 
@@ -829,15 +963,8 @@ if (vs_obj == null) {
       	_logger.debug("rel_search_association: " + _rel_search_association);
 
 
-        if (_label == null || _label.length() < 1) {
-            _message = resource.getString("error_missing_label");
-            request.getSession().setAttribute("message", _message);
-
-            System.out.println("ERROR: " + _message);
-            return "error";
-        }
-
         _logger.debug("Saving component.");
+
 
         ValueSetObject vs = vsb.getCurrentValueSet();
 
@@ -845,60 +972,13 @@ if (vs_obj == null) {
 			_logger.debug("ValueSetObject is NULL???");
 		}
 
-        ValueSetBean.ComponentObject co = null;
-        String _edit_action = FacesUtil.getRequestParameter("action");
-        if (_edit_action == null || _edit_action.compareTo("edit") != 0) {
-			co = vsb.new ComponentObject();
-		} else {
-			String _vs_uri = FacesUtil.getRequestParameter("vs_uri");
-			String _component_label = FacesUtil.getRequestParameter("component_label");
-
-			if (_vs_uri != null && _component_label != null) {
-				//vs = vsb.getValueSet(_vs_uri);
-				co = vs.getComponent(_component_label);
-			}
-			vsb.setUri(_vs_uri);
-			//vsb.setExpression(_component_label);
-	    }
-
-      	_logger.debug("rel_search_association: " + _rel_search_association);
-
-        co.setLabel(_label);
-        co.setDescription(_description);
-        co.setType(_type);
-
-        if (_matchText != null) _matchText = _matchText.trim();
-
-        co.setMatchText(_matchText);
-        co.setAlgorithm(_algo);
-        co.setVocabulary(_vocabulary);
-        co.setPropertyName(_propertyName);
-
-        if (_focusConceptCode != null) _focusConceptCode = _focusConceptCode.trim();
-        co.setFocusConceptCode(_focusConceptCode);
-
-        co.setRel_search_association(_rel_search_association);
-        co.setInclude_focus_node(_include_focus_node);
-        co.setTransitivity(_transitivity);
-        co.setSelectedDirection(_selectedDirection);
-
-        co.setValueSetReference(_selectValueSetReference);
-
-		if (_type.compareTo("EntireVocabulary") == 0) {
-			String cs_name = DataUtils.getCodingSchemeName(_vocabulary, null);
-            co.setCodingSchemeReference(cs_name);
-		}
-
-        if (_codes == null) _codes = "";
-        co.setCodes(_codes);
 
         if (_focusConceptCode != null && _focusConceptCode.compareTo("") != 0 && _vocabulary != null) {
 			_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
 			if (DataUtils.getConceptByCode(_vocabulary, null, null, _focusConceptCode) == null) {
 				_message = "WARNING: Invalid code " + _focusConceptCode + ".";
-				request.setAttribute("message", _message);
-				request.setAttribute("selectSearchOption", _type);
-
+				request.getSession().setAttribute("message", _message);
+				request.getSession().setAttribute("selectSearchOption", _type);
 				request.getSession().setAttribute("message", _message);
 
 				return "error";
@@ -910,11 +990,9 @@ if (vs_obj == null) {
 				_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
 				if (DataUtils.getConceptByCode(_vocabulary, null, null, _matchText) == null) {
 					_message = "WARNING: Invalid code " + _matchText + ".";
-					request.setAttribute("message", _message);
-					request.setAttribute("selectSearchOption", _type);
-
 					request.getSession().setAttribute("message", _message);
-
+					request.getSession().setAttribute("selectSearchOption", _type);
+					request.getSession().setAttribute("message", _message);
 					return "error";
 				}
 			}
@@ -963,6 +1041,54 @@ if (vs_obj == null) {
 				return "error";
 			}
 		}
+
+*/
+        ValueSetBean.ComponentObject co = null;
+        String _edit_action = FacesUtil.getRequestParameter("action");
+        if (_edit_action == null || _edit_action.compareTo("edit") != 0) {
+			co = vsb.new ComponentObject();
+		} else {
+			String _vs_uri = FacesUtil.getRequestParameter("vs_uri");
+			String _component_label = FacesUtil.getRequestParameter("component_label");
+
+			if (_vs_uri != null && _component_label != null) {
+				vs = vsb.getValueSet(_vs_uri);
+				co = vs.getComponent(_component_label);
+			}
+			vsb.setUri(_vs_uri);
+			//vsb.setExpression(_component_label);
+	    }
+
+      	_logger.debug("rel_search_association: " + _rel_search_association);
+
+        co.setLabel(_label);
+        co.setDescription(_description);
+        co.setType(_type);
+
+        if (_matchText != null) _matchText = _matchText.trim();
+
+        co.setMatchText(_matchText);
+        co.setAlgorithm(_algo);
+        co.setVocabulary(_vocabulary);
+        co.setPropertyName(_propertyName);
+
+        if (_focusConceptCode != null) _focusConceptCode = _focusConceptCode.trim();
+        co.setFocusConceptCode(_focusConceptCode);
+
+        co.setRel_search_association(_rel_search_association);
+        co.setInclude_focus_node(_include_focus_node);
+        co.setTransitivity(_transitivity);
+        co.setSelectedDirection(_selectedDirection);
+
+        co.setValueSetReference(_selectValueSetReference);
+
+		if (_type.compareTo("EntireVocabulary") == 0) {
+			String cs_name = DataUtils.getCodingSchemeName(_vocabulary, null);
+            co.setCodingSchemeReference(cs_name);
+		}
+
+        if (_codes == null) _codes = "";
+        co.setCodes(_codes);
 
 
         vs.getCompList().put(_label, co);

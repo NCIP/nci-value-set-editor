@@ -78,7 +78,7 @@
 	String check_true = "";
 	String check_false = "";
 	
-	boolean vs_uri_readonly = true;
+	boolean vs_uri_readonly = false; // to be modified
 	String is_new_vsd = (String) request.getAttribute("isNewVSD");
 	request.removeAttribute("isNewVSD");
 	
@@ -149,19 +149,26 @@
          <td></td>
       </tr>
       <tr>
-        <td align="right"><h:outputLabel for="uri" value="URI" styleClass="inputLabel"  /></td>
-        
-        <%
-        if (vs_uri_readonly) {
-        %>
-            <td><h:inputText id="uri" value="#{ValueSetBean.uri}" size="75" readonly="true" /></td>
-        <%    
-        } else {
-        %>
-            <td><h:inputText id="uri" value="#{ValueSetBean.uri}" size="75" /></td>
-        <%    
-        }
-        %>
+                         <td align="right" class="inputLabel">
+                             URI:
+                         </td>
+                         <td class="textbody">
+
+<%
+if (vs_uri == null || vs_uri.compareTo("") == 0 || vs_uri.compareTo("null") == 0) {
+    vs_uri = "";
+%>
+    <input id="uri" name="uri" value="<%=vs_uri%>" />
+<%    
+} else {
+%>
+    <%=vs_uri%>
+    <input type="hidden" id="uri" name="uri" value="<%=vs_uri%>" />
+<%
+}
+%>
+                        
+                         </td>
         
       </tr>
       
@@ -393,6 +400,7 @@
 <%    }%>	
 
           <input type="hidden" id="vs_uri" name="vs_uri" value="<%=vs_uri%>" />
+          
           <input type="hidden" id="tab" name="tab" value="valueset" />  
 		
     </h:form>

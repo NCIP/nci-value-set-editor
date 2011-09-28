@@ -1267,10 +1267,19 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
 
 
     public String saveMetadataAction() {
+
+		HttpServletRequest request =
+			(HttpServletRequest) FacesContext.getCurrentInstance()
+				.getExternalContext().getRequest();
+
+
     	_message = null;
         _logger.debug("Saving metadata to cart.");
 
         // Validate input
+        String uri = (String) request.getParameter("uri");
+        _uri = uri;
+
         if (_uri == null || _uri.length() < 1) {
             _message = resource.getString("error_missing_uri");
             _logger.debug("URI is null.");

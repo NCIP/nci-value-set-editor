@@ -30,9 +30,9 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
 
   <script type="text/javascript"> 
-      window.history.forward();
+      window.history.forward(1);
       function noBack() {
-         window.history.forward();
+         window.history.forward(1);
       }
   </script> 
 
@@ -133,7 +133,7 @@
 </head>
 
 
-<body onload="noBack();"    onpageshow="if (event.persisted) noBack();" onunload=""> 
+<body> 
 
 
 <f:view>
@@ -240,7 +240,8 @@ System.out.println("(****) addComponent.jsp preview_direction: " + direction);
         
         request.getSession().removeAttribute("preview_adv_search_vocabulary");   
         request.getSession().removeAttribute("preview_selectSearchOption");   
-        request.getSession().removeAttribute("preview_label");   
+        request.getSession().removeAttribute("preview_label"); 
+        request.getSession().removeAttribute("label");  
         request.getSession().removeAttribute("preview_description");
         request.getSession().removeAttribute("preview_search_string");   
         request.getSession().removeAttribute("preview_search_algorithm");   

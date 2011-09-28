@@ -68,7 +68,9 @@
  
   
 </head>
-<body>
+
+<body onload="noBack();"    onpageshow="if (event.persisted) noBack();" onunload=""> 
+
 <f:view>
     <%@ include file="/pages/include/header.jsp" %>
     <div class="center-page">
@@ -196,7 +198,10 @@ if (expression == null) expression = "";
       </tr>
       <tr>
         <td align="right"><h:outputLabel for="uri" value="URI" styleClass="inputLabel"  /></td>
+        <!--
         <td><h:inputText id="uri" value="#{ValueSetBean.uri}" size="75"  readonly="true"/></td>
+        -->
+        <td class="textbody"><%=curr_uri%></td>
       </tr>
       
       

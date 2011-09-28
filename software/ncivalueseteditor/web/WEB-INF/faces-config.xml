@@ -280,7 +280,7 @@
  
         <navigation-case>
            <from-action>#{ComponentBean.saveComponentSubsetAction}</from-action>
-           <from-outcome>error</from-outcome>
+           <from-outcome>message</from-outcome>
            <to-view-id>/pages/addComponent.jsp</to-view-id>
        </navigation-case>
        

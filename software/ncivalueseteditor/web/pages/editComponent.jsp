@@ -30,12 +30,14 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   
+  <!--
   <script type="text/javascript"> 
-      window.history.forward();
+      window.history.forward(1);
       function noBack() {
-         window.history.forward();
+         window.history.forward(1);
       }
   </script> 
+  -->
   
   <script type="text/javascript">
   
@@ -136,8 +138,7 @@
   </script>
 </head>
 
-<body onload="noBack();"    onpageshow="if (event.persisted) noBack();" onunload=""> 
-
+<body> 
 
 <f:view>
     <%@ include file="/pages/include/header.jsp" %>
@@ -152,6 +153,7 @@
 		      <%@ include file="/pages/include/navBar.jsp" %>
 
 <%
+String warning_msg = (String) request.getSession().getAttribute("message");
 
 String edit_action = null;
 String vs_uri = null;
@@ -174,7 +176,11 @@ if (closeResolvedComponentSubset != null) {
     	vs_uri = (String) request.getAttribute("vs_uri");
     }
     component_label = (String) request.getParameter("label");
+    if (component_label == null) {
+        component_label = (String) request.getSession().getAttribute("label"); 
+    }
 }
+
 
 System.out.println("(*) editComponent.jsp edit_action: " + edit_action);
 System.out.println("(*) editComponent.jsp vs_uri: " + vs_uri);
@@ -240,6 +246,7 @@ System.out.println("editComponent.jsp -- Step 2");
 	   System.out.println("(*) vs_obj == null???");
 	} else {
 	   component_obj = vs_obj.getComponent(component_label);
+
 
 	   if (component_obj != null) {
 	       ValueSetBean.dumpComponentObject(component_obj);
@@ -346,7 +353,8 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
         
         request.getSession().removeAttribute("preview_adv_search_vocabulary");   
         request.getSession().removeAttribute("preview_selectSearchOption");   
-        request.getSession().removeAttribute("preview_label");   
+        request.getSession().removeAttribute("preview_label"); 
+        request.getSession().removeAttribute("label");   
         request.getSession().removeAttribute("preview_description");
         request.getSession().removeAttribute("preview_search_string");   
         request.getSession().removeAttribute("preview_search_algorithm");   
@@ -392,7 +400,6 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
 
    
 
-     String warning_msg= (String) request.getSession().getAttribute("message");
      if (warning_msg != null && warning_msg.compareTo("null") != 0) {
 	 request.getSession().removeAttribute("message");
      %>
@@ -454,8 +461,14 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
                          <td align="right" class="inputLabel">
                              Label:
                          </td>
-                         <td>
-                     <input CLASS="searchbox-input" name="Label" value="<%=_label%>" size="75" tabindex="1" readonly="true">
+                         <td class="textbody">
+                         
+                            <%=_label%>
+                     <!--    
+                     <input CLASS="searchbox-input" name="Label" value="<%=_label%>" size="75" tabindex="1" >
+                     -->
+                     
+                         
                          </td>
                 </tr>
  
@@ -941,6 +954,7 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
 
               <input type="hidden" name="vs_uri" id="vs_uri" value="<%=vs_uri%>" />
               <input type="hidden" name="component_label" id="component_label" value="<%=component_label%>" />
+              <input type="hidden" name="label" id="label" value="<%=_label%>" />
               <input type="hidden" name="action" id="action" value="edit" />
               
               
