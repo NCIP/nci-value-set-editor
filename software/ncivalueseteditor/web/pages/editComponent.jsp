@@ -163,7 +163,7 @@ String closeResolvedComponentSubset = (String) request.getSession().getAttribute
 
 System.out.println("(*) editComponent.jsp closeResolvedComponentSubset: " + closeResolvedComponentSubset);
 
-
+/*
 if (closeResolvedComponentSubset != null) {
     request.getSession().removeAttribute("closeResolvedComponentSubset");
     edit_action = (String) request.getSession().getAttribute("action");
@@ -180,11 +180,37 @@ if (closeResolvedComponentSubset != null) {
         component_label = (String) request.getSession().getAttribute("label"); 
     }
 }
+*/
+
+edit_action = (String) request.getParameter("action");
+if (edit_action != null && edit_action.compareTo("edit") == 0) {
+    vs_uri = (String) request.getParameter("uri");
+    if (vs_uri == null) {
+    	vs_uri = (String) request.getAttribute("vs_uri");
+    }
+    component_label = (String) request.getParameter("label");
+    if (component_label == null) {
+        component_label = (String) request.getSession().getAttribute("label"); 
+    }
+} else {
+    request.getSession().removeAttribute("closeResolvedComponentSubset");
+    edit_action = (String) request.getSession().getAttribute("action");
+    vs_uri = (String) request.getSession().getAttribute("vs_uri");
+    component_label = (String) request.getSession().getAttribute("label");
+}
 
 
 System.out.println("(*) editComponent.jsp edit_action: " + edit_action);
 System.out.println("(*) editComponent.jsp vs_uri: " + vs_uri);
 System.out.println("(*) editComponent.jsp component_label: " + component_label);
+
+
+ValueSetBean vsb = (ValueSetBean)FacesContext.getCurrentInstance()
+	     .getExternalContext().getSessionMap().get("ValueSetBean");
+
+
+ValueSetObject vs_obj = vsb.getValueSet(vs_uri);
+request.getSession().setAttribute("vs_obj", vs_obj);
 
 
 
@@ -232,10 +258,12 @@ System.out.println("(*) editComponent.jsp component_label: " + component_label);
          
         
     // find component object
+    /*
 	ValueSetBean vsb = (ValueSetBean)FacesContext.getCurrentInstance()
 			     .getExternalContext().getSessionMap().get("ValueSetBean");
 
 	ValueSetObject vs_obj = vsb.getCurrentValueSet();
+    */	
 	ComponentObject component_obj = null;
 
 
@@ -249,12 +277,21 @@ System.out.println("editComponent.jsp -- Step 2");
 
 
 	   if (component_obj != null) {
+	   
+	   
+System.out.println("component_obj != null");
+
+
+request.getSession().setAttribute("component_obj", component_obj);
+
+	   
 	       ValueSetBean.dumpComponentObject(component_obj);
         
 		_label = component_obj.getLabel();
 		_description = component_obj.getDescription();
 		_vocabulary = component_obj.getVocabulary();
 		
+System.out.println("_label " + _label);
 		
 System.out.println("debugging editComponent.jsp _vocabulary: " + _vocabulary);
 	
@@ -320,6 +357,8 @@ System.out.println("debugging editComponent.jsp adv_search_vocabulary: " + _voca
         selectSearchOption = (String) request.getSession().getAttribute("preview_selectSearchOption");
         
         label = (String) request.getSession().getAttribute("preview_label");
+        request.getSession().setAttribute("ComponentObjectLabel", label);
+
         description = (String) request.getSession().getAttribute("preview_description");
         search_string = (String) request.getSession().getAttribute("preview_search_string");
 
@@ -349,7 +388,7 @@ include_focus_node_checkbox = (String) request.getSession().getAttribute("previe
 transitivity_checkbox = (String) request.getSession().getAttribute("preview_transitivity_checkbox");
 
 
-      
+/*      
         
         request.getSession().removeAttribute("preview_adv_search_vocabulary");   
         request.getSession().removeAttribute("preview_selectSearchOption");   
@@ -369,7 +408,8 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
         
         request.getSession().removeAttribute("preview_include_focus_node_checkbox"); 
         request.getSession().removeAttribute("preview_transitivity_checkbox"); 
-        
+*/
+
         
     } else {
 	    if (refresh_page) {
@@ -451,7 +491,7 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
 %>
 
 
- <font size="4"><b>Component Set</b></font><br/>
+ <font size="4"><b>Edit Component Set</b></font><br/>
  <h:form id="addComponentForm" styleClass="pagecontent">            
                
       <table border="0" width="80%">
@@ -464,10 +504,7 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
                          <td class="textbody">
                          
                             <%=_label%>
-                     <!--    
-                     <input CLASS="searchbox-input" name="Label" value="<%=_label%>" size="75" tabindex="1" >
-                     -->
-                     
+                    
                          
                          </td>
                 </tr>
@@ -959,7 +996,9 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
               
               
               <input type="hidden" name="state" id="state" value="edit_component" />
-              
+              <%
+              request.getSession().setAttribute("state", "edit_component");
+              %>              
     
             </h:form>
 		        

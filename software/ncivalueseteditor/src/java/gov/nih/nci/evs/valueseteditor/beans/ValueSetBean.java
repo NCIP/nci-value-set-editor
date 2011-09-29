@@ -2209,10 +2209,14 @@ System.out.println("cs_name 1 " + cs_name);
 		if (vs_obj.getCodingScheme() != null) {
 
 String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
-System.out.println("cs_name 1 " + cs_name);
 
-			hset.add(cs_name);
-			v.add(cs_name);
+System.out.println("vs_obj.getCodingScheme() " + vs_obj.getCodingScheme());
+
+System.out.println("cs_name 1 " + cs_name);
+			if (cs_name != null) {
+				hset.add(cs_name);
+				v.add(cs_name);
+			}
 		}
 
 		Map<String,ComponentObject> map = vs_obj.getCompList();
@@ -2225,7 +2229,7 @@ System.out.println("cs_name 1 " + cs_name);
 				String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 				System.out.println("cs_name 2 " + cs_name);
 
-				if (!hset.contains(cs_name)) {
+				if (cs_name != null && !hset.contains(cs_name)) {
 					hset.add(cs_name);
 					v.add(cs_name);
 				}
@@ -2241,6 +2245,7 @@ System.out.println("cs_name 1 " + cs_name);
 
 				String cs_uri = DataUtils.getCodingSchemeURI(codingSchemeName, null);
 
+System.out.println("codingSchemeName: " + codingSchemeName);
 System.out.println("cs_uri: " + cs_uri);
 
 				//Mappings mappings = DataUtils.getCodingSchemeMappings(codingSchemeName, null);

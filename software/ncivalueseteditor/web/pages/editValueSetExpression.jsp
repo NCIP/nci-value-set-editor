@@ -337,7 +337,7 @@ if (expression == null) expression = "";
 
 
  <%   
-
+ request.getSession().removeAttribute("vs_obj");
  if (!isNewVSD) { 
 
  %>
@@ -346,7 +346,7 @@ if (expression == null) expression = "";
 		border="0" width="96%">
 		
 	        <tr>
-	           <td align="right"><font size="3"><b><u>Component Subsets</u></b></font></td>
+	           <td align="right"><font size="3"><b><u>Component Sets</u></b></font></td>
 	        </tr>		
 		
 		<tr height="15px">

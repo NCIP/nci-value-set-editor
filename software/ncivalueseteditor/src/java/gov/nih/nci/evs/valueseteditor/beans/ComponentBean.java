@@ -468,6 +468,8 @@ public class ComponentBean {
         String selectSearchOption = (String) request.getParameter("selectSearchOption");
         _type = selectSearchOption;
 
+
+
         String codes = (String) request.getParameter("codes");
         _codes = codes;
 
@@ -565,7 +567,7 @@ public class ComponentBean {
 			}
 		}
 
-	    if (_message != null) {
+	    if (_message == null) {
 
 			request.getSession().setAttribute("preview_adv_search_vocabulary", adv_search_vocabulary);
 			request.getSession().setAttribute("preview_selectSearchOption", selectSearchOption);
@@ -584,11 +586,11 @@ public class ComponentBean {
 			request.getSession().setAttribute("preview", "true");
 
 
-
 		}
 
 		return _message;
 	}
+
 
 
     public String previewComponentSubsetAction() throws Exception {
@@ -668,17 +670,45 @@ public class ComponentBean {
 */
 
 
+        String state = (String) request.getParameter("state");
+        if (state == null) {
+			state = (String) request.getSession().getAttribute("state");
 
+		}
 
-		ValueSetBean.ComponentObject ob = getComponentObject();
-		ValueSetObject vs_obj = vsb.getCurrentValueSet();
+		String component_label = (String) request.getParameter("component_label");
+		ValueSetObject vs_obj = null;//vsb.getCurrentValueSet();
+		ValueSetBean.ComponentObject ob = null;
+		boolean retval;
+
 
 		//KLO, 092111
-		vs_obj = new ValueSetBean().copyValueSetObject(vs_obj);
-		boolean retval = vs_obj.addComponent(ob);
+		//vs_obj = new ValueSetBean().copyValueSetObject(vs_obj);
+		//boolean retval = vs_obj.addComponent(ob);
+
+		if (state.compareTo("add_component") == 0) {
+			vs_obj = vsb.getCurrentValueSet();
+			vs_obj = new ValueSetBean().copyValueSetObject(vs_obj);
+			ob = getComponentObject();
+			retval = vs_obj.addComponent(ob);
+
+		} else if (state.compareTo("edit_component") == 0) {
+
+            String vs_uri = (String) request.getSession().getAttribute("vs_uri");
+            vs_obj = vsb.getCurrentValueSet();
+            ob = vs_obj.getComponent(component_label);
+            retval = vs_obj.addComponent(ob);
+		}
 
 		request.getSession().setAttribute("vs_obj", vs_obj);
-		request.getSession().setAttribute("ComponentObjectLabel", _label);
+
+
+		if (component_label != null) {
+			request.getSession().setAttribute("ComponentObjectLabel", component_label);
+		} else{
+			request.getSession().setAttribute("ComponentObjectLabel", ob.getLabel());
+		}
+
 		request.getSession().setAttribute("ComponentDescription", _description);
 
 		return "comp_obj_coding_scheme_references";
@@ -783,23 +813,44 @@ public class ComponentBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        _message = "";
+        request.getSession().removeAttribute("message");
+
 ValueSetObject vs_obj = (ValueSetObject) request.getSession().getAttribute("vs_obj");//vsb.getValueSet(vsd_uri);
 
 if (vs_obj == null) {
 	String message = "ERROR: Value set object is not found in session.";
 	request.getSession().setAttribute("message", message);
 	return "message";
+} else {
+	System.out.println("continueResolveComponentSubsetAction vs_obj found in session.: " + vs_obj.getUri());
 }
-
 
         // find vs_uri and component_label
 		String vs_uri = vs_obj.getUri();
-		String component_label = (String) request.getSession().getAttribute("ComponentObjectLabel");
+
+		System.out.println("continueResolveComponentSubsetAction vs_uri: " + vs_uri);
+
+		String component_label = (String) request.getSession().getAttribute("component_label");
+
+		System.out.println("continueResolveComponentSubsetAction component_label: " + component_label);
+
 
         ValueSetObject existing_vs_obj = vsb.getValueSet(vs_uri);
+
+
         ValueSetBean.ComponentObject component = existing_vs_obj.getComponent(component_label);
 
+        if (component != null) {
+        	System.out.println("continueResolveComponentSubsetAction found component in existing_vs_obj: " + component_label);
+	    } else {
+			System.out.println("continueResolveComponentSubsetAction cannot found component in existing_vs_obj : " + component_label);
+		}
+
+
         String infixExpression = null;
+
+        System.out.println("continueResolveComponentSubsetAction calling convertToValueSetDefinition ");
 		ValueSetDefinition vsd = new ValueSetBean().convertToValueSetDefinition(vs_obj, infixExpression);
 
 		HashMap<String, ValueSetDefinition> referencedVSDs = null;
@@ -859,15 +910,21 @@ if (vs_obj == null) {
 
     public String saveComponentSubsetAction() throws Exception {
 
-		String vs_uri = vsb.getUri();
-
-    	_label = FacesUtil.getRequestParameter("Label");
-    	_logger.debug("Label: " + _label);
-
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
+
+        _message = "";
+        request.getSession().removeAttribute("message");
+
+		String vs_uri = vsb.getUri();
+
+    	_label = FacesUtil.getRequestParameter("Label");
+    	if (_label == null) {
+			_label = (String) request.getSession().getAttribute("label");
+		}
+    	_logger.debug("saveComponentSubsetAction Label: " + _label);
+
 
         // Validate input
         if (vsb.getUri() == null || vsb.getUri().length() < 1) {
@@ -1129,6 +1186,8 @@ if (vs_obj == null) {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        request.getSession().removeAttribute("closeResolvedComponentSubset");
+
         // find vs_uri and component_label
 		ValueSetObject vs_obj = (ValueSetObject) request.getSession().getAttribute("vs_obj");
 		String vs_uri = vs_obj.getUri();
@@ -1140,6 +1199,7 @@ if (vs_obj == null) {
         if (component == null) {
 			request.getSession().setAttribute("closeResolvedComponentSubset", "true");
             request.getSession().setAttribute("preview", "true");
+            request.getSession().setAttribute("preview_label", component_label);
 			return "add_component";
 		}
 
@@ -1150,6 +1210,8 @@ if (vs_obj == null) {
 
         request.getSession().removeAttribute("vs_obj");
         request.getSession().setAttribute("preview", "true");
+
+
         return "edit_component";
 	}
 

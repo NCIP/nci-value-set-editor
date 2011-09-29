@@ -204,8 +204,7 @@ System.out.println("=================== addComponent.jsp =======================
     String selectSearchOption = null;
     String direction = null;
         
-    String preview = null;//(String) request.getParameter("preview");
-    preview = (String) request.getSession().getAttribute("preview");
+    String preview = (String) request.getSession().getAttribute("preview");
     
    
  String include_focus_node_checkbox = null;   
@@ -216,6 +215,7 @@ System.out.println("=================== addComponent.jsp =======================
         adv_search_vocabulary = (String) request.getSession().getAttribute("preview_adv_search_vocabulary");
         selectSearchOption = (String) request.getSession().getAttribute("preview_selectSearchOption");
         label = (String) request.getSession().getAttribute("preview_label");
+        
         description = (String) request.getSession().getAttribute("preview_description");
         search_string = (String) request.getSession().getAttribute("preview_search_string");
         search_algorithm = (String) request.getSession().getAttribute("preview_search_algorithm");
@@ -224,20 +224,15 @@ System.out.println("=================== addComponent.jsp =======================
         selectProperty = (String) request.getSession().getAttribute("preview_selectProperty");
         selectValueSetReference = (String) request.getSession().getAttribute("preview_selectValueSetReference");
         direction = (String) request.getSession().getAttribute("preview_direction");
-        
 
 include_focus_node_checkbox = (String) request.getSession().getAttribute("preview_include_focus_node_checkbox");
 transitivity_checkbox = (String) request.getSession().getAttribute("preview_transitivity_checkbox");
-
-
-System.out.println("(****) addComponent.jsp preview_direction: " + direction);        
-        
       
         focusConceptCode = (String) request.getSession().getAttribute("preview_focusConceptCode");
         if (focusConceptCode == null || focusConceptCode.compareTo("null") == 0) {
             focusConceptCode = "";
         }
-        
+        /*
         request.getSession().removeAttribute("preview_adv_search_vocabulary");   
         request.getSession().removeAttribute("preview_selectSearchOption");   
         request.getSession().removeAttribute("preview_label"); 
@@ -254,14 +249,10 @@ System.out.println("(****) addComponent.jsp preview_direction: " + direction);
         request.getSession().removeAttribute("preview_include_focus_node_checkbox"); 
         request.getSession().removeAttribute("preview_transitivity_checkbox"); 
         
-        request.getSession().removeAttribute("preview");  
-        
-        
+        request.getSession().removeAttribute("preview");
+        */
         
     } else {
-    
-    
-    
     
 	    if (refresh_page) {
 		adv_search_vocabulary = (String) request.getParameter("dictionary");
@@ -278,12 +269,22 @@ System.out.println("(****) addComponent.jsp preview_direction: " + direction);
 	    } else {
 		selectSearchOption = (String) request.getAttribute("selectSearchOption");
 		search_string = (String) request.getSession().getAttribute("matchText");
+		
+System.out.println("------------ addComponent.jsp selectSearchOption: " + selectSearchOption);
+System.out.println("------------ addComponent.jsp search_string: " + search_string);
+
+		
+		
 	    }
 
 	    if (selectSearchOption == null || selectSearchOption.compareTo("null") == 0) {
 		selectSearchOption = "Property";
 	    }
     }
+
+
+System.out.println("------------ addComponent.jsp selectSearchOption: " + selectSearchOption);
+
 
 
      String warning_msg= (String) request.getSession().getAttribute("message");
@@ -307,13 +308,9 @@ System.out.println("(****) addComponent.jsp preview_direction: " + direction);
 
     adv_search_type = selectSearchOption;
 
-    //if (rel_search_association == null) rel_search_association = "ALL";
-    //if (rel_search_rela == null) rel_search_rela = " ";
     if (selectProperty == null) selectProperty = "ALL";
-    //if (adv_search_source == null) adv_search_source = "ALL";
     if (search_string == null) search_string = "";
     if (search_algorithm == null) search_algorithm = "exactMatch";
-
 
     String check__e = "", check__b = "", check__s = "" , check__c ="";
     if (search_algorithm == null || search_algorithm.compareTo("exactMatch") == 0)
@@ -374,14 +371,9 @@ if (is_new_component != null && is_new_component.compareTo("true") == 0) {
 System.out.println("(*) co_label_readonly: " + co_label_readonly);
 
 
-
-
-
-
-
 %>
 
- <font size="4"><b>Component Set</b></font><br/>
+ <font size="4"><b>Add Component Set</b></font><br/>
  <h:form id="addComponentForm" styleClass="pagecontent">            
                
       <table border="0" width="80%">
@@ -396,13 +388,18 @@ System.out.println("(*) co_label_readonly: " + co_label_readonly);
                      <%    
                      if (co_label_readonly) {
                      %>
-                         <input CLASS="searchbox-input" name="Label" value="<%=label%>" size="75" tabindex="1" />
+                         <%=label%>
+                         <input type="hidden" name="Label" id="state" value="<%=label%>" />
+                         <input type="hidden" name="component_label" id="state" value="<%=label%>" />
+                         
                      <%    
                      } else {
                      %>
                          <input CLASS="searchbox-input" name="Label" value="<%=label%>" size="75" tabindex="1" />
                      <%    
                      }
+                     
+                     
                      %>
                      
                          </td>
@@ -420,7 +417,10 @@ System.out.println("(*) co_label_readonly: " + co_label_readonly);
                 
                 
                 
- <% if (selectSearchOption == null || selectSearchOption.compareTo("ValueSetReference") != 0) { %>
+ <% 
+ 
+ 
+ if (selectSearchOption == null || selectSearchOption.compareTo("ValueSetReference") != 0) { %>
                 
                 <tr valign="top" >
                         <td align="right" class="inputLabel">
@@ -750,13 +750,7 @@ if (rel_search_association == null || rel_search_association.compareTo("") == 0)
                     </td>
                 </tr> 
                 
-                
-  <!--              
- <h:selectOneRadio id="direction"
- 	value="#{ComponentBean.selectedDirection}" styleClass="inputItem" >
- 	<f:selectItems value="#{ComponentBean.directionList}"/>
- </h:selectOneRadio>
-   -->
+
                          </td> 
                      </tr>         
  
@@ -871,6 +865,9 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
               
               
               <input type="hidden" name="state" id="state" value="add_component" />
+              <%
+              request.getSession().setAttribute("state", "add_component");
+              %>
               
          
             </h:form>
