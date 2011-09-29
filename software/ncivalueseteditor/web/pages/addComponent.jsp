@@ -308,7 +308,7 @@ System.out.println("------------ addComponent.jsp selectSearchOption: " + select
 
     adv_search_type = selectSearchOption;
 
-    if (selectProperty == null) selectProperty = "ALL";
+    if (selectProperty == null) selectProperty = "";
     if (search_string == null) search_string = "";
     if (search_algorithm == null) search_algorithm = "exactMatch";
 
@@ -639,7 +639,7 @@ System.out.println("(*) co_label_readonly: " + co_label_readonly);
                         
                           <select id="selectProperty" name="selectProperty" size="1" tabindex="6">
                           <%
-                            t = "ALL";
+                            t = "";
                             if (t.compareTo(selectProperty) == 0) {
                           %>
                               <option value="<%=t%>" selected><%=t%></option>

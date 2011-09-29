@@ -1222,7 +1222,7 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
         // To be implemented.
 		ValueSetDefinition vsd = convertToValueSetDefinition(item, expression);
 		if (vsd == null) {
-			String msg = "ERROR: Unable to construct ValueSetDefinition based on the expression.";
+			String msg = "ERROR: Unable to construct ValueSetDefinition based on the given expression.";
 			request.setAttribute("message", msg);
 			return "error";
 		}
@@ -2366,8 +2366,6 @@ cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
 
 			properties = new org.LexGrid.commonTypes.Properties();
 			vsd.setProperties(properties);
-
-
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
