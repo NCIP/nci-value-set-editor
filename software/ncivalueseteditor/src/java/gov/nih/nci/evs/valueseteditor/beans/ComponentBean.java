@@ -1158,6 +1158,26 @@ if (vs_obj == null) {
         _message = resource.getString("action_saved");
         _logger.debug("saveComponentSubsetAction returns success");
         System.out.println("saveComponentSubsetAction returns success");
+
+
+		request.getSession().removeAttribute("preview_adv_search_vocabulary");
+		request.getSession().removeAttribute("preview_selectSearchOption");
+		request.getSession().removeAttribute("preview_label");
+		request.getSession().removeAttribute("label");
+		request.getSession().removeAttribute("preview_focusConceptCode");
+		request.getSession().removeAttribute("preview_description");
+		request.getSession().removeAttribute("preview_search_string");
+		request.getSession().removeAttribute("preview_search_algorithm");
+		request.getSession().removeAttribute("preview_rel_search_association");
+		request.getSession().removeAttribute("preview_selectProperty");
+		request.getSession().removeAttribute("preview_selectValueSetReference");
+		request.getSession().removeAttribute("preview_direction");
+		request.getSession().removeAttribute("preview_include_focus_node_checkbox");
+		request.getSession().removeAttribute("preview_transitivity_checkbox");
+		request.getSession().removeAttribute("preview");
+
+
+
         return "success";
     }
 
