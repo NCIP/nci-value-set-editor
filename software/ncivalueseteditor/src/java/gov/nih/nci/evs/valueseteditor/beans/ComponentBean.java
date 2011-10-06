@@ -479,6 +479,8 @@ public class ComponentBean {
         String focusConceptCode = (String) request.getParameter("focusConceptCode");
         _focusConceptCode = focusConceptCode;
 
+        //System.out.println("********* _focusConceptCode: " + _focusConceptCode);
+
         String search_string = (String) request.getParameter("matchText");
         _matchText = search_string;
 
@@ -491,7 +493,12 @@ public class ComponentBean {
 
         String rel_search_association = (String) request.getParameter("rel_search_association");
         _rel_search_association = rel_search_association;
+
+        //System.out.println("********* _rel_search_association: " + _rel_search_association);
+
         String direction = (String) request.getParameter("direction");
+
+        //System.out.println("********* direction: " + direction);
 
         String matchText = (String) request.getParameter("matchText");
         _matchText = matchText;
@@ -499,8 +506,13 @@ public class ComponentBean {
         String include_focus_node_checkbox = (String) request.getParameter("include_focus_node_checkbox");
         _include_focus_node = include_focus_node_checkbox;
 
+        //System.out.println("********* _include_focus_node: " + _include_focus_node);
+
+
         String transitivity_checkbox = (String) request.getParameter("transitivity_checkbox");
         _transitivity = transitivity_checkbox;
+
+        //System.out.println("********* _transitivity: " + _transitivity);
 
         String _message = null;
 
@@ -551,12 +563,17 @@ public class ComponentBean {
 			}
 
 		} else if (_type.compareTo("Relationship") == 0) {
-
+            if (isNull(_transitivity)) {
+				_transitivity = "false";
+			}
+            if (isNull(_include_focus_node)) {
+				_include_focus_node = "false";
+			}
 			if (isNull(_vocabulary) || isNull(_focusConceptCode) || isNull(_rel_search_association) || isNull(_selectedDirection)) {
 				request.getSession().setAttribute("message", incompleteDataEntry);
 				_message = incompleteDataEntry;
 			}
-			if (isNull(_transitivity) || isNull(_include_focus_node) || isNull(_rel_search_association)) {
+			if (isNull(_transitivity) || isNull(_include_focus_node)) {
 				request.getSession().setAttribute("message", incompleteDataEntry);
 				_message = incompleteDataEntry;
 			}
