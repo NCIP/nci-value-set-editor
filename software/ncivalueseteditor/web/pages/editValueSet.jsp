@@ -400,8 +400,8 @@ if (vs_uri == null || vs_uri.compareTo("") == 0 || vs_uri.compareTo("null") == 0
 <%    }%>	
 
           <input type="hidden" id="vs_uri" name="vs_uri" value="<%=vs_uri%>" />
-          
-          <input type="hidden" id="tab" name="tab" value="valueset" />  
+          <input type="hidden" id="tab" name="tab" value="valueset" /> 
+          <input type="hidden" id="action" name="action" value="edit" /> 
 		
     </h:form>
 		           

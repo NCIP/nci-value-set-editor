@@ -480,6 +480,7 @@ public class ComponentBean {
         _focusConceptCode = focusConceptCode;
 
         String search_string = (String) request.getParameter("matchText");
+        _matchText = search_string;
 
         String search_algorithm = (String) request.getParameter("search_algorithm");
         _algo = search_algorithm;
@@ -567,26 +568,34 @@ public class ComponentBean {
 			}
 		}
 
-	    if (_message == null) {
+	    //if (_message != null) {
 
-			request.getSession().setAttribute("preview_adv_search_vocabulary", adv_search_vocabulary);
-			request.getSession().setAttribute("preview_selectSearchOption", selectSearchOption);
-			request.getSession().setAttribute("preview_label", label);
-			request.getSession().setAttribute("label", label);
-			request.getSession().setAttribute("preview_focusConceptCode", focusConceptCode);
-			request.getSession().setAttribute("preview_description", description);
-			request.getSession().setAttribute("preview_search_string", search_string);
-			request.getSession().setAttribute("preview_search_algorithm", search_algorithm);
-			request.getSession().setAttribute("preview_rel_search_association", rel_search_association);
-			request.getSession().setAttribute("preview_selectProperty", selectProperty);
-			request.getSession().setAttribute("preview_selectValueSetReference", selectValueSetReference);
-			request.getSession().setAttribute("preview_direction", direction);
-			request.getSession().setAttribute("preview_include_focus_node_checkbox", include_focus_node_checkbox);
-			request.getSession().setAttribute("preview_transitivity_checkbox", transitivity_checkbox);
-			request.getSession().setAttribute("preview", "true");
+		request.getSession().setAttribute("preview_adv_search_vocabulary", adv_search_vocabulary);
+		request.getSession().setAttribute("preview_selectSearchOption", selectSearchOption);
+		request.getSession().setAttribute("preview_label", label);
+		request.getSession().setAttribute("label", label);
+		request.getSession().setAttribute("preview_focusConceptCode", focusConceptCode);
+		request.getSession().setAttribute("preview_description", description);
+		request.getSession().setAttribute("preview_search_string", search_string);
+		request.getSession().setAttribute("preview_search_algorithm", search_algorithm);
+		request.getSession().setAttribute("preview_rel_search_association", rel_search_association);
+		request.getSession().setAttribute("preview_selectProperty", selectProperty);
+		request.getSession().setAttribute("preview_selectValueSetReference", selectValueSetReference);
+		request.getSession().setAttribute("preview_direction", direction);
+		request.getSession().setAttribute("preview_include_focus_node_checkbox", include_focus_node_checkbox);
+		request.getSession().setAttribute("preview_transitivity_checkbox", transitivity_checkbox);
+		request.getSession().setAttribute("preview", "true");
 
+
+
+        String action = (String) request.getParameter("action");
+        if (action != null && action.compareTo("edit") == 0) {
+			String vs_uri = (String) request.getParameter("vs_uri");
+			request.getSession().setAttribute("preview_vs_uri", vs_uri);
 
 		}
+
+		//}
 
 		return _message;
 	}
@@ -1175,7 +1184,7 @@ if (vs_obj == null) {
 		request.getSession().removeAttribute("preview_include_focus_node_checkbox");
 		request.getSession().removeAttribute("preview_transitivity_checkbox");
 		request.getSession().removeAttribute("preview");
-
+		request.getSession().removeAttribute("preview_vs_uri");
 
 
         return "success";

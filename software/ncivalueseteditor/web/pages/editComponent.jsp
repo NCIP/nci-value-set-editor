@@ -61,7 +61,11 @@
         }
       }
 
-     
+      var vs_uri = "";
+      if (document.forms["addComponentForm"].vs_uri != null) {
+          vs_uri = document.forms["addComponentForm"].vs_uri.value;
+      }  
+           
       var dictionary = "";
       if (document.forms["addComponentForm"].Vocabulary != null) {
           dictionary = document.forms["addComponentForm"].Vocabulary.value;
@@ -121,9 +125,13 @@
           if (radioObj[1].checked) dir = "Backward";
       }
       
+      
+      
       window.location.href="/ncivalueseteditor/pages/editComponent.jsf?refresh=1"
+          + "&action=edit"
           + "&opt="+ selectSearchOption
           + "&label="+ label
+          + "&uri="+ vs_uri
           + "&description="+ description
           + "&text="+ text
           + "&algorithm="+ algorithm
@@ -163,40 +171,29 @@ String closeResolvedComponentSubset = (String) request.getSession().getAttribute
 
 System.out.println("(*) editComponent.jsp closeResolvedComponentSubset: " + closeResolvedComponentSubset);
 
-/*
-if (closeResolvedComponentSubset != null) {
-    request.getSession().removeAttribute("closeResolvedComponentSubset");
-    edit_action = (String) request.getSession().getAttribute("action");
-    vs_uri = (String) request.getSession().getAttribute("vs_uri");
-    component_label = (String) request.getSession().getAttribute("label");
-} else {
-    edit_action = (String) request.getParameter("action");
-    vs_uri = (String) request.getParameter("uri");
-    if (vs_uri == null) {
-    	vs_uri = (String) request.getAttribute("vs_uri");
-    }
-    component_label = (String) request.getParameter("label");
-    if (component_label == null) {
-        component_label = (String) request.getSession().getAttribute("label"); 
-    }
-}
-*/
 
-edit_action = (String) request.getParameter("action");
-if (edit_action != null && edit_action.compareTo("edit") == 0) {
-    vs_uri = (String) request.getParameter("uri");
-    if (vs_uri == null) {
-    	vs_uri = (String) request.getAttribute("vs_uri");
-    }
-    component_label = (String) request.getParameter("label");
-    if (component_label == null) {
-        component_label = (String) request.getSession().getAttribute("label"); 
-    }
+
+String preview_vs_uri = (String) request.getSession().getAttribute("preview_vs_uri"); 
+if (preview_vs_uri != null) {
+    vs_uri = preview_vs_uri;
+    component_label = (String) request.getSession().getAttribute("preview_label"); 
 } else {
-    request.getSession().removeAttribute("closeResolvedComponentSubset");
-    edit_action = (String) request.getSession().getAttribute("action");
-    vs_uri = (String) request.getSession().getAttribute("vs_uri");
-    component_label = (String) request.getSession().getAttribute("label");
+	edit_action = (String) request.getParameter("action");
+	if (edit_action != null && edit_action.compareTo("edit") == 0) {
+	    vs_uri = (String) request.getParameter("uri");
+	    if (vs_uri == null) {
+		vs_uri = (String) request.getSession().getAttribute("vs_uri");
+	    }
+	    component_label = (String) request.getParameter("label");
+	    if (component_label == null) {
+		component_label = (String) request.getSession().getAttribute("label"); 
+	    }
+	} else {
+	    request.getSession().removeAttribute("closeResolvedComponentSubset");
+	    edit_action = (String) request.getSession().getAttribute("action");
+	    vs_uri = (String) request.getSession().getAttribute("vs_uri");
+	    component_label = (String) request.getSession().getAttribute("label");
+	}
 }
 
 
@@ -255,15 +252,8 @@ request.getSession().setAttribute("vs_obj", vs_obj);
 
  String include_focus_node_checkbox = null;   
  String transitivity_checkbox = null; 
-         
-        
+       
     // find component object
-    /*
-	ValueSetBean vsb = (ValueSetBean)FacesContext.getCurrentInstance()
-			     .getExternalContext().getSessionMap().get("ValueSetBean");
-
-	ValueSetObject vs_obj = vsb.getCurrentValueSet();
-    */	
 	ComponentObject component_obj = null;
 
 
@@ -285,7 +275,7 @@ System.out.println("component_obj != null");
 request.getSession().setAttribute("component_obj", component_obj);
 
 	   
-	       ValueSetBean.dumpComponentObject(component_obj);
+	       //ValueSetBean.dumpComponentObject(component_obj);
         
 		_label = component_obj.getLabel();
 		_description = component_obj.getDescription();
@@ -330,14 +320,9 @@ System.out.println("debugging editComponent.jsp _vocabulary: " + _vocabulary);
 		
 		adv_search_vocabulary = _vocabulary;
 		
-System.out.println("debugging editComponent.jsp adv_search_vocabulary: " + _vocabulary);
-		
-		
 	   }
 	}
 
-
-        
     
     String refresh = (String) request.getParameter("refresh");
 
@@ -345,7 +330,6 @@ System.out.println("debugging editComponent.jsp adv_search_vocabulary: " + _voca
     if (refresh != null) {
         refresh_page = true;
     }
-    
   
 
     String preview = null;//(String) request.getParameter("preview");
@@ -387,51 +371,29 @@ System.out.println("DIRECTION: " + direction);
 include_focus_node_checkbox = (String) request.getSession().getAttribute("preview_include_focus_node_checkbox");
 transitivity_checkbox = (String) request.getSession().getAttribute("preview_transitivity_checkbox");
 
-
-/*      
         
-        request.getSession().removeAttribute("preview_adv_search_vocabulary");   
-        request.getSession().removeAttribute("preview_selectSearchOption");   
-        request.getSession().removeAttribute("preview_label"); 
-        request.getSession().removeAttribute("label");   
-        request.getSession().removeAttribute("preview_description");
-        request.getSession().removeAttribute("preview_search_string");   
-        request.getSession().removeAttribute("preview_search_algorithm");   
-        request.getSession().removeAttribute("preview_adv_search_source");   
-        request.getSession().removeAttribute("preview_rel_search_association");   
-        request.getSession().removeAttribute("preview_selectProperty");   
-        request.getSession().removeAttribute("preview_selectValueSetReference");   
-        request.getSession().removeAttribute("preview"); 
-        
-        request.getSession().removeAttribute("preview_focusConceptCode");
-        request.getSession().removeAttribute("preview_direction");   
-        
-        request.getSession().removeAttribute("preview_include_focus_node_checkbox"); 
-        request.getSession().removeAttribute("preview_transitivity_checkbox"); 
-*/
+    } 
+    
+    if (refresh_page) {
+	adv_search_vocabulary = (String) request.getParameter("dictionary");
+	selectSearchOption = (String) request.getParameter("opt");
+	_type = selectSearchOption;
 
-        
-    } else {
-	    if (refresh_page) {
-		adv_search_vocabulary = (String) request.getParameter("dictionary");
-		selectSearchOption = (String) request.getParameter("opt");
-		_type = selectSearchOption;
+	_vocabulary = adv_search_vocabulary;
 
-		_vocabulary = adv_search_vocabulary;
+	label = (String) request.getParameter("label");
+	description = (String) request.getParameter("description");
 
-		label = (String) request.getParameter("label");
-		description = (String) request.getParameter("description");
+	search_string = (String) request.getParameter("text");
+	search_algorithm = (String) request.getParameter("algorithm");
+	adv_search_source = (String) request.getParameter("sab");
+	rel_search_association = (String) request.getParameter("rel");
+	selectProperty = (String) request.getParameter("prop");
 
-		search_string = (String) request.getParameter("text");
-		search_algorithm = (String) request.getParameter("algorithm");
-		adv_search_source = (String) request.getParameter("sab");
-		rel_search_association = (String) request.getParameter("rel");
-		selectProperty = (String) request.getParameter("prop");
-
-		selectValueSetReference = (String) request.getParameter("ref_uri");
-		direction = (String) request.getParameter("dir");
-	    } 
-    }
+	selectValueSetReference = (String) request.getParameter("ref_uri");
+	direction = (String) request.getParameter("dir");
+    } 
+    
     
 
     if (selectSearchOption == null || selectSearchOption.compareTo("null") == 0) {
@@ -502,6 +464,8 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
                              Label:
                          </td>
                          <td class="textbody">
+                         
+                         
                          
                             <%=_label%>
                     
@@ -623,6 +587,9 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
  
  
  } else if (selectSearchOption != null && selectSearchOption.compareTo("Relationship") == 0) {
+     if (_focusConceptCode == null || _focusConceptCode.compareTo("null") == 0) {
+         _focusConceptCode = "";
+     }
  %>
      <tr>               
                           <td align="right" class="inputLabel">
@@ -991,7 +958,7 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
 
               <input type="hidden" name="vs_uri" id="vs_uri" value="<%=vs_uri%>" />
               <input type="hidden" name="component_label" id="component_label" value="<%=component_label%>" />
-              <input type="hidden" name="label" id="label" value="<%=_label%>" />
+              <input type="hidden" name="Label" id="Label" value="<%=component_label%>" />
               <input type="hidden" name="action" id="action" value="edit" />
               
               

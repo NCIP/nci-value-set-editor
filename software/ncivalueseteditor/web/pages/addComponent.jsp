@@ -56,7 +56,7 @@
           selectSearchOption = selectSearchOptionObj[i].value;
         }
       }
-
+      
       var dictionary = "";
       if (document.forms["addComponentForm"].Vocabulary != null) {
           dictionary = document.forms["addComponentForm"].Vocabulary.value;
@@ -232,29 +232,14 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
         if (focusConceptCode == null || focusConceptCode.compareTo("null") == 0) {
             focusConceptCode = "";
         }
-        /*
-        request.getSession().removeAttribute("preview_adv_search_vocabulary");   
-        request.getSession().removeAttribute("preview_selectSearchOption");   
-        request.getSession().removeAttribute("preview_label"); 
-        request.getSession().removeAttribute("label");  
-        request.getSession().removeAttribute("preview_description");
-        request.getSession().removeAttribute("preview_search_string");   
-        request.getSession().removeAttribute("preview_search_algorithm");   
-        request.getSession().removeAttribute("preview_adv_search_source");   
-        request.getSession().removeAttribute("preview_rel_search_association");   
-        request.getSession().removeAttribute("preview_selectProperty");   
-        request.getSession().removeAttribute("preview_direction");   
-        request.getSession().removeAttribute("preview_selectValueSetReference");  
-        
-        request.getSession().removeAttribute("preview_include_focus_node_checkbox"); 
-        request.getSession().removeAttribute("preview_transitivity_checkbox"); 
-        
-        request.getSession().removeAttribute("preview");
-        */
-        
-    } else {
+       
+    } 
     
 	    if (refresh_page) {
+	    
+	    
+System.out.println("********************** REFRESH PAGE");	    
+	    
 		adv_search_vocabulary = (String) request.getParameter("dictionary");
 		selectSearchOption = (String) request.getParameter("opt");
 		label = (String) request.getParameter("label");
@@ -266,21 +251,27 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
 		selectProperty = (String) request.getParameter("prop");
 		selectValueSetReference = (String) request.getParameter("ref_uri");
 
-	    } else {
-		selectSearchOption = (String) request.getAttribute("selectSearchOption");
-		search_string = (String) request.getSession().getAttribute("matchText");
-		
-System.out.println("------------ addComponent.jsp selectSearchOption: " + selectSearchOption);
-System.out.println("------------ addComponent.jsp search_string: " + search_string);
 
-		
-		
-	    }
+
+System.out.println("REFRESH PAGE adv_search_vocabulary " + adv_search_vocabulary);
+System.out.println("REFRESH PAGE selectSearchOption " + selectSearchOption);
+System.out.println("REFRESH PAGE label " + label);
+System.out.println("REFRESH PAGE description " + description);
+System.out.println("REFRESH PAGE search_string " + search_string);
+System.out.println("REFRESH PAGE search_algorithm " + search_algorithm);
+System.out.println("REFRESH PAGE adv_search_source " + adv_search_source);
+System.out.println("REFRESH PAGE rel_search_association " + rel_search_association);
+System.out.println("REFRESH PAGE selectProperty " + selectProperty);
+System.out.println("REFRESH PAGE selectValueSetReference " + selectValueSetReference);
+
+
+
+	    } 
 
 	    if (selectSearchOption == null || selectSearchOption.compareTo("null") == 0) {
 		selectSearchOption = "Property";
 	    }
-    }
+
 
 
 System.out.println("------------ addComponent.jsp selectSearchOption: " + selectSearchOption);
@@ -353,12 +344,6 @@ if (adv_search_vocabulary == null) {
 
 
 
-
-
-
-
-
-
 String is_new_component = (String) request.getAttribute("isNewComponent");
 request.removeAttribute("isNewComponent");
 
@@ -383,10 +368,14 @@ System.out.println("(*) co_label_readonly: " + co_label_readonly);
                          <td align="right" class="inputLabel">
                              Label:
                          </td>
-                         <td>
-                         
+                         <td class="textbody">
+ 
                      <%    
-                     if (co_label_readonly) {
+                      if (label == null || label.compareTo("") == 0 || label.compareTo("null") == 0) {
+                     %>
+                          <input CLASS="searchbox-input" name="Label" value="<%=label%>" size="75" tabindex="1" />
+                     <%    
+                     } else if (co_label_readonly) {
                      %>
                          <%=label%>
                          <input type="hidden" name="Label" id="state" value="<%=label%>" />
