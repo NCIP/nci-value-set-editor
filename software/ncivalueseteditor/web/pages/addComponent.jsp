@@ -510,8 +510,7 @@ System.out.println("(*) co_label_readonly: " + co_label_readonly);
                               Codes:
                           </td>
      <td>  
-         <textarea name="codes" cols="50" rows=10 tabindex="3" class="inputText" >
-         </textarea>
+         <textarea name="codes" cols="50" rows=10 tabindex="3" class="inputText" ></textarea>
      </td>
      </tr>
      

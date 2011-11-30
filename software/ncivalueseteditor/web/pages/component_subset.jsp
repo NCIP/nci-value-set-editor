@@ -354,8 +354,7 @@
                               Codes:
                           </td>
      <td>  
-         <textarea name="codes" cols="50" rows=10 tabindex="3">
-         </textarea>
+         <textarea name="codes" cols="50" rows=10 tabindex="3"></textarea>
      </td>
      </tr>
  <%  
