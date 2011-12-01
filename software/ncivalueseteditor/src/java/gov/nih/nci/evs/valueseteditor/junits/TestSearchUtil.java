@@ -71,7 +71,7 @@ public class TestSearchUtil extends TestCase {
 
       public void testGetOntologyList() throws Exception {
           ValueSetSearchUtil util = new ValueSetSearchUtil();
-          Map<String,String> map = util.getOntologyList();
+          Map<String,String> map = (Map<String,String>) util.getOntologyList();
           
           System.out.println("\ngetOntologyList map:");
           Iterator<?> it = map.entrySet().iterator();

@@ -1,6 +1,6 @@
 package gov.nih.nci.evs.valueseteditor.junits;
 
-import gov.nih.nci.evs.valueseteditor.utilities.ValueSetExportUtil;
+//import gov.nih.nci.evs.valueseteditor.utilities.ValueSetExportUtil;
 import junit.framework.TestCase;
 
 /**
@@ -54,7 +54,7 @@ public class TestValueSetUtil extends TestCase {
 	public void testExportTwoConcepts() throws Exception {
 		
 		System.out.println("\nExport two concepts:");
-		ValueSetExportUtil util = new ValueSetExportUtil();
+		//ValueSetExportUtil util = new ValueSetExportUtil();
 		
 	}
 	
