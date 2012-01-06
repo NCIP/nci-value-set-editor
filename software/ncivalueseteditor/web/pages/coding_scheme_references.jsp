@@ -99,12 +99,14 @@ vsd_uri = vsb.getUri();
 System.out.println("vsd_uri " + vsd_uri);
 
 if (vsd_uri == null) {
-    vsd_uri = (String) request.getAttribute("uri");
+    //vsd_uri = (String) request.getAttribute("uri");
+    vsd_uri = (String) request.getAttribute("vs_uri");
 }
 
-System.out.println("vsd_uri " + vsd_uri);
+System.out.println("[@@@] reference page: vsd_uri " + vsd_uri);
 
 ValueSetObject vs_obj = vsb.getValueSet(vsd_uri);
+
 Vector codingSchemeName_vec = vsb.findParticipatingCodingSchemes(vs_obj);
 
 String codingSchemeNames = "";
@@ -280,8 +282,6 @@ System.out.println("coding_scheme_references.jsp cs_version: " + cs_version);
            </table>                
                   
               <input type="hidden" name="uri" id="uri" value="<%=vsd_uri%>"> 
-              
-              
               <input type="hidden" name="codingSchemeNames" id="codingSchemeNames" value="<%=codingSchemeNames%>">
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>

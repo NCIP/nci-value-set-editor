@@ -2000,11 +2000,11 @@ Results returned: 14588
         	LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 			ResolvedValueSetDefinition rvsd = null;
 			try {
-				System.out.println("Calling vsd_service.resolveValueSetDefinition ...");
+				System.out.println("[*****************] Calling vsd_service.resolveValueSetDefinition ...");
 
 				rvsd = vsd_service.resolveValueSetDefinition(vsd, csVersionList, csVersionTag, referencedVSDs, sortOptionList);
 
-				System.out.println("Exiting vsd_service.resolveValueSetDefinition ...");
+				System.out.println("[*****************] Exiting vsd_service.resolveValueSetDefinition ...");
 
 				if (rvsd != null) {
 					System.out.println("rvsd != null -- returns iterator ...");

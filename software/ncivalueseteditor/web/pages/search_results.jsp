@@ -71,6 +71,12 @@
 
 <%
 
+
+String _vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+String _component_label = (String) request.getSession().getAttribute("component_label");
+
+
+
 //JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 //String search_results_dictionary = info.dictionary;
 
@@ -428,7 +434,14 @@ if (obj == null) {
  </h:commandButton>
 </td></tr></table> 
 
+<!--
 <input type="hidden" id="tab" name="tab" value="valueset" /> 
+-->
+
+
+<input type="hidden" id="vsd_uri" name="vsd_uri" value="<%=_vsd_uri%>" /> 
+<input type="hidden" id="component_label" name="component_label" value="<%=_component_label%>" /> 
+
 
 </h:form> 
         

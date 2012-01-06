@@ -75,7 +75,7 @@
 				      <h:commandButton
 					value="Copy" action="#{ValueSetBean.copyFromServerAction}"
 					onclick="javascript:cursor_wait();"
-					image="#{requestContextPath}/images/copy.gif" alt="Copy value set definition from server" />
+					image="#{requestContextPath}/images/clone.gif" alt="Copy value set definition from server" />
 
 					&#xA0;&#xA0;
 				      <h:commandButton

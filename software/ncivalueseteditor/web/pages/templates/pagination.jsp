@@ -32,7 +32,7 @@ IteratorBean itrBean = (IteratorBean) request.getSession().getAttribute("iterato
       <td>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </td>
-      <td class="texttitle-blue" align=right>
+      <td class="textbody" align=right>
         <%
           if (page_num > 1) {
         %>

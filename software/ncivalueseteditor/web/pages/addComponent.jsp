@@ -56,6 +56,11 @@
           selectSearchOption = selectSearchOptionObj[i].value;
         }
       }
+
+      var vs_uri = "";
+      if (document.forms["addComponentForm"].vs_uri != null) {
+          vs_uri = document.forms["addComponentForm"].vs_uri.value;
+      }  
       
       var dictionary = "";
       if (document.forms["addComponentForm"].Vocabulary != null) {
@@ -119,6 +124,7 @@
       window.location.href="/ncivalueseteditor/pages/addComponent.jsf?refresh=1"
           + "&opt="+ selectSearchOption
           + "&label="+ label
+          + "&uri="+ vs_uri
           + "&description="+ description
           + "&text="+ text
           + "&algorithm="+ algorithm
@@ -238,7 +244,9 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
 	    if (refresh_page) {
 	    
 	    
-System.out.println("********************** REFRESH PAGE");	    
+System.out.println("********************** REFRESH PAGE");	
+
+                vs_uri = (String) request.getParameter("uri");
 	    
 		adv_search_vocabulary = (String) request.getParameter("dictionary");
 		selectSearchOption = (String) request.getParameter("opt");
@@ -362,6 +370,21 @@ System.out.println("(*) co_label_readonly: " + co_label_readonly);
  <h:form id="addComponentForm" styleClass="pagecontent">            
                
       <table border="0" width="80%">
+ 
+ 
+                 <tr valign="top" align="left">
+                    
+                          <td align="right" class="inputLabel">
+                              Value Set:
+                          </td>
+                          <td class="textbody">
+                          
+                             <%=vs_uri%>
+                     
+                          
+                          </td>
+                 </tr>
+               
                 
                 <tr valign="top" align="left">
                    

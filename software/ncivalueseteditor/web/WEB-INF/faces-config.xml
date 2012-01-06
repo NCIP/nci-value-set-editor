@@ -99,7 +99,13 @@
        <navigation-case>
           <from-action>#{ValueSetBean.continueResolveValueSetAction}</from-action>
           <from-outcome>error</from-outcome>
-          <to-view-id>/pages/coding_scheme_references.jsp</to-view-id>
+          <to-view-id>/pages/editValueSetExpression.jsp</to-view-id>
+       </navigation-case> 
+
+       <navigation-case>
+          <from-action>#{ValueSetBean.continueResolveValueSetAction}</from-action>
+          <from-outcome>message</from-outcome>
+          <to-view-id>/pages/editValueSet.jsp</to-view-id>
        </navigation-case> 
        
        <navigation-case>
@@ -360,6 +366,14 @@
            <from-outcome>error</from-outcome>
            <to-view-id>/pages/editComponent.jsp</to-view-id>
        </navigation-case>
+
+
+        <navigation-case>
+           <from-action>#{ComponentBean.saveComponentSubsetAction}</from-action>
+           <from-outcome>message</from-outcome>
+           <to-view-id>/pages/editComponent.jsp</to-view-id>
+       </navigation-case>
+       
        
        <navigation-case>
           <from-action>#{ComponentBean.cancelComponentSubsetAction}</from-action>

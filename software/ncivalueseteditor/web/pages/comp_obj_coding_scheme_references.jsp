@@ -99,7 +99,7 @@ vsd_uri = vsb.getUri();
 System.out.println("vsd_uri " + vsd_uri);
 
 if (vsd_uri == null) {
-    vsd_uri = (String) request.getAttribute("uri");
+    vsd_uri = (String) request.getSession().getAttribute("vs_uri");
 }
 
 System.out.println("vsd_uri " + vsd_uri);
@@ -109,6 +109,13 @@ System.out.println("vsd_uri " + vsd_uri);
 ValueSetObject vs_obj = (ValueSetObject) request.getSession().getAttribute("vs_obj");//vsb.getValueSet(vsd_uri);
 String ComponentObjectLabel = (String) request.getSession().getAttribute("ComponentObjectLabel");
 String ComponentDescription = (String) request.getSession().getAttribute("ComponentDescription");
+
+
+System.out.println("[***] comp_obj_cs_reference.jsp vsd_uri " + vsd_uri);
+System.out.println("[***] comp_obj_cs_reference.jsp ComponentObjectLabel " + ComponentObjectLabel);
+
+
+
 
 Vector codingSchemeName_vec = vsb.findParticipatingCodingSchemes(vs_obj);
 
@@ -284,11 +291,10 @@ System.out.println("coding_scheme_references.jsp cs_version: " + cs_version);
               </td></tr>  
            </table>                
                   
-              <input type="hidden" name="uri" id="uri" value="<%=vsd_uri%>"> 
-              
-              
-              <input type="hidden" name="codingSchemeNames" id="codingSchemeNames" value="<%=codingSchemeNames%>">
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
+                  
+              <input type="hidden" name="uri" id="uri" value="<%=vsd_uri%>"> 
+              <input type="hidden" name="codingSchemeNames" id="codingSchemeNames" value="<%=codingSchemeNames%>">
               <input type="hidden" name="ComponentObjectLabel" id="ComponentObjectLabel" value="<%=ComponentObjectLabel%>">
               
 </h:form>

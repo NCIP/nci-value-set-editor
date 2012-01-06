@@ -161,6 +161,7 @@
 		      <%@ include file="/pages/include/navBar.jsp" %>
 
 <%
+
 String warning_msg = (String) request.getSession().getAttribute("message");
 
 String edit_action = null;
@@ -169,45 +170,84 @@ String component_label = null;
 
 String closeResolvedComponentSubset = (String) request.getSession().getAttribute("closeResolvedComponentSubset");
 
-System.out.println("(*) editComponent.jsp closeResolvedComponentSubset: " + closeResolvedComponentSubset);
+
+/*
+String preview_vs_uri = (String) request.getSession().getAttribute("preview_vs_uri");
+
+System.out.println("*** editComponent.jsp preview_vs_uri: " + preview_vs_uri);
 
 
-
-String preview_vs_uri = (String) request.getSession().getAttribute("preview_vs_uri"); 
 if (preview_vs_uri != null) {
+    System.out.println("*** editComponent.jsp preview_vs_uri != null" );
+
     vs_uri = preview_vs_uri;
     component_label = (String) request.getSession().getAttribute("preview_label"); 
+    
+    System.out.println("*** editComponent.jsp component_label: " + component_label);
+    
+    
 } else {
+
 	edit_action = (String) request.getParameter("action");
+	
+	
 	if (edit_action != null && edit_action.compareTo("edit") == 0) {
 	    vs_uri = (String) request.getParameter("uri");
 	    if (vs_uri == null) {
 		vs_uri = (String) request.getSession().getAttribute("vs_uri");
 	    }
 	    component_label = (String) request.getParameter("label");
+	    
 	    if (component_label == null) {
 		component_label = (String) request.getSession().getAttribute("label"); 
 	    }
+	    
 	} else {
+	
 	    request.getSession().removeAttribute("closeResolvedComponentSubset");
 	    edit_action = (String) request.getSession().getAttribute("action");
 	    vs_uri = (String) request.getSession().getAttribute("vs_uri");
 	    component_label = (String) request.getSession().getAttribute("label");
 	}
+	
+	
 }
+*/
 
 
-System.out.println("(*) editComponent.jsp edit_action: " + edit_action);
-System.out.println("(*) editComponent.jsp vs_uri: " + vs_uri);
-System.out.println("(*) editComponent.jsp component_label: " + component_label);
+String preview = null;//(String) request.getParameter("preview");
+String direction = null;
+preview = (String) request.getSession().getAttribute("preview");
+
+
+edit_action = (String) request.getParameter("action");
+if (edit_action != null && edit_action.compareTo("edit") == 0) {
+    vs_uri = (String) request.getParameter("uri");
+    component_label = (String) request.getParameter("label");
+   
+    
+} else {
+    request.getSession().removeAttribute("closeResolvedComponentSubset");
+    edit_action = (String) request.getSession().getAttribute("action");
+    vs_uri = (String) request.getSession().getAttribute("vs_uri");
+    component_label = (String) request.getSession().getAttribute("label");
+    
+}
 
 
 ValueSetBean vsb = (ValueSetBean)FacesContext.getCurrentInstance()
 	     .getExternalContext().getSessionMap().get("ValueSetBean");
 
 
-ValueSetObject vs_obj = vsb.getValueSet(vs_uri);
+//ValueSetObject vs_obj = vsb.getValueSet(vs_uri);
+
+ValueSetObject vs_obj = vsb.getValueSetObject(vs_uri);
+
+
 request.getSession().setAttribute("vs_obj", vs_obj);
+
+
+
 
 
 
@@ -257,37 +297,47 @@ request.getSession().setAttribute("vs_obj", vs_obj);
 	ComponentObject component_obj = null;
 
 
-System.out.println("editComponent.jsp -- Step 2");
+
+ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
+	     .getExternalContext().getSessionMap().get("ComponentBean");
 
 
+
+
+
+
+/*
 	if (vs_obj == null) {
 	   System.out.println("(*) vs_obj == null???");
 	} else {
-	   component_obj = vs_obj.getComponent(component_label);
+	
+*/	
+	   //component_obj = vs_obj.getComponent(component_label);
+	   
+if (edit_action != null && edit_action.compareTo("edit") == 0) {
+    component_obj = componentBean.getComponentObject(vs_uri, component_label); 
+} else if (preview != null && preview.compareTo("true") == 0) {
+    component_obj = (ValueSetBean.ComponentObject) request.getSession().getAttribute("preview_component");
+}
+
 
 
 	   if (component_obj != null) {
-	   
-	   
-System.out.println("component_obj != null");
-
 
 request.getSession().setAttribute("component_obj", component_obj);
 
 	   
-	       //ValueSetBean.dumpComponentObject(component_obj);
+ValueSetBean.dumpComponentObject(component_obj);
         
 		_label = component_obj.getLabel();
 		_description = component_obj.getDescription();
 		_vocabulary = component_obj.getVocabulary();
-		
-System.out.println("_label " + _label);
-		
-System.out.println("debugging editComponent.jsp _vocabulary: " + _vocabulary);
-	
+
 
 		_type = component_obj.getType();
 		_matchText = component_obj.getMatchText();
+		
+		
 		_algorithm = component_obj.getAlgorithm();
 
 		_propertyName = component_obj.getPropertyName();
@@ -307,8 +357,6 @@ System.out.println("debugging editComponent.jsp _vocabulary: " + _vocabulary);
 		selectProperty = _propertyName;
 		rel_search_association = _rel_search_association;
 		
-		System.out.println("rel_search_association (1): " + rel_search_association);	
-		
 		
 		//adv_search_source = null;
 		adv_search_type = null;
@@ -321,7 +369,7 @@ System.out.println("debugging editComponent.jsp _vocabulary: " + _vocabulary);
 		adv_search_vocabulary = _vocabulary;
 		
 	   }
-	}
+	//}
 
     
     String refresh = (String) request.getParameter("refresh");
@@ -332,9 +380,10 @@ System.out.println("debugging editComponent.jsp _vocabulary: " + _vocabulary);
     }
   
 
-    String preview = null;//(String) request.getParameter("preview");
-    String direction = null;
-    preview = (String) request.getSession().getAttribute("preview");
+    
+/*    
+    
+    
     if (preview != null && preview.compareTo("true") == 0) {
     
         adv_search_vocabulary = (String) request.getSession().getAttribute("preview_adv_search_vocabulary");
@@ -347,8 +396,6 @@ System.out.println("debugging editComponent.jsp _vocabulary: " + _vocabulary);
         search_string = (String) request.getSession().getAttribute("preview_search_string");
 
 _matchText = search_string;
-System.out.println("_matchText: " + _matchText);
-        
         search_algorithm = (String) request.getSession().getAttribute("preview_search_algorithm");
         adv_search_source = (String) request.getSession().getAttribute("preview_adv_search_source");
         rel_search_association = (String) request.getSession().getAttribute("preview_rel_search_association");
@@ -359,14 +406,10 @@ System.out.println("_matchText: " + _matchText);
         if (_focusConceptCode == null || _focusConceptCode.compareTo("null") == 0) {
             _focusConceptCode = "";
         }
-        
-
-System.out.println("FOCUSCONCEPTCODE: " + direction);
-
+ 
         direction = (String) request.getSession().getAttribute("preview_direction");
         
         
-System.out.println("DIRECTION: " + direction);
 
 include_focus_node_checkbox = (String) request.getSession().getAttribute("preview_include_focus_node_checkbox");
 transitivity_checkbox = (String) request.getSession().getAttribute("preview_transitivity_checkbox");
@@ -374,7 +417,13 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
         
     } 
     
+*/    
+    
+    
     if (refresh_page) {
+    
+        vs_uri = (String) request.getParameter("uri");
+    
 	adv_search_vocabulary = (String) request.getParameter("dictionary");
 	selectSearchOption = (String) request.getParameter("opt");
 	_type = selectSearchOption;
@@ -391,7 +440,7 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
 	selectProperty = (String) request.getParameter("prop");
 
 	selectValueSetReference = (String) request.getParameter("ref_uri");
-	direction = (String) request.getParameter("dir");
+	_selectedDirection = (String) request.getParameter("dir");
     } 
     
     
@@ -457,6 +506,20 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
  <h:form id="addComponentForm" styleClass="pagecontent">            
                
       <table border="0" width="80%">
+
+                <tr valign="top" align="left">
+                   
+                         <td align="right" class="inputLabel">
+                             Value Set:
+                         </td>
+                         <td class="textbody">
+                         
+                            <%=vs_uri%>
+                    
+                         
+                         </td>
+                </tr>
+             
                 
                 <tr valign="top" align="left">
                    
@@ -464,8 +527,6 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
                              Label:
                          </td>
                          <td class="textbody">
-                         
-                         
                          
                             <%=_label%>
                     
@@ -812,26 +873,16 @@ if (rel_search_association == null || rel_search_association.compareTo("") == 0)
                             Direction:
                         </td> 
                                      
- 
- 
- <!--
- <h:selectOneRadio id="direction"
- 	value="#{ComponentBean.selectedDirection}" styleClass="inputItem" >
- 	<f:selectItems value="#{ComponentBean.directionList}"/>
- </h:selectOneRadio>
- -->
- 
- 
- 
+
                      <td align="left" class="inputItem">
                      <%
-                           if (direction != null && direction.compareTo("Backward") == 0) {
+                           if (_selectedDirection != null && _selectedDirection.compareTo("Backward") == 0) {
  		    %>
  		                  <input type="radio" id="direction" name="direction" value="Forward" alt="Forward" tabindex="5">Forward&nbsp;
  				  <input type="radio" id="direction" name="direction" value="Backward" alt="Backward" checked tabindex="6">Backward;
- 		<%
- 		} else {
- 		%>	  
+				<%
+			   } else {
+				%>	  
  				  <input type="radio" id="direction" name="direction" value="Forward" alt="Forward" checked tabindex="5">Forward&nbsp;
  				  <input type="radio" id="direction" name="direction" value="Backward" alt="Backward"  tabindex="6">Backward;
  		<%

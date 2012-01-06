@@ -344,11 +344,20 @@ if (expression == null) expression = "";
 
 	<table class="dataTable" summary="" cellpadding="3" cellspacing="0"
 		border="0" width="96%">
-		
+	        <tr>
+	           <td align="left"><font size="3"><b><u>Component Sets</u></b></font></td>
+	        </tr>	
+	</table>
+	
+	
+	        
+	<table class="dataTable" summary="" cellpadding="3" cellspacing="0"
+		border="0" width="96%">
+<!--		
 	        <tr>
 	           <td align="right"><font size="3"><b><u>Component Sets</u></b></font></td>
 	        </tr>		
-		
+-->		
 		<tr height="15px">
 			<th class="dataTableHeader" scope="col" align="left" width="20px">&#xA0;</th>
 			<th class="dataTableHeader" scope="col" align="left">Label</th>
