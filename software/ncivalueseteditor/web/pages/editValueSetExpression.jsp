@@ -128,7 +128,6 @@
 	    selectedOntology = DataUtils.getFormalName(vsb.getSelectedOntology(), null);
 	    
 	    if (selectedOntology == null) {
-//System.out.println("(?????) Unable to find formalname for: " + vsb.getSelectedOntology());	
 selectedOntology = "NCI Thesaurus";
 
 	    } else {
@@ -511,6 +510,7 @@ if (expression == null) expression = "";
 					id="Reset"
 					value="Reset"
 					image="#{subsetEditor_requestContextPath}/images/reset.gif"
+					action="#{ValueSetBean.resetVSDExpression}" 
 					onclick="javascript:resetExpression()"
 					alt="Reset Expression" >
 				</h:commandButton>

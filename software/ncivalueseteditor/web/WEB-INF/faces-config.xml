@@ -408,7 +408,12 @@
           <to-view-id>/pages/coding_scheme_references.jsp</to-view-id>
        </navigation-case>
        
-
+       <navigation-case>
+          <from-action>#{ValueSetBean.resetVSDExpression}</from-action>
+          <from-outcome>reset</from-outcome>
+          <to-view-id>/pages/editValueSetExpression.jsp</to-view-id>
+       </navigation-case>
+       
        <navigation-case>
           <from-action>#{ValueSetBean.resolveVSDAction}</from-action>
           <from-outcome>error</from-outcome>

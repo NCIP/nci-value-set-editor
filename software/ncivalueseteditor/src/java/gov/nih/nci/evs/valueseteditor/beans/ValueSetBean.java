@@ -1315,8 +1315,9 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
             if (item.getCheckbox().isSelected()) {
 				knt++;
                 if (_cart.containsKey(item._uri)) {
+					//KLO
+					removeValueSetObject(item._uri);
                     i.remove();
-
                     setExpression("");
 				}
             }
@@ -2991,8 +2992,6 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 	}
 
 
-
-
     public ValueSetObject getValueSetObject(String vsd_uri) {
 	    if (valueSetObjectHashMap == null) {
 			valueSetObjectHashMap = new HashMap();
@@ -3010,5 +3009,55 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 			valueSetObjectHashMap.put(obj.getUri(), obj);
 		}
 	}
+
+    public void removeValueSetObject(String vsd_uri) {
+	    if (valueSetObjectHashMap == null) {
+			return;
+		}
+		if (!valueSetObjectHashMap.containsKey(vsd_uri)) return;
+		valueSetObjectHashMap.remove(vsd_uri);
+	}
+
+    public String resetVSDExpression() {
+_logger.debug("===== resetVSDExpression");
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String expression = null;
+
+		expression = request.getParameter("expression");
+		if (expression != null) {
+			expression = expression.trim();
+		}
+
+        request.getSession().removeAttribute("message");
+    	_message = null;
+    	String curr_uri = FacesUtil.getRequestParameter("uri");
+
+        ValueSetObject item = null;
+
+        String vsd_uri = (String) request.getParameter("uri");
+
+        item = getValueSetObject(vsd_uri);
+
+        if(item != null) {
+			/*
+			if (expression.compareTo(item.getExpression()) == 0) {
+				item.setExpression("");
+			} else {
+				item.setExpression(expression);
+			}
+			*/
+			item.setExpression("");
+	    }
+
+	    //setUri(vsd_uri);
+
+	    return "reset";
+	}
+
+
 
 } // End of ValueSetBean

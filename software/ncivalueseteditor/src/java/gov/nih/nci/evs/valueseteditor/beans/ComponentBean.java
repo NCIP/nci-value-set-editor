@@ -1649,6 +1649,13 @@ if (vs_obj == null) {
 
     }
 
-
+    public void removeComponentObject(String vsd_uri, String component_label) {
+	    if (componentObjectHashMap == null) {
+			return;
+		}
+		String key = vsd_uri + "$" + component_label;
+		if (!componentObjectHashMap.containsKey(key)) return;
+		componentObjectHashMap.remove(key);
+	}
 
 } // End of ComponentBean
