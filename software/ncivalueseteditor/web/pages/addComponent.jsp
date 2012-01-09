@@ -746,7 +746,7 @@ if (rel_search_association == null || rel_search_association.compareTo("") == 0)
 
                     <td align="left" class="inputItem">
                     <%
-                          if (direction != null && direction.compareTo("Backward") == 0) {
+                          if (direction != null && direction.compareToIgnoreCase("Backward") == 0) {
 		    %>
 		                  <input type="radio" id="direction" name="direction" value="Forward" alt="Forward" tabindex="5">Forward&nbsp;
 				  <input type="radio" id="direction" name="direction" value="Backward" alt="Backward" checked tabindex="6">Backward;

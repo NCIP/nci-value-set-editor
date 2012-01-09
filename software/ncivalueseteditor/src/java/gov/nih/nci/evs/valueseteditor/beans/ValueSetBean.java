@@ -614,12 +614,32 @@ public class ValueSetBean {
 			Source source = sources[i];
 			_selectedSource = source.getContent();
     	    item.setSources(_selectedSource);
-    	    System.out.println("source: " + _selectedSource);
+    	    //System.out.println("source: " + _selectedSource);
 		}
 
     	DefinitionEntry[] entries = vsd.getDefinitionEntry();
 
         String component_label = null;
+
+
+ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
+	     .getExternalContext().getSessionMap().get("ComponentBean");
+
+	    if (componentBean == null) {
+			try {
+				componentBean = new ComponentBean();
+				FacesContext.getCurrentInstance()
+					 .getExternalContext().getSessionMap().put("ComponentBean", componentBean);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+        componentBean = (ComponentBean)FacesContext.getCurrentInstance()
+	     .getExternalContext().getSessionMap().get("ComponentBean");
+
+	    String expression = "";
+
     	for (int i=0; i<entries.length; i++) {
 			DefinitionEntry entry = entries[i];
 
@@ -628,14 +648,33 @@ public class ValueSetBean {
 			String label = "C" + j;
 			component_label = label;
 			ob.setLabel(label);
+
+            if (i == 0) {
+				expression = label;
+			} else {
+				expression = expression + " ";
+				expression = expression + ob.getOperator();
+				expression = expression + " ";
+				expression = expression + label;
+			}
+
 			ob.setDescription(label);
     	    item._compList.put(label, ob);
+
+
+	        componentBean.addComponentObject(_uri, ob);
+
 		}
-		if (item.getCompListSize() == 0) {
-			item.setExpression(component_label);
-		}
+		expression = expression.trim();
+
+		FacesContext.getCurrentInstance()
+			 .getExternalContext().getSessionMap().put("ComponentBean", componentBean);
+
+		item.setExpression(expression);
 
         _cart.put(_uri,item);
+        addValueSetObject(item);
+
         _new_vsd = false;
 
 		return "save_copy";
@@ -647,7 +686,6 @@ public class ValueSetBean {
 
 		DefinitionOperator operator = entry.getOperator();
 		System.out.println("operator: " + operator.toString());  //AND, OR, SUBTRACT
-
 
         java.lang.Long ruleOrder = entry.getRuleOrder();
         System.out.println("ruleOrder: " + ruleOrder);
@@ -662,6 +700,7 @@ public class ValueSetBean {
 		EntityReference entity_ref = entry.getEntityReference();
 		if (entity_ref != null) {
 			ob.setType("Relationship");
+			ob.setOperator(operator.toString());
 			ob.setVocabulary(entity_ref.getEntityCodeNamespace());
 			ob.setFocusConceptCode(entity_ref.getEntityCode());
 
@@ -706,36 +745,6 @@ public class ValueSetBean {
 			ob.setAlgorithm(pmv.getMatchAlgorithm());
 			ob.setMatchText(pmv.getContent());
 		}
-
-/*
- java.lang.String 	getEntityCode()
-          Returns the value of field 'entityCode'.
- java.lang.String 	getEntityCodeNamespace()
-          Returns the value of field 'entityCodeNamespace'.
- java.lang.Boolean 	getLeafOnly()
-          Returns the value of field 'leafOnly'.
- java.lang.String 	getReferenceAssociation()
-          Returns the value of field 'referenceAssociation'.
- java.lang.Boolean 	getTargetToSource()
-          Returns the value of field 'targetToSource'.
- java.lang.Boolean 	getTransitiveClosure()
-          Returns the value of field 'transitiveClosure'.
- java.lang.Boolean 	isLeafOnly()
-          Returns the value of field 'leafOnly'.
- java.lang.Boolean 	isTargetToSource()
-          Returns the value of field 'targetToSource'.
- java.lang.Boolean 	isTransitiveClosure()
-          Returns the value of field 'transitiveClosure'.
- */
-
-
-
-
-
-		// determine type
-
-
-
 		return ob;
 	}
 
@@ -767,7 +776,6 @@ public class ValueSetBean {
 	}
 
     public String resolveVSDAction() {
-_logger.debug("===== resolveValueSetAction");
 		String resolved_vs_key = "";
 
         HttpServletRequest request =
@@ -787,19 +795,20 @@ _logger.debug("===== resolveValueSetAction");
         request.getSession().removeAttribute("message");
     	_message = null;
     	String curr_uri = FacesUtil.getRequestParameter("uri");
-    	_logger.debug("Resolving value set: " + curr_uri);
-
         ValueSetObject item = null;
 
         String vsd_uri = (String) request.getParameter("uri");
-
         item = getValueSetObject(vsd_uri);
+
+
+        if(item == null) {
+		}
 
         if(item != null) {
 
         //if (_cart.containsKey(curr_uri)) {
         	//item = _cart.get(curr_uri);
-			System.out.println("URI: " + curr_uri);
+			System.out.println("=========================================================URI: " + curr_uri);
 			if (item.getCompListSize() > 1) {
 				if (expression == null || expression.compareTo("") == 0) {
 					String msg = "WARNING: Please complete the value set expression.";
@@ -839,9 +848,6 @@ _logger.debug("===== resolveValueSetAction");
 				System.out.println("\n");
 			}
 		}
-
-
-		_logger.debug("Resolving value set: Step 1 ");
 
 				// To be implemented.
 
@@ -910,8 +916,6 @@ _logger.debug("===== resolveValueSetAction");
         request.getSession().removeAttribute("message");
     	_message = null;
     	String curr_uri = FacesUtil.getRequestParameter("uri");
-    	_logger.debug("***************************** continueResolveValueSetAction Resolving value set: " + curr_uri);
-
 		//String expression = FacesUtil.getRequestParameter("expression");
 		//if (expression != null) expression = expression.trim();
 		String infixExpression = null;
@@ -920,19 +924,12 @@ _logger.debug("===== resolveValueSetAction");
         String vsd_uri = (String) request.getParameter("uri");
 
         item = getValueSetObject(vsd_uri);
-
         if(item != null) {
-
 
         //if (_cart.containsKey(curr_uri)) {
         //	item = _cart.get(curr_uri);
 
 			infixExpression = item.getExpression();;
-
-			System.out.println("continueResolveValueSetAction infixExpression: " + infixExpression);
-
-
-			System.out.println("URI: " + curr_uri);
 			if (item.getCompListSize() > 1) {
 				if (infixExpression == null || infixExpression.compareTo("") == 0) {
 					String msg = "WARNING: Please complete the value set expression.";
@@ -1714,6 +1711,9 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
 
     public class ComponentObject {
         private String _label = null;
+
+        private String _operator = "";
+
         private String _description = null;
 
         private String _vocabulary = null;
@@ -1742,6 +1742,15 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
         public ComponentObject() {
 
 		}
+
+        public String getOperator() {
+        	return _operator;
+        }
+
+        public void setOperator(String operator) {
+        	this._operator = operator;
+        }
+
 
         public String getValueSetReference() {
         	return _selectValueSetReference;
@@ -3026,12 +3035,12 @@ _logger.debug("===== resetVSDExpression");
                 .getExternalContext().getRequest();
 
         String expression = null;
-
+/*
 		expression = request.getParameter("expression");
 		if (expression != null) {
 			expression = expression.trim();
 		}
-
+*/
         request.getSession().removeAttribute("message");
     	_message = null;
     	String curr_uri = FacesUtil.getRequestParameter("uri");
@@ -3051,7 +3060,13 @@ _logger.debug("===== resetVSDExpression");
 			}
 			*/
 			item.setExpression("");
-	    }
+			addValueSetObject(item);
+
+
+	    } else {
+			_logger.debug("===== resetVSDExpression UNABLE TO FIND ITEM " + vsd_uri);
+
+		}
 
 	    //setUri(vsd_uri);
 

@@ -63,7 +63,7 @@
      
       <table border="0" width="80%">
       <tr>
-       <td align="left"><font size="4"><b>Copy Value Set</b></font></td>
+       <td align="left"><font size="4"><b>Clone Value Set</b></font></td>
 
       </tr>
       </table>
