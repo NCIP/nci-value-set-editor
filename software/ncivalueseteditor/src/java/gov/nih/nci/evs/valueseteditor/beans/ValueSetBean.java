@@ -520,6 +520,17 @@ public class ValueSetBean {
     }
 
 
+    public String convertSetOperator(String operator) {
+		if (operator.compareToIgnoreCase("OR") == 0) {
+			return "&#x222a;";
+		} else if (operator.compareToIgnoreCase("AND") == 0) {
+			return "&#x2229;";
+		} else if (operator.compareToIgnoreCase("SUBTRACT") == 0) {
+			return "/";
+		}
+		return " ";
+	}
+
     public String saveCopyAction() {
 		_selectValueSetReference = FacesUtil.getRequestParameter("selectValueSetReference");
         ValueSetDefinition vsd = ValueSetUtils.getValueSetDefinitionByURI(_selectValueSetReference);
@@ -528,7 +539,7 @@ public class ValueSetBean {
 
      	_uri = FacesUtil.getRequestParameter("uri");
 
-			HttpServletRequest request =
+		HttpServletRequest request =
 				(HttpServletRequest) FacesContext.getCurrentInstance()
 					.getExternalContext().getRequest();
 
@@ -536,21 +547,20 @@ public class ValueSetBean {
         if (_uri == null || _uri.length() < 1) {
             _message = resource.getString("error_missing_uri");
 
-
-			request.setAttribute("selectValueSetReference", selectValueSetReference);
-			request.setAttribute("uri_value", _uri);
-
-
+			request.getSession().setAttribute("selectValueSetReference", selectValueSetReference);
+			request.getSession().setAttribute("uri_value", _uri);
             request.setAttribute("message", _message);
 
             _logger.debug("URI is null.");
             return "error";
         }
 
+
 		boolean retval = DataUtils.validateVSDURI(_uri);
+
 		if (!retval) {
-			request.setAttribute("uri_value", _uri);
-			request.setAttribute("selectValueSetReference", selectValueSetReference);
+			request.getSession().setAttribute("uri_value", _uri);
+			request.getSession().setAttribute("selectValueSetReference", selectValueSetReference);
 			_message = "WARNING: A value Set Definition with the same URI, " + _uri + ", already exists on the server.";
 			request.setAttribute("message", _message);
 			 return "error";
@@ -559,8 +569,8 @@ public class ValueSetBean {
 
 		retval = validateVSDURI(_uri);
 		if (!retval) {
-			request.setAttribute("uri_value", _uri);
-			request.setAttribute("selectValueSetReference", selectValueSetReference);
+			request.getSession().setAttribute("uri_value", _uri);
+			request.getSession().setAttribute("selectValueSetReference", selectValueSetReference);
 			_message = "WARNING: A value Set Definition with the same URI, " + _uri + ", already exists.";
 			request.setAttribute("message", _message);
 			 return "error";
@@ -653,15 +663,13 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 				expression = label;
 			} else {
 				expression = expression + " ";
-				expression = expression + ob.getOperator();
+				expression = expression + convertSetOperator(ob.getOperator());
 				expression = expression + " ";
 				expression = expression + label;
 			}
 
 			ob.setDescription(label);
     	    item._compList.put(label, ob);
-
-
 	        componentBean.addComponentObject(_uri, ob);
 
 		}
@@ -802,6 +810,8 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 
 
         if(item == null) {
+              System.out.println("************** ITEM NOT FOUND ??? URI: " + curr_uri);
+              item = _cart.get(curr_uri);
 		}
 
         if(item != null) {
@@ -924,6 +934,11 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
         String vsd_uri = (String) request.getParameter("uri");
 
         item = getValueSetObject(vsd_uri);
+
+if (item == null) {
+	item = _cart.get(curr_uri);
+}
+
         if(item != null) {
 
         //if (_cart.containsKey(curr_uri)) {
@@ -1107,7 +1122,7 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 
         String message = "No match found.";
         System.out.println("result: " + message);
-        request.getSession().setAttribute("message", message);
+        request.setAttribute("message", message);
 
         return "message";
 
@@ -1262,6 +1277,9 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
 
     	item.setSources(_selectedSource);
 
+    	item.setExpression("");
+    	_expression = "";
+
         _cart.put(_uri,item);
         _message = resource.getString("action_saved");
 
@@ -1365,7 +1383,7 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
     	request.getSession().removeAttribute("vocabulary");
     	request.getSession().removeAttribute("matchText");
     	request.getSession().removeAttribute("editAction");
-
+    	request.getSession().removeAttribute("component_obj");
 
         String vs_uri = FacesUtil.getRequestParameter("vs_uri");
         request.getSession().setAttribute("vs_uri", vs_uri);
@@ -1401,9 +1419,9 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
         ValueSetObject vs_obj = _cart.get(vs_uri);
         ComponentObject component_obj = vs_obj.getComponent(labelParam);
 
-        request.setAttribute("vs_uri", vs_uri);
-        request.setAttribute("component_object", component_obj);
-        request.setAttribute("component_label", labelParam);
+        request.getSession().setAttribute("vs_uri", vs_uri);
+        request.getSession().setAttribute("component_object", component_obj);
+        request.getSession().setAttribute("component_label", labelParam);
 
     	return "edit_component";
     }
@@ -1439,6 +1457,7 @@ System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri)
         _selectedOntology = null;
         _selectValueSetReference = null;
         _new_vsd = true;
+        _expression = null;
 
     }
 
@@ -3028,6 +3047,7 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 	}
 
     public String resetVSDExpression() {
+		_expression = "";
 _logger.debug("===== resetVSDExpression");
 
         HttpServletRequest request =
@@ -3051,24 +3071,23 @@ _logger.debug("===== resetVSDExpression");
 
         item = getValueSetObject(vsd_uri);
 
+		if (item == null) {
+			item = _cart.get(curr_uri);
+			request.getSession().setAttribute("vs_uri", curr_uri);
+		}
+
         if(item != null) {
-			/*
-			if (expression.compareTo(item.getExpression()) == 0) {
-				item.setExpression("");
-			} else {
-				item.setExpression(expression);
-			}
-			*/
 			item.setExpression("");
 			addValueSetObject(item);
+			request.getSession().setAttribute("vs_uri", item.getUri());
 
 
 	    } else {
-			_logger.debug("===== resetVSDExpression UNABLE TO FIND ITEM " + vsd_uri);
-
+			_logger.debug("===== resetVSDExpression UNABLE TO FIND ITEM???  " + vsd_uri);
 		}
 
 	    //setUri(vsd_uri);
+
 
 	    return "reset";
 	}

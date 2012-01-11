@@ -78,7 +78,7 @@ System.out.println("(*) resolved_value_set.jsp cs_ref_key: " + cs_ref_key);
             		String valueSetSearch_requestContextPath = request
             				.getContextPath();
 
-            		String message = (String) request.getSession().getAttribute("message");
+            		String message = (String) request.getAttribute("message");
             		request.getSession().removeAttribute("message");
             		
             		

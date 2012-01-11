@@ -130,19 +130,14 @@
 	    if (selectedOntology == null) {
 selectedOntology = "NCI Thesaurus";
 
-	    } else {
-	    
-System.out.println("(*****) selectedOntology: " + selectedOntology);	
-	    }
+	    } 
 	    
 
 curr_uri = vsb.getUri();
 if (curr_uri == null) {
-    curr_uri = (String) request.getAttribute("vs_uri");
+    curr_uri = (String) request.getSession().getAttribute("vs_uri");
 }
 
-
-System.out.println("(*) curr_uri: " + curr_uri);
 
 expression = vsb.getExpression();
 if (expression == null) expression = "";
@@ -161,7 +156,13 @@ if (expression == null) expression = "";
 			    System.out.println("\tcheck box checked: " +  co.getCheckbox());
 
 			}
-		}		    
+		} else {
+
+
+System.out.println("(*) objs == null??? " + curr_uri);
+
+
+		}
 	    
 	}
 
@@ -176,6 +177,7 @@ if (expression == null) expression = "";
                 <p class="textbodyred"><%=warning_msg%></p>
              <%
              }
+             
              %>
 	
 		      
@@ -235,6 +237,8 @@ if (expression == null) expression = "";
 
                            <select id="codingScheme" name="codingScheme" size="1">
 <%
+
+ 
                             Vector formalname_vec = null;
                             try {
                             	formalname_vec = DataUtils.getOntologyNames();
@@ -245,9 +249,6 @@ if (expression == null) expression = "";
                             if (formalname_vec != null) { 
 				    for (int i=0; i<formalname_vec.size(); i++) {
 				      t = (String) formalname_vec.elementAt(i);
-				      
-				      //System.out.println(t + " : " + selectedOntology);
-				      
 				      
 				      if (t.compareToIgnoreCase(selectedOntology) == 0) {
 				      
@@ -335,7 +336,8 @@ if (expression == null) expression = "";
     <hr />
 
 
- <%   
+ <% 
+ 
  request.getSession().removeAttribute("vs_obj");
  if (!isNewVSD) { 
 
@@ -352,11 +354,7 @@ if (expression == null) expression = "";
 	        
 	<table class="dataTable" summary="" cellpadding="3" cellspacing="0"
 		border="0" width="96%">
-<!--		
-	        <tr>
-	           <td align="right"><font size="3"><b><u>Component Sets</u></b></font></td>
-	        </tr>		
--->		
+		
 		<tr height="15px">
 			<th class="dataTableHeader" scope="col" align="left" width="20px">&#xA0;</th>
 			<th class="dataTableHeader" scope="col" align="left">Label</th>
@@ -368,7 +366,8 @@ if (expression == null) expression = "";
 
 
 
-<%    
+<%
+
 	if (!isNewVSD && componentCount == 0) {
 %>	
 		<tr valign="top">
@@ -380,7 +379,8 @@ if (expression == null) expression = "";
 		</tr>
 		
 <%	
-	} else if (componentCount > 0){
+	} else if (componentCount > 0) {
+	
 		Collection<ComponentObject> objs = vsb.getComponentObjectList();
 			
 		ArrayList co_list = new ArrayList();
@@ -446,7 +446,9 @@ if (expression == null) expression = "";
 
 
 		
-<%    if (!isNewVSD) { %>
+<%    if (!isNewVSD) { 
+
+%>
 
 	      <tr>
 	          <td align="right" >&nbsp;</td>
@@ -475,6 +477,7 @@ if (expression == null) expression = "";
 
 	<%
 	if (componentCount > 1) {
+	
 	%>
 
 	      <table border="0" width="80%">
@@ -544,6 +547,7 @@ if (expression == null) expression = "";
 	<%
 	} 
 	else if (componentCount > 0){
+	
 	%>
 
 
@@ -578,6 +582,7 @@ if (expression == null) expression = "";
 
 	<%
 	}
+
 	%>
 
 

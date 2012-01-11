@@ -72,7 +72,7 @@ String requestContextPath = request.getContextPath();
 
 System.out.println("requestContextPath: " + requestContextPath);
 
-String message = (String) request.getSession().getAttribute("message");  
+String message = (String) request.getAttribute("message");  
 request.getSession().removeAttribute("message");  
 
 

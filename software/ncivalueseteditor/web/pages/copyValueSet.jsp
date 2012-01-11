@@ -111,7 +111,7 @@
  	   <%
 	   
  	     Vector item_vec = DataUtils.getValueSetDefinitions();
- 	     String selectValueSetReference = (String) request.getAttribute("selectValueSetReference");
+ 	     String selectValueSetReference = (String) request.getSession().getAttribute("selectValueSetReference");
  	     
  	     
  	     if (selectValueSetReference == null) {

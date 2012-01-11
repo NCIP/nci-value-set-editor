@@ -125,7 +125,10 @@
           if (radioObj[1].checked) dir = "Backward";
       }
       
-      
+      var focus = "";
+      if (document.forms["addComponentForm"].focusConceptCode != null) {
+            focus = document.forms["addComponentForm"].focusConceptCode.value;
+      }            
       
       window.location.href="/ncivalueseteditor/pages/editComponent.jsf?refresh=1"
           + "&action=edit"
@@ -139,6 +142,7 @@
           + "&prop="+ selectProperty
           + "&rel="+ rel_search_association
           + "&dir="+ dir
+          + "&focus="+ focus
           + "&dictionary="+ dictionary;
 
     }
@@ -162,7 +166,7 @@
 
 <%
 
-String warning_msg = (String) request.getSession().getAttribute("message");
+String warning_msg = (String) request.getAttribute("message");
 
 String edit_action = null;
 String vs_uri = null;
@@ -318,6 +322,13 @@ if (edit_action != null && edit_action.compareTo("edit") == 0) {
     component_obj = componentBean.getComponentObject(vs_uri, component_label); 
 } else if (preview != null && preview.compareTo("true") == 0) {
     component_obj = (ValueSetBean.ComponentObject) request.getSession().getAttribute("preview_component");
+    if (component_obj != null) request.getSession().removeAttribute("preview_component");
+}
+
+
+
+if (component_obj == null) {
+    component_obj = (ValueSetBean.ComponentObject) request.getSession().getAttribute("component_obj");
 }
 
 
@@ -430,7 +441,7 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
 
 	_vocabulary = adv_search_vocabulary;
 
-	label = (String) request.getParameter("label");
+	_label = (String) request.getParameter("label");
 	description = (String) request.getParameter("description");
 
 	search_string = (String) request.getParameter("text");
@@ -441,6 +452,8 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
 
 	selectValueSetReference = (String) request.getParameter("ref_uri");
 	_selectedDirection = (String) request.getParameter("dir");
+	_focusConceptCode = (String) request.getParameter("focus");
+
     } 
     
     

@@ -1310,5 +1310,8 @@ System.out.println(	"WARNING: DataUtils.getCodingSchemeURI cannot find coding sc
  	return cns;
     }
 
-
+    public static boolean isNull(String value) {
+		if (value == null || value.compareTo("null") == 0 || value.compareTo("undefined") == 0) return true;
+		return false;
+	}
 }

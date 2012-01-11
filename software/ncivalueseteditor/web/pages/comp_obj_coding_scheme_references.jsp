@@ -70,9 +70,7 @@
 
 String requestContextPath = request.getContextPath();
 
-System.out.println("requestContextPath: " + requestContextPath);
-
-String message = (String) request.getSession().getAttribute("message");  
+String message = (String) request.getAttribute("message");  
 request.getSession().removeAttribute("message");  
 
 
@@ -90,9 +88,7 @@ request.getSession().removeAttribute("message");
 	
 	if (vsb == null) {
 	    System.out.println("ValueSetBean == null???");
-	} else {
-	    System.out.println("ValueSetBean != null");
-	}
+	} 
 	
 	
 vsd_uri = vsb.getUri();
@@ -102,19 +98,12 @@ if (vsd_uri == null) {
     vsd_uri = (String) request.getSession().getAttribute("vs_uri");
 }
 
-System.out.println("vsd_uri " + vsd_uri);
 
 //ValueSetObject vs_obj = vsb.getValueSet(vsd_uri);
 
 ValueSetObject vs_obj = (ValueSetObject) request.getSession().getAttribute("vs_obj");//vsb.getValueSet(vsd_uri);
 String ComponentObjectLabel = (String) request.getSession().getAttribute("ComponentObjectLabel");
 String ComponentDescription = (String) request.getSession().getAttribute("ComponentDescription");
-
-
-System.out.println("[***] comp_obj_cs_reference.jsp vsd_uri " + vsd_uri);
-System.out.println("[***] comp_obj_cs_reference.jsp ComponentObjectLabel " + ComponentObjectLabel);
-
-
 
 
 Vector codingSchemeName_vec = vsb.findParticipatingCodingSchemes(vs_obj);
@@ -131,9 +120,6 @@ if (codingSchemeName_vec != null) {
 }
 
 Vector coding_scheme_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(codingSchemeName_vec);
-
-
-System.out.println("coding_scheme_references.jsp coding_scheme_ref_vec.size() " + coding_scheme_ref_vec.size()) ;
 
 
 String checked = "";
@@ -180,7 +166,6 @@ int k = -1;
             
 		    String coding_scheme_ref_str = (String) coding_scheme_ref_vec.elementAt(i);
 int lcv = i+1;		    
-System.out.println("(" + lcv + ")" + coding_scheme_ref_str);		    
 		    
 		    
 		    String coding_scheme_name_version = coding_scheme_ref_str;
@@ -193,10 +178,6 @@ System.out.println("(" + lcv + ")" + coding_scheme_ref_str);
 		    
 		    
 		    String cs_version = (String) u.elementAt(1);
-		    
-System.out.println("coding_scheme_references.jsp cs_name: " + cs_name);
-
-System.out.println("coding_scheme_references.jsp cs_version: " + cs_version);
 		    
 		    String cs_tag = DataUtils.getVocabularyVersionTag(cs_name, cs_version);
 		    if (cs_tag == null) cs_tag = "";

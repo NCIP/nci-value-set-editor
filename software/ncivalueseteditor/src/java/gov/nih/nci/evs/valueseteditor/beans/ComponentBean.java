@@ -481,6 +481,7 @@ public class ComponentBean {
         String search_string = (String) request.getParameter("matchText");
         _matchText = search_string;
 
+
         String search_algorithm = (String) request.getParameter("search_algorithm");
         _algo = search_algorithm;
 
@@ -504,14 +505,20 @@ public class ComponentBean {
         _transitivity = transitivity_checkbox;
 
         String _message = null;
+/*
+if (_type.compareToIgnoreCase("Code") == 0) {
+        System.out.println("validating search_string " + _matchText);
+        _focusConceptCode = search_string;
+}
+*/
 
         if (_focusConceptCode != null && _focusConceptCode.compareTo("") != 0 && _vocabulary != null) {
 			_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
 			if (DataUtils.getConceptByCode(_vocabulary, null, null, _focusConceptCode) == null) {
 				_message = "WARNING: Invalid code " + _focusConceptCode + ".";
-				request.getSession().setAttribute("message", _message);
+				request.setAttribute("message", _message);
 				request.getSession().setAttribute("selectSearchOption", _type);
-				request.getSession().setAttribute("message", _message);
+				request.setAttribute("message", _message);
 			}
 		}
 
@@ -520,9 +527,9 @@ public class ComponentBean {
 				_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
 				if (DataUtils.getConceptByCode(_vocabulary, null, null, _matchText) == null) {
 					_message = "WARNING: Invalid code " + _matchText + ".";
-					request.getSession().setAttribute("message", _message);
+					request.setAttribute("message", _message);
 					request.getSession().setAttribute("selectSearchOption", _type);
-					request.getSession().setAttribute("message", _message);
+					request.setAttribute("message", _message);
 				}
 			}
 		}
@@ -532,22 +539,22 @@ public class ComponentBean {
 
 		if (_type.compareTo("EntireVocabulary") == 0) {
 			if (isNull(_vocabulary)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				_message = incompleteDataEntry;
 			}
 		} else if (_type.compareTo("Code") == 0) {
 			if (isNull(_vocabulary) || isNull(_matchText)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				_message = incompleteDataEntry;
 			}
 		} else if (_type.compareTo("Name") == 0) {
 			if (isNull(_vocabulary) || isNull(_matchText)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				_message = incompleteDataEntry;
 			}
 		} else if (_type.compareTo("Property") == 0) {
 			if (isNull(_vocabulary) || isNull(_matchText) || isNull(_algo) || isNull(_propertyName)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				_message = incompleteDataEntry;
 			}
 
@@ -563,26 +570,26 @@ public class ComponentBean {
 
 			if (isNull(_vocabulary)) {
 				//|| isNull(_focusConceptCode) || isNull(_rel_search_association) || isNull(_selectedDirection)) {
-				request.getSession().setAttribute("message", incompleteDataEntry + " - vocabulary.");
+				request.setAttribute("message", incompleteDataEntry + " - vocabulary.");
 				_message = incompleteDataEntry + " - vocabulary.";
 			}
 
 			if (isNull(_rel_search_association)) {
 				//|| isNull(_focusConceptCode) || isNull(_rel_search_association) || isNull(_selectedDirection)) {
-				request.getSession().setAttribute("message", incompleteDataEntry + " - association name.");
+				request.setAttribute("message", incompleteDataEntry + " - association name.");
 				_message = incompleteDataEntry + " - association name.";
 			}
 
 			if (isNull(_selectedDirection)) {
 				//|| isNull(_focusConceptCode) || isNull(_rel_search_association) || isNull(_selectedDirection)) {
-				request.getSession().setAttribute("message", incompleteDataEntry + " - association direction.");
+				request.setAttribute("message", incompleteDataEntry + " - association direction.");
 				_message = incompleteDataEntry + " - association direction.";
 			}
 
 
 			/*
 			if (isNull(_transitivity) || isNull(_include_focus_node)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				_message = incompleteDataEntry;
 			}
 			*/
@@ -591,7 +598,7 @@ public class ComponentBean {
 		} else if (_type.compareTo("EnumerationOfCodes") == 0) {
 
 			if (isNull(_vocabulary) || isNull(_codes)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				_message = incompleteDataEntry;
 			}
 		}
@@ -628,6 +635,27 @@ public class ComponentBean {
 		return _message;
 	}
 
+
+
+    public String findBestContainsAlgorithm(String matchText) {
+        if (matchText == null)
+            return "nonLeadingWildcardLiteralSubString";
+        matchText = matchText.trim();
+        if (matchText.length() == 0)
+            return "nonLeadingWildcardLiteralSubString"; // or null
+        if (matchText.length() > 1)
+            return "nonLeadingWildcardLiteralSubString";
+        char ch = matchText.charAt(0);
+        if (Character.isDigit(ch))
+            return "literal";
+        else if (Character.isLetter(ch))
+            return "LuceneQuery";
+        else
+            return "literalContains";
+    }
+
+
+
 public String previewComponentSubsetAction() throws Exception {
     //public String previewNewComponentSubsetAction() throws Exception {
 
@@ -637,11 +665,6 @@ public String previewComponentSubsetAction() throws Exception {
                 .getExternalContext().getRequest();
 
         String message = validateComponentForm(request);
-        if (message != null) {
-			request.getSession().setAttribute("message", message);
-			return "message";
-		}
-
 
         String vs_uri = (String) request.getParameter("vs_uri");
 
@@ -675,6 +698,12 @@ public String previewComponentSubsetAction() throws Exception {
         String search_string = (String) request.getParameter("matchText");
 
         String search_algorithm = (String) request.getParameter("search_algorithm");
+
+
+        if (search_algorithm.compareToIgnoreCase("contains") == 0) {
+			search_algorithm = findBestContainsAlgorithm(search_string);
+		}
+
         _algo = search_algorithm;
 
         String code_enumeration = (String) request.getParameter("code_enumeration");
@@ -734,6 +763,9 @@ public String previewComponentSubsetAction() throws Exception {
 		request.getSession().setAttribute("ComponentDescription", co.getDescription());
 
 
+		request.getSession().setAttribute("component_obj", co);
+
+
 
 /*
 
@@ -753,6 +785,12 @@ public String previewComponentSubsetAction() throws Exception {
         request.getSession().setAttribute("preview", "true");
 */
 
+
+        if (message != null) {
+			request.setAttribute("message", message);
+			return "message";
+		}
+
 		return "comp_obj_coding_scheme_references";
 
     }
@@ -768,7 +806,7 @@ public String previewComponentSubsetAction() throws Exception {
 
         String message = validateComponentForm(request);
         if (message != null) {
-			request.getSession().setAttribute("message", message);
+			request.setAttribute("message", message);
 			return "message";
 		}
 
@@ -879,8 +917,6 @@ String vs_uri = null;
 		}
 
 		request.getSession().setAttribute("vs_obj", vs_obj);
-
-
 		request.getSession().setAttribute("vs_uri", vs_uri);
 
 
@@ -940,7 +976,7 @@ String vs_uri = null;
 
         if (iterator == null) {
 			String message = "Unable to resolve component set.";
-			request.getSession().setAttribute("message", message);
+			request.setAttribute("message", message);
 			return "message";
 		} else {
 			System.out.println("resolveComponentSubsetAction iterator != null");
@@ -983,7 +1019,7 @@ String vs_uri = null;
 
         String message = "No match found.";
         System.out.println("search_results " + message);
-        request.getSession().setAttribute("message", message);
+        request.setAttribute("message", message);
         return "message";
 
     }
@@ -1035,7 +1071,7 @@ ValueSetObject vs_obj = vsb.getValueSet(vsd_uri);
 
 if (vs_obj == null) {
 	String message = "ERROR: Value set object is not found in session.";
-	request.getSession().setAttribute("message", message);
+	request.setAttribute("message", message);
 	return "message";
 } else {
 	System.out.println("continueResolveComponentSubsetAction vs_obj found in session.: " + vs_obj.getUri());
@@ -1134,7 +1170,7 @@ if (component == null) {
 
         if (iterator == null) {
 			String message = "WARNING: Unable to resolve component set.";
-			request.getSession().setAttribute("message", message);
+			request.setAttribute("message", message);
 			return "message";
 		} else {
 			System.out.println("continueResolveComponentSubsetAction iterator != null");
@@ -1162,7 +1198,7 @@ if (component == null) {
 		}
 
         String message = "No match found.";
-        request.getSession().setAttribute("message", message);
+        request.setAttribute("message", message);
 
         if (component == null) {
 			return "add_component";
@@ -1181,9 +1217,11 @@ if (component == null) {
         request.getSession().removeAttribute("preview");
 
         _message = "";
-        request.getSession().removeAttribute("message");
+        request.removeAttribute("message");
 
 		//String vs_uri = vsb.getUri();
+
+		String message = validateComponentForm(request);
 
 		String vs_uri = (String) request.getParameter("vs_uri");//vsb.getUri();
 
@@ -1197,17 +1235,21 @@ if (component == null) {
     	_logger.debug("saveComponentSubsetAction Label: " + _label);
 
 
-            request.getSession().setAttribute("vs_uri", vs_uri);
-            request.getSession().setAttribute("label", _label);
+request.getSession().removeAttribute("component_obj");
 
 
+		request.getSession().setAttribute("vs_uri", vs_uri);
+		request.getSession().setAttribute("label", _label);
+
+/*
         // Validate input
         if (vsb.getUri() == null || vsb.getUri().length() < 1) {
             _message = resource.getString("error_missing_uri");
-            request.getSession().setAttribute("message", _message);
+            request.setAttribute("message", _message);
             request.getSession().setAttribute("label", _label);
             return "message";
         }
+
 
         String message = validateComponentForm(request);
         if (message != null) {
@@ -1216,14 +1258,14 @@ if (component == null) {
             request.getSession().setAttribute("label", _label);
 
 
-			request.getSession().setAttribute("message", message);
+			request.setAttribute("message", message);
 			return "message";
 		}
 
 
         if (_label == null || _label.length() < 1) {
             _message = resource.getString("error_missing_label");
-            request.getSession().setAttribute("message", _message);
+            request.setAttribute("message", _message);
 
             request.getSession().setAttribute("vs_uri", vs_uri);
             request.getSession().setAttribute("label", _label);
@@ -1231,7 +1273,7 @@ if (component == null) {
 
             return "error";
         }
-
+*/
 		String component_label = _label;
         ValueSetObject existing_vs_obj = vsb.getValueSet(vs_uri);
         ValueSetBean.ComponentObject component = existing_vs_obj.getComponent(component_label);
@@ -1317,9 +1359,9 @@ if (component == null) {
 			_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
 			if (DataUtils.getConceptByCode(_vocabulary, null, null, _focusConceptCode) == null) {
 				_message = "WARNING: Invalid code " + _focusConceptCode + ".";
-				request.getSession().setAttribute("message", _message);
+				request.setAttribute("message", _message);
 				request.getSession().setAttribute("selectSearchOption", _type);
-				request.getSession().setAttribute("message", _message);
+				request.setAttribute("message", _message);
 
 				return "error";
 			}
@@ -1330,9 +1372,9 @@ if (component == null) {
 				_vocabulary = DataUtils.getCodingSchemeName(_vocabulary, null);
 				if (DataUtils.getConceptByCode(_vocabulary, null, null, _matchText) == null) {
 					_message = "WARNING: Invalid code " + _matchText + ".";
-					request.getSession().setAttribute("message", _message);
+					request.setAttribute("message", _message);
 					request.getSession().setAttribute("selectSearchOption", _type);
-					request.getSession().setAttribute("message", _message);
+					request.setAttribute("message", _message);
 					return "error";
 				}
 			}
@@ -1345,39 +1387,39 @@ if (component == null) {
 
 		if (_type.compareTo("EntireVocabulary") == 0) {
 			if (isNull(_vocabulary)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				return "error";
 			}
 		} else if (_type.compareTo("Code") == 0) {
 			if (isNull(_vocabulary) || isNull(_matchText)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				return "error";
 			}
 		} else if (_type.compareTo("Name") == 0) {
 			if (isNull(_vocabulary) || isNull(_matchText)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				return "error";
 			}
 		} else if (_type.compareTo("Property") == 0) {
 			if (isNull(_vocabulary) || isNull(_matchText) || isNull(_algo) || isNull(_propertyName)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				return "error";
 			}
 
 		} else if (_type.compareTo("Relationship") == 0) {
 
 			if (isNull(_vocabulary) || isNull(_focusConceptCode) || isNull(_rel_search_association) || isNull(_selectedDirection)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				return "error";
 			}
 			if (isNull(_transitivity) || isNull(_include_focus_node) || isNull(_rel_search_association)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				return "error";
 			}
 		} else if (_type.compareTo("EnumerationOfCodes") == 0) {
 
 			if (isNull(_vocabulary) || isNull(_codes)) {
-				request.getSession().setAttribute("message", incompleteDataEntry);
+				request.setAttribute("message", incompleteDataEntry);
 				return "error";
 			}
 		}
@@ -1407,6 +1449,10 @@ String _component_label = (String) request.getParameter("component_label");
 	    }
 
       	_logger.debug("rel_search_association: " + _rel_search_association);
+
+      	if (co == null) {
+			co = new ValueSetBean().instantiateComponentObject();
+		}
 
         co.setLabel(_label);
         co.setDescription(_description);
@@ -1466,10 +1512,46 @@ String _component_label = (String) request.getParameter("component_label");
 		request.getSession().removeAttribute("preview");
 		request.getSession().removeAttribute("preview_vs_uri");
 
+
+        // Validate input
+        if (vsb.getUri() == null || vsb.getUri().length() < 1) {
+            _message = resource.getString("error_missing_uri");
+            request.setAttribute("message", _message);
+            request.getSession().setAttribute("label", _label);
+
+            request.getSession().setAttribute("component_obj", co);
+            return "message";
+        }
+
+
+
+        if (message != null) {
+
+            request.getSession().setAttribute("vs_uri", vs_uri);
+            request.getSession().setAttribute("label", _label);
+
+
+			request.setAttribute("message", message);
+			request.getSession().setAttribute("component_obj", co);
+			return "message";
+		}
+
+
+        if (_label == null || _label.length() < 1) {
+            _message = resource.getString("error_missing_label");
+            request.setAttribute("message", _message);
+
+            request.getSession().setAttribute("vs_uri", vs_uri);
+            request.getSession().setAttribute("label", _label);
+
+            request.getSession().setAttribute("component_obj", co);
+            return "error";
+        }
+
         addComponentObject(vs.getUri(), co);
-
-
+        request.getSession().removeAttribute("component_obj");
         return "success";
+
     }
 
     public String cancelComponentSubsetAction() throws Exception {
@@ -1485,8 +1567,7 @@ String _component_label = (String) request.getParameter("component_label");
 
         if (vs_uri != null) {
 			vsb.setUri(vs_uri);
-
-			request.setAttribute("vs_uri", vs_uri);
+			request.getSession().setAttribute("vs_uri", vs_uri);
 		}
 
 		return "cancel";
@@ -1602,7 +1683,7 @@ ValueSetObject vs_obj = (ValueSetObject) request.getSession().getAttribute("vs_o
 
 if (vs_obj == null) {
 	String message = "ERROR: Value set object is not found in session.";
-	request.getSession().setAttribute("message", message);
+	request.setAttribute("message", message);
 	return "message";
 }
 
