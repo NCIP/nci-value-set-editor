@@ -700,7 +700,7 @@ public String previewComponentSubsetAction() throws Exception {
         String search_algorithm = (String) request.getParameter("search_algorithm");
 
 
-        if (search_algorithm.compareToIgnoreCase("contains") == 0) {
+        if (search_algorithm != null && search_algorithm.compareToIgnoreCase("contains") == 0) {
 			search_algorithm = findBestContainsAlgorithm(search_string);
 		}
 
