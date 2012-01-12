@@ -269,21 +269,12 @@ public class ValueSetUtils //extends Stack
 		  vsd.setConceptDomain("myConceptDomain");
 		  vsd.setDefaultCodingScheme("NCI_Thesaurus");
 
-/*
-//Type 0:
-          ValueSetDefinitionReference valueSetDefinitionReference = new ValueSetDefinitionReference();
-		  valueSetDefinitionReference.setValueSetDefinitionURI("myReferencedValueSetDefinitionURI");
 
-          DefinitionEntry de = new DefinitionEntry();
-          de.setValueSetDefinitionReference(valueSetDefinitionReference);
-*/
 
           DefinitionEntry de = new DefinitionEntry();
           EntityReference er = new EntityReference();
           er.setEntityCode("T090"); //Occupation or Discipline
           vsd.addDefinitionEntry(de);
-//Type 1:
-
 
 
 
@@ -407,12 +398,6 @@ public class ValueSetUtils //extends Stack
 	}
 
 
-
-/*
-Definition Resolve Time: 268008
-Result Return Time: 74264
-Results returned: 14588
-*/
 
 
 	public static void run() {
@@ -1280,212 +1265,6 @@ Results returned: 14588
 	  }
 
 
-/*
-      public ResolvedConceptReferencesIterator searchByName(
-        Vector vsd_uri_vec, String matchText, String source,
-        String matchAlgorithm, boolean ranking, int maxToReturn) {
-        String matchText0 = matchText;
-        String matchAlgorithm0 = matchAlgorithm;
-        matchText0 = matchText0.trim();
-
-        _logger.debug("searchByName ..." + matchText);
-
-        long ms = System.currentTimeMillis(), delay = 0;
-        long tnow = System.currentTimeMillis();
-        long total_delay = 0;
-        boolean debug_flag = false;
-
-        // if (debug_flag)
-        // _logger.debug("Entering SearchUtils searchByName ...");
-
-        boolean preprocess = true;
-        if (matchText == null || matchText.length() == 0) {
-            return null;
-        }
-
-        matchText = matchText.trim();
-        if (matchAlgorithm.compareToIgnoreCase("contains") == 0) // p11.1-q11.1
-                                                                 // /100{WBC}
-        {
-            // matchAlgorithm = Constants.CONTAIN_SEARCH_ALGORITHM;
-            matchAlgorithm = findBestContainsAlgorithm(matchText);
-        }
-
-        CodedNodeSet cns = null;
-        ResolvedConceptReferencesIterator iterator = null;
-
-        String scheme = null;
-        String version = null;
-
-        try {
-            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
-
-            if (lbSvc == null) {
-                _logger.warn("lbSvc = null");
-                return null;
-            }
-
-            Vector cns_vec = new Vector();
-            for (int i = 0; i < schemes.size(); i++) {
-
-                cns = null;
-                iterator = null;
-                scheme = (String) schemes.elementAt(i);
-
-                ms = System.currentTimeMillis();
-
-                CodingSchemeVersionOrTag versionOrTag =
-                    new CodingSchemeVersionOrTag();
-                version = (String) versions.elementAt(i);
-                if (version != null)
-                    versionOrTag.setVersion(version);
-                try {
-                    if (lbSvc == null) {
-                        _logger.warn("lbSvc = null");
-                        return null;
-                    }
-                    //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
-
-                    cns = getNodeSet(lbSvc, scheme, versionOrTag);
-                    if (cns != null) {
-                        try {
-                            cns =
-                                cns.restrictToMatchingDesignations(matchText,
-                                    null, matchAlgorithm, null);
-                            cns = restrictToSource(cns, source);
-                        } catch (Exception ex) {
-                            return null;
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    // return null;
-                }
-                if (cns != null) {
-                    cns_vec.add(cns);
-                }
-
-                delay = System.currentTimeMillis() - ms;
-                if (debug_flag)
-                    _logger.debug("Restricting CNS on " + scheme
-                        + " delay (millisec.): " + delay);
-                if (debug_flag)
-                    System.out.flush();
-
-            }
-
-            iterator = null;
-
-
-            LocalNameList restrictToProperties = new LocalNameList();
-            // boolean resolveConcepts = true;
-            // if (!ranking) resolveConcepts = false;
-            boolean resolveConcepts = false;
-
-            SortOptionList sortCriteria = null;
-
-            if (ranking) {
-                sortCriteria = null;// Constructors.createSortOptionList(new
-                                    // String[]{"matchToQuery"});
-
-            } else {
-                sortCriteria =
-                    Constructors
-                        .createSortOptionList(new String[] { "entityDescription" }); // code
-                _logger.debug("*** Sort alphabetically...");
-                resolveConcepts = false;
-            }
-            try {
-                try {
-                    ms = System.currentTimeMillis();
-                    if (debug_flag)
-                        _logger
-                            .debug("Calling  cns.resolve to resolve the union CNS ... ");
-                    // iterator = cns.resolve(sortCriteria, null,
-                    // restrictToProperties, null, resolveConcepts);
-
-
-                    iterator =
-                        new QuickUnionIterator(cns_vec, sortCriteria, null,
-                            restrictToProperties, null, resolveConcepts);
-
-                    delay = System.currentTimeMillis() - ms;
-                    if (debug_flag)
-                        _logger.debug("Resolve CNS union "
-                            + "delay (millisec.): " + delay);
-
-                    // Debug.println("cns.resolve delay ---- Run time (ms): " +
-                    // (delay = System.currentTimeMillis() - ms) +
-                    // " -- matchAlgorithm " + matchAlgorithm);
-                    // DBG.debugDetails(delay, "cns.resolve",
-                    // "searchByName, CodedNodeSet.resolve");
-
-                } catch (Exception e) {
-                    _logger.error("Method: SearchUtils.searchByName 2");
-                    _logger.error("* ERROR: cns.resolve throws exceptions.");
-                    _logger.error("* " + e.getClass().getSimpleName() + ": "
-                        + e.getMessage());
-                }
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return null;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        int lcv = 0;
-        int iterator_size = 0;
-        if (iterator != null) {
-            try {
-                iterator_size = iterator.numberRemaining();
-                _logger.debug("Number of matches: " + iterator_size);
-            } catch (Exception ex) {
-
-            }
-        }
-
-        ms = System.currentTimeMillis();
-        while (iterator_size == 0 && lcv < schemes.size()) {
-            scheme = (String) schemes.elementAt(lcv);
-
-            CodingSchemeVersionOrTag versionOrTag =
-                new CodingSchemeVersionOrTag();
-            version = (String) versions.elementAt(lcv);
-            if (version != null)
-                versionOrTag.setVersion(version);
-            iterator =
-                matchConceptCode(scheme, version, matchText0, source,
-                    "LuceneQuery");
-            if (iterator != null) {
-                try {
-                    iterator_size = iterator.numberRemaining();
-                    _logger.debug("Number of matches: " + iterator_size);
-                } catch (Exception ex) {
-
-                }
-            }
-            lcv++;
-        }
-
-        delay = System.currentTimeMillis() - ms;
-        if (debug_flag)
-            _logger
-                .debug("Match concept code " + "delay (millisec.): " + delay);
-
-        total_delay = System.currentTimeMillis() - tnow;
-        _logger.debug("Total search delay: (millisec.): " + total_delay);
-
-        // return iterator;
-        return new ResolvedConceptReferencesIteratorWrapper(iterator);
-
-    }
-
-*/
-
 
 
     public static void testExportResolvedValueSetDefinition() {
@@ -1697,9 +1476,6 @@ Results returned: 14588
 ///////////////////////////////////////////////////////////////
 
 
-//isIsActive
-//public java.lang.Boolean isIsActive()
-
     public static HashMap getValueSetDefinitionURI2VSD_map() {
 		if (_valueSetDefinitionURI2VSD_map != null) {
 			return _valueSetDefinitionURI2VSD_map;
@@ -1738,7 +1514,6 @@ Results returned: 14588
 		return null;
 
 	}
-
 
 
 /*

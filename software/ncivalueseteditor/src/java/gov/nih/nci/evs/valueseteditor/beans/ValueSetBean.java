@@ -487,13 +487,7 @@ public class ValueSetBean {
 		return _new_vsd;
 	}
 
-/*
-    public boolean getIsNew() {
-		if (_uri == null) return true;
-		return false;
-		//return _new_vsd;
-	}
-*/
+
 
     public boolean getIsNotEmpty() {
 		if (getCount() == 0) {
@@ -826,12 +820,7 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 					return "error";
 				}
 			}
-/*
-            if ((expression == null || expression.compareTo("") == 0) && item.getCompListSize() == 1) {
-                ComponentObject first_component = item.getFirstComponentObject();
-				expression = first_component.getLabel();
-			}
-*/
+
 
 			item.setExpression(expression);
 
@@ -850,7 +839,6 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 				System.out.println("\t Description: " + ob.getDescription());
 				System.out.println("\t Vocabulary: " + ob.getVocabulary());
 
-//_logger.debug("\t Vocabulary: " + ob.getVocabulary());
 
 				System.out.println("\t Type: " + ob.getType());
 				System.out.println("\t MatchText: " + ob.getMatchText());
@@ -858,8 +846,6 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 				System.out.println("\n");
 			}
 		}
-
-				// To be implemented.
 
 		_logger.debug("Resolving value set: convertToValueSetDefinition infixExpression: " + expression);
 
@@ -1178,12 +1164,8 @@ if (item == null) {
 				System.out.println("\t Algorithm: " + ob.getAlgorithm());
 				System.out.println("\n");
 			}
-		} else {
-System.out.println("????? exportVSDToXMLAction curr_uri not found: " + curr_uri);
-
 		}
 
-        // To be implemented.
 		ValueSetDefinition vsd = convertToValueSetDefinition(item, expression);
 		if (vsd == null) {
 			String msg = "ERROR: Unable to construct ValueSetDefinition based on the given expression.";
@@ -2674,10 +2656,6 @@ System.out.println("Calculating  " + operand_1.getLabel() + " " + operand_1.getT
 			  return vsd;
 		  } else if (final_ob instanceof ComponentObject) {
 
-
-System.out.println("(*) final_ob instanceof ComponentObject): " );
-
-
 			ComponentObject ob = (ComponentObject) final_ob;
 			ValueSetDefinition vsd = new ValueSetDefinition();
 			Long ruleOrderCount = new Long(0);
@@ -2864,11 +2842,7 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 					sb.append("\"" + ref.getCodingSchemeName() + "\",");
 					sb.append("\"" + ref.getCodingSchemeVersion() + "\",");
 					sb.append("\"" + ref.getCodeNamespace() + "\",");
-/*
-					String definition = getNCIDefinition(ref);
-					if (definition == null) definition = "";
-					sb.append("\"" + definition + "\"");
-*/
+
 					sb.append("\r\n");
 				}
 			}
@@ -3048,19 +3022,13 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 
     public String resetVSDExpression() {
 		_expression = "";
-_logger.debug("===== resetVSDExpression");
 
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
         String expression = null;
-/*
-		expression = request.getParameter("expression");
-		if (expression != null) {
-			expression = expression.trim();
-		}
-*/
+
         request.getSession().removeAttribute("message");
     	_message = null;
     	String curr_uri = FacesUtil.getRequestParameter("uri");
@@ -3081,10 +3049,7 @@ _logger.debug("===== resetVSDExpression");
 			addValueSetObject(item);
 			request.getSession().setAttribute("vs_uri", item.getUri());
 
-
-	    } else {
-			_logger.debug("===== resetVSDExpression UNABLE TO FIND ITEM???  " + vsd_uri);
-		}
+	    }
 
 	    //setUri(vsd_uri);
 

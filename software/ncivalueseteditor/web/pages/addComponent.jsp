@@ -175,49 +175,6 @@ String component_label = null;
 String closeResolvedComponentSubset = (String) request.getSession().getAttribute("closeResolvedComponentSubset");
 
 
-/*
-String preview_vs_uri = (String) request.getSession().getAttribute("preview_vs_uri");
-
-System.out.println("*** editComponent.jsp preview_vs_uri: " + preview_vs_uri);
-
-
-if (preview_vs_uri != null) {
-    System.out.println("*** editComponent.jsp preview_vs_uri != null" );
-
-    vs_uri = preview_vs_uri;
-    component_label = (String) request.getSession().getAttribute("preview_label"); 
-    
-    System.out.println("*** editComponent.jsp component_label: " + component_label);
-    
-    
-} else {
-
-	edit_action = (String) request.getParameter("action");
-	
-	
-	if (edit_action != null && edit_action.compareTo("edit") == 0) {
-	    vs_uri = (String) request.getParameter("uri");
-	    if (vs_uri == null) {
-		vs_uri = (String) request.getSession().getAttribute("vs_uri");
-	    }
-	    component_label = (String) request.getParameter("label");
-	    
-	    if (component_label == null) {
-		component_label = (String) request.getSession().getAttribute("label"); 
-	    }
-	    
-	} else {
-	
-	    request.getSession().removeAttribute("closeResolvedComponentSubset");
-	    edit_action = (String) request.getSession().getAttribute("action");
-	    vs_uri = (String) request.getSession().getAttribute("vs_uri");
-	    component_label = (String) request.getSession().getAttribute("label");
-	}
-	
-	
-}
-*/
-
 
 String preview = null;//(String) request.getParameter("preview");
 String direction = null;
@@ -415,21 +372,6 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
         
     } 
  
- 
- 
-           //+ "&action=edit"
-           //+ "&opt="+ selectSearchOption
-           //+ "&label="+ label
-           //+ "&uri="+ vs_uri
-           //+ "&description="+ description
-           //+ "&text="+ text
-           //+ "&algorithm="+ algorithm
-           //+ "&ref_uri="+ selectValueSetReference
-           //+ "&prop="+ selectProperty
-           //+ "&rel="+ rel_search_association
-           //+ "&dir="+ dir
-           //+ "&focus="+ focus
-           //+ "&dictionary="+ dictionary;
           
 */    
     
@@ -448,6 +390,10 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
 
 	_label = (String) request.getParameter("label");
 	component_label = _label;
+	
+	
+System.out.println("*********** Refreshing page Label: " + 	_label);
+	
 	
 	description = (String) request.getParameter("description");
 	_description = description;
@@ -523,7 +469,12 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
     
     if (DataUtils.isNull(_description)) _description = "";
     if (DataUtils.isNull(_matchText)) _matchText = "";
-    if (DataUtils.isNull(_label)) _label = "";
+    if (DataUtils.isNull(_label)) {
+         _label = "";
+ System.out.println("*********** DataUtils.isNull(_label) " + 	_label);
+        
+         
+    }
     
      
 %>
@@ -554,6 +505,16 @@ transitivity_checkbox = (String) request.getSession().getAttribute("preview_tran
                              Label:
                          </td>
                          <td class="textbody">
+<%
+
+ System.out.println("*********** input Label " + 	_label);
+
+
+%>
+
+
+                         
+                         
                          
                          <input CLASS="searchbox-input" name="Label" value="<%=_label%>" size="75" tabindex="1" />
                                                 
@@ -1036,9 +997,11 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
 
               <input type="hidden" name="vs_uri" id="vs_uri" value="<%=vs_uri%>" />
               <input type="hidden" name="component_label" id="component_label" value="<%=component_label%>" />
+              <!--
               <input type="hidden" name="Label" id="Label" value="<%=component_label%>" />
-              <input type="hidden" name="action" id="action" value="add" />
+              -->
               
+              <input type="hidden" name="action" id="action" value="add" />
               
               <input type="hidden" name="state" id="state" value="edit_component" />
               <%

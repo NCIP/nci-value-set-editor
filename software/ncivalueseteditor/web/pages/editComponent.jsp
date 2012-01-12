@@ -1022,7 +1022,9 @@ if (!selectSearchOption.equals("EntireVocabulary")) {
 
               <input type="hidden" name="vs_uri" id="vs_uri" value="<%=vs_uri%>" />
               <input type="hidden" name="component_label" id="component_label" value="<%=component_label%>" />
+              
               <input type="hidden" name="Label" id="Label" value="<%=component_label%>" />
+              
               <input type="hidden" name="action" id="action" value="edit" />
               
               

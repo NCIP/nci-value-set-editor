@@ -1,7 +1,5 @@
 package gov.nih.nci.evs.valueseteditor.utilities;
 
-//import java.util.HashMap;
-//import java.util.Map;
 import java.util.*;
 
 import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
@@ -99,38 +97,7 @@ public class ValueSetSearchUtil {
         return hmap;
     }
 
-    /**
-     * Retrieve list of ontologies
-     * @return
-     * @throws LBInvocationException
-     */
 
-     /*
-    public Map<String,String> getOntologyList() throws Exception {
-
-		if (ontologyList != null) return ontologyList;
-		ontologyList = new HashMap<String,String>();
-
-    	Map<String,String> hmap = new HashMap<String,String>();
-    	CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
-        CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
-
-        for (int i = 0; i < csrs.length; i++) {
-        	CodingSchemeRendering csr = csrs[i];
-        	CodingSchemeSummary css = csr.getCodingSchemeSummary();
-        	String representsVersion = css.getRepresentsVersion();
-        	//String name = css.getLocalName();
-        	String formalname = css.getFormalName();
-
-        	if (!DataUtils.isMapping(formalname, representsVersion) &&
-        	     DataUtils.isExtension(formalname, representsVersion)) {
-				String key = name + " (" + representsVersion + ")";
-				ontologyList.put(key,name);
-		    }
-        }
-    	return ontologyList;
-    }
-    */
 
     public List getOntologyList() throws Exception {
 
@@ -138,44 +105,7 @@ public class ValueSetSearchUtil {
 
         ontologyList = new DataUtils().getOntologyList();
         return ontologyList;
-        /*
 
-        return new DataUtils().getOntologyList() ;
-
-    	//HashMap csnv2codingSchemeNameMap = new HashMap();
-    	//HashMap csnv2VersionMap = new HashMap();
-
-		ontologyList = new ArrayList();
-
-    	Map<String,String> hmap = new HashMap<String,String>();
-    	CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
-        CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
-
-        Vector v = new Vector();
-        HashSet hset = new HashSet();
-        for (int i = 0; i < csrs.length; i++) {
-        	CodingSchemeRendering csr = csrs[i];
-        	CodingSchemeSummary css = csr.getCodingSchemeSummary();
-        	String representsVersion = css.getRepresentsVersion();
-       	    String formalname = css.getFormalName();
-
-        	if (!DataUtils.isMapping(formalname, representsVersion) &&
-        	    !DataUtils.isExtension(formalname, representsVersion)) {
-
-				if (!hset.contains(formalname)) {
-					hset.add(formalname);
-					v.add(formalname);
-				}
-			}
-		}
-
-		v = SortUtils.quickSort(v);
-		for (int i=0; i<v.size(); i++) {
-			String formalname = (String) v.elementAt(i);
-			ontologyList.add(new SelectItem(formalname));
-		}
-    	return ontologyList;
-    	*/
     }
 
 
