@@ -379,8 +379,8 @@ if (obj == null) {
 
           <td class="dataCellText">
           <%
-               String url = browser_url + "/ConceptReport.jsp?dictionary=" + search_results_dictionary 
-                                        + "&version=" + search_results_version
+               String url = browser_url + "/ConceptReport.jsp?dictionary=" + rcr.getCodingSchemeName() 
+                                        + "&version=" + rcr.getCodingSchemeVersion()
                                         + "&code=" + code;
 
 
