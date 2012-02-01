@@ -669,12 +669,23 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 		}
 		expression = expression.trim();
 
+
+System.out.println("(************) Expression: " + expression);
+
+
+
 		FacesContext.getCurrentInstance()
 			 .getExternalContext().getSessionMap().put("ComponentBean", componentBean);
 
+
+System.out.println("(************) setting Expression: " + expression);
+
+
 		item.setExpression(expression);
 
-        _cart.put(_uri,item);
+		setExpression(expression);
+
+        _cart.put(_uri, item);
         addValueSetObject(item);
 
         _new_vsd = false;

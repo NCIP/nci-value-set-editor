@@ -140,7 +140,13 @@ if (curr_uri == null) {
 
 
 expression = vsb.getExpression();
-if (expression == null) expression = "";
+
+System.out.println("Expression: " + expression);
+
+
+if (expression == null) {
+    expression = "";
+}
 
 	    componentCount = vsb.getComponentCount();
 	    
