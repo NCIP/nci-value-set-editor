@@ -189,6 +189,8 @@ public class ValueSetBean {
     static public final String DUPLICATE_VS = "Duplicate URI.";
 
 
+    private String default_vsd_uri = null;
+
     /**
      * Class constructor
      * @throws Exception
@@ -220,6 +222,14 @@ public class ValueSetBean {
 		return co;
 	}
 
+
+    public void set_default_vsd_uri(String default_vsd_uri) {
+		this.default_vsd_uri = default_vsd_uri;
+	}
+
+	public String get_default_vsd_uri() {
+		return this.default_vsd_uri;
+	}
 
 
 	public List getConceptDomainList() {
@@ -549,8 +559,8 @@ public class ValueSetBean {
             return "error";
         }
 
-
-		boolean retval = DataUtils.validateVSDURI(_uri);
+        // temporary disable server side uri checking ...
+		boolean retval = true;//DataUtils.validateVSDURI(_uri);
 
 		if (!retval) {
 			request.getSession().setAttribute("uri_value", _uri);
@@ -3067,6 +3077,40 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 
 	    return "reset";
 	}
+
+
+
+    public void valueSetDefinitionSelectionChanged(ValueChangeEvent event) {
+        if (event.getNewValue() == null)
+            return;
+        String newValue = (String) event.getNewValue();
+        set_default_vsd_uri("copy_of_" + newValue);
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+ 	    request.getSession().setAttribute("selectValueSetReference", get_default_vsd_uri());
+
+
+/*
+        HttpServletResponse response =
+            (HttpServletResponse) FacesContext.getCurrentInstance()
+                .getExternalContext().getResponse();
+
+        String targetURL = null;// "http://nciterms.nci.nih.gov/";
+        if (_selectedQuickLink.compareTo("NCI Terminology Browser") == 0) {
+            targetURL = "http://nciterms.nci.nih.gov/";
+        }
+
+        try {
+            response.sendRedirect(response.encodeRedirectURL(targetURL));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            // send error message
+        }
+*/
+    }
 
 
 

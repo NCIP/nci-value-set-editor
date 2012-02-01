@@ -38,6 +38,16 @@
     }
 
 
+
+   function refresh() {
+   
+	var combo = document.getElementById("selectValueSetReference"); 
+	var val = combo.options[combo.selectedIndex].text;
+  
+        window.location.href="/ncivalueseteditor/pages/copyValueSet.jsf?vsd_name=" + val;
+        
+   }
+
     
   </script>
  
@@ -56,7 +66,6 @@
 		  <div class="pagecontent">
 		      <%@ include file="/pages/include/navBar.jsp" %>
 
-
 	
 		      
      <h:form id="valueSetFormId">
@@ -70,11 +79,38 @@
       <hr></hr>
   
       <%
-      String message = (String) request.getAttribute("message");
-      String requestContextPath = request.getContextPath();
       
       String uri_value = (String) request.getAttribute("uri_value");
-      if(uri_value == null) uri_value = "";
+      if(uri_value == null) {
+          uri_value = "";
+      }
+      
+      
+      Vector item_vec = DataUtils.getValueSetDefinitions();
+      String selectValueSetReference = (String) request.getParameter("vsd_name");
+      String vsd_uri = "";
+      if (selectValueSetReference == null) {
+          selectValueSetReference = (String) request.getSession().getAttribute("selectValueSetReference");
+      }
+      
+      if (selectValueSetReference != null) {
+	    for (int i=0; i<item_vec.size(); i++) {
+	      SelectItem item = (SelectItem) item_vec.elementAt(i);
+	      String key = (String) item.getLabel();
+	      if (key.compareTo(selectValueSetReference) == 0) {
+	          vsd_uri = (String) item.getValue();
+	          uri_value = vsd_uri;
+	          break;
+	      }
+	   }
+      } else {
+	      SelectItem item = (SelectItem) item_vec.elementAt(0);
+	      selectValueSetReference = (String) item.getLabel();
+	      uri_value = (String) item.getValue();
+      }
+ 	     
+      String message = (String) request.getAttribute("message");
+      String requestContextPath = request.getContextPath();
       
       if (message != null) {
           request.removeAttribute("message");
@@ -106,18 +142,15 @@
  	 </td>                   
  
  	 <td class="inputItem">
- 	 <select id="selectValueSetReference" name="selectValueSetReference" size="1" tabindex="6">
+ 	 <select id="selectValueSetReference" name="selectValueSetReference" size="1" tabindex="6" onChange="javascript:refresh()">
  
  	   <%
 	   
- 	     Vector item_vec = DataUtils.getValueSetDefinitions();
- 	     String selectValueSetReference = (String) request.getSession().getAttribute("selectValueSetReference");
+ 	     //Vector item_vec = DataUtils.getValueSetDefinitions();
  	     
  	     
- 	     if (selectValueSetReference == null) {
- 		      SelectItem item = (SelectItem) item_vec.elementAt(0);
- 		      selectValueSetReference = (String) item.getLabel();
- 	     }
+ 	     
+
 	     
  	     if (item_vec != null) {
  		    for (int i=0; i<item_vec.size(); i++) {
@@ -153,6 +186,7 @@
 	     <h:commandButton
 		value="Save" action="#{ValueSetBean.saveCopyAction}"
 		onclick="javascript:cursor_wait();"
+		
 		image="#{requestContextPath}/images/continue.gif" alt="Save a copy" />
 
 	 &nbsp; 
