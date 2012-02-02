@@ -245,10 +245,16 @@ if (vs_uri == null || vs_uri.compareTo("") == 0 || vs_uri.compareTo("null") == 0
         <td align="right"><h:outputLabel for="source" value="Source" styleClass="inputLabel"  /></td>
         <td>
             
+             
+<!--            
 	  <h:selectOneMenu id="source" value="#{ValueSetBean.selectedSource}" >
 	        <f:selectItems value="#{ValueSetBean.sourceList}" />
 	  </h:selectOneMenu>            
-            
+-->
+	  <h:selectManyListbox id="sources" value="#{ValueSetBean.selectedSources}" size="5">
+	        <f:selectItems value="#{ValueSetBean.sourceList}" />
+	  </h:selectManyListbox>  
+	  
             
          </td>
       </tr>

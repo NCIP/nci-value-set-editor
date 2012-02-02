@@ -191,6 +191,10 @@ public class ValueSetBean {
 
     private String default_vsd_uri = null;
 
+
+    private String[] _selectedSources = null;
+
+
     /**
      * Class constructor
      * @throws Exception
@@ -206,16 +210,18 @@ public class ValueSetBean {
     	if (_cart == null) _init();
 	}
 
+    public String[] getSelectedSources() {
+		return _selectedSources;
+	}
 
-
+    public void setSelectedSources(String[] a) {
+		_selectedSources = a;
+	}
 
     public ValueSetBean(ValueSetDefinition vsd) {
 
 
 	}
-
-
-
 
     public ComponentObject instantiateComponentObject() {
 		ComponentObject co = new ComponentObject();
@@ -624,12 +630,21 @@ public class ValueSetBean {
         String cs_nm = DataUtils.getFormalName(vsd.getDefaultCodingScheme(), null);
     	setSelectedOntology(cs_nm);
         Source[] sources = vsd.getSource();
-    	for (int i=0; i<vsd.getSourceCount(); i++) {
-			Source source = sources[i];
-			_selectedSource = source.getContent();
-    	    item.setSources(_selectedSource);
-    	    //System.out.println("source: " + _selectedSource);
-		}
+
+        String[] srcs = new String[vsd.getSourceCount()];
+
+        if (vsd.getSourceCount() > 0) {
+			for (int i=0; i<vsd.getSourceCount(); i++) {
+				Source source = sources[i];
+				_selectedSource = source.getContent();
+				item.setSources(_selectedSource);
+				//System.out.println("source: " + _selectedSource);
+
+				srcs[i] = _selectedSource;
+			}
+			item.set_vs_sources(srcs);
+			setSelectedSources(srcs);
+	    }
 
     	DefinitionEntry[] entries = vsd.getDefinitionEntry();
 
@@ -680,15 +695,8 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 		expression = expression.trim();
 
 
-System.out.println("(************) Expression: " + expression);
-
-
-
 		FacesContext.getCurrentInstance()
 			 .getExternalContext().getSessionMap().put("ComponentBean", componentBean);
-
-
-System.out.println("(************) setting Expression: " + expression);
 
 
 		item.setExpression(expression);
@@ -825,7 +833,7 @@ System.out.println("(************) setting Expression: " + expression);
 
 
         if(item == null) {
-              System.out.println("************** ITEM NOT FOUND ??? URI: " + curr_uri);
+              System.out.println("ITEM NOT FOUND ??? URI: " + curr_uri);
               item = _cart.get(curr_uri);
 		}
 
@@ -833,7 +841,6 @@ System.out.println("(************) setting Expression: " + expression);
 
         //if (_cart.containsKey(curr_uri)) {
         	//item = _cart.get(curr_uri);
-			System.out.println("=========================================================URI: " + curr_uri);
 			if (item.getCompListSize() > 1) {
 				if (expression == null || expression.compareTo("") == 0) {
 					String msg = "WARNING: Please complete the value set expression.";
@@ -1172,6 +1179,7 @@ if (item == null) {
 			System.out.println("ConceptDomain: " + item.getConceptDomain());
 			System.out.println("DefaultCodingScheme: " + item.getCodingScheme());
 			System.out.println("Sources: " + item.getSources());
+
 			Map<String,ComponentObject> map = item.getCompList();
 			Iterator it = map.keySet().iterator();
 			while (it.hasNext()) {
@@ -1233,6 +1241,10 @@ if (item == null) {
 
 
 
+
+
+
+
     public String saveMetadataAction() {
 
 		HttpServletRequest request =
@@ -1279,6 +1291,7 @@ if (item == null) {
     	item.setCodingScheme(_selectedOntology);
 
     	item.setSources(_selectedSource);
+    	item.set_vs_sources(_selectedSources);
 
     	item.setExpression("");
     	_expression = "";
@@ -1489,6 +1502,10 @@ if (item == null) {
         private String _codingScheme = null;
         private String _organizations = null;
         private String _sources = null;
+
+        public  String[] _vs_sources = null;
+
+
         private HtmlSelectBooleanCheckbox _checkbox = null;
         private Map<String,ComponentObject> _compList = null;
 
@@ -1512,6 +1529,8 @@ if (item == null) {
 		}
 
 
+
+
         public boolean getIsNotEmpty() {
 			if (getCompListSize() == 0) {
 				_isNotEmpty = false;
@@ -1523,6 +1542,17 @@ if (item == null) {
 
 
         // Getters & setters
+
+
+    public String[] get_vs_sources() {
+		return _vs_sources;
+	}
+
+    public void set_vs_sources(String[] a) {
+		_vs_sources = a;
+	}
+
+
 		public String getExpression() {
 			return _expression;
 		}
@@ -2062,7 +2092,6 @@ if (item == null) {
             ValueSetDefinitionReference valueSetDefinitionReference = new ValueSetDefinitionReference();
             valueSetDefinitionReference.setValueSetDefinitionURI (ob.getValueSetReference());
 
-            System.out.println("(* testing VSD URI *) ValueSetReference: " + ob.getValueSetReference());
 
             entry.setValueSetDefinitionReference(valueSetDefinitionReference);
         }
@@ -2175,7 +2204,6 @@ String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
 
 			if (ob.getType().compareTo("ValueSetReference") != 0) {
 				String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
-				System.out.println("cs_name 2 " + cs_name);
 
 				if (!hset.contains(cs_name)) {
 					hset.add(cs_name);
@@ -2212,7 +2240,6 @@ String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
 
 			if (ob.getType().compareTo("ValueSetReference") != 0) {
 				String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
-				System.out.println("cs_name 2 " + cs_name);
 
 				if (cs_name != null && !hset.contains(cs_name)) {
 					hset.add(cs_name);
@@ -2252,7 +2279,6 @@ String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
 
 			}
 
-			System.out.println("w size: " + w.size());
 			return w;
 		} catch (Exception ex) {
 			//ex.printStackTrace();
@@ -2265,14 +2291,11 @@ String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
 
     public ValueSetDefinition convertToValueSetDefinition(ValueSetObject vs_obj, String expression) {
 
+		if ((expression == null || expression.compareTo("") == 0) && vs_obj.getCompListSize() == 1) {
+			ComponentObject first_component = vs_obj.getFirstComponentObject();
+			expression = first_component.getLabel();
 
-if ((expression == null || expression.compareTo("") == 0) && vs_obj.getCompListSize() == 1) {
-	ComponentObject first_component = vs_obj.getFirstComponentObject();
-	expression = first_component.getLabel();
-
-}
-
-
+		}
 
         ValueSetDefinition vsd = new ValueSetDefinition();
 
@@ -2302,9 +2325,25 @@ String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
         Mappings mappings = constructVSDMappings(vs_obj);
         vsd.setMappings(mappings);
 
+/*
         org.LexGrid.commonTypes.Source source = new org.LexGrid.commonTypes.Source();
         source.setContent(vs_obj.getSources());
         vsd.addSource(source);
+*/
+
+        String[] vs_sources = vs_obj.get_vs_sources();
+        if (vs_sources != null && vs_sources.length > 0) {
+			for (int k=0; k<vs_sources.length; k++) {
+				String src = vs_sources[k];
+
+				System.out.println("CONVERTING ToValueSetDefinition src: " + src);
+
+
+				org.LexGrid.commonTypes.Source source = new org.LexGrid.commonTypes.Source();
+				source.setContent(src);
+				vsd.addSource(source);
+			}
+		}
 
         org.LexGrid.commonTypes.Properties properties = new org.LexGrid.commonTypes.Properties();
         vsd.setProperties(properties);
@@ -2351,10 +2390,25 @@ cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
 			mappings = constructVSDMappings(vs_obj);
 			vsd.setMappings(mappings);
 
+/*
 			source = new org.LexGrid.commonTypes.Source();
 			source.setContent(vs_obj.getSources());
 			vsd.addSource(source);
+*/
 
+			vs_sources = vs_obj.get_vs_sources();
+			if (vs_sources != null && vs_sources.length > 0) {
+				for (int k=0; k<vs_sources.length; k++) {
+					String src = vs_sources[k];
+
+					System.out.println("CONVERTING ToValueSetDefinition src: " + src);
+
+
+					org.LexGrid.commonTypes.Source source = new org.LexGrid.commonTypes.Source();
+					source.setContent(src);
+					vsd.addSource(source);
+				}
+			}
 			properties = new org.LexGrid.commonTypes.Properties();
 			vsd.setProperties(properties);
 
@@ -3069,9 +3123,7 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 			item.setExpression("");
 			addValueSetObject(item);
 			request.getSession().setAttribute("vs_uri", item.getUri());
-
 	    }
-
 	    //setUri(vsd_uri);
 
 
@@ -3092,25 +3144,8 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 
  	    request.getSession().setAttribute("selectValueSetReference", get_default_vsd_uri());
 
-
-/*
-        HttpServletResponse response =
-            (HttpServletResponse) FacesContext.getCurrentInstance()
-                .getExternalContext().getResponse();
-
-        String targetURL = null;// "http://nciterms.nci.nih.gov/";
-        if (_selectedQuickLink.compareTo("NCI Terminology Browser") == 0) {
-            targetURL = "http://nciterms.nci.nih.gov/";
-        }
-
-        try {
-            response.sendRedirect(response.encodeRedirectURL(targetURL));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            // send error message
-        }
-*/
     }
+
 
 
 

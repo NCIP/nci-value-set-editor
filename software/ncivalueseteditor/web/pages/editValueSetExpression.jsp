@@ -308,11 +308,17 @@ System.out.println("(*) objs == null??? " + curr_uri);
       <tr>
         <td align="right"><h:outputLabel for="source" value="Source" styleClass="inputLabel"  /></td>
         <td>
-            
+<!--            
 	  <h:selectOneMenu id="source" value="#{ValueSetBean.selectedSource}" >
 	        <f:selectItems value="#{ValueSetBean.sourceList}" />
 	  </h:selectOneMenu>            
-            
+-->
+
+	  <h:selectManyListbox id="sources" value="#{ValueSetBean.selectedSources}" size="5">
+	        <f:selectItems value="#{ValueSetBean.sourceList}" />
+	  </h:selectManyListbox>  
+
+
             
          </td>
       </tr>
