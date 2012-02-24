@@ -262,11 +262,15 @@ public class ValueSetBean {
 		String version = null;
 
         String blank_str = "";
-		Vector v = DataUtils.getConceptEntityNamesInCodingScheme(codingSchemeName, version);
+		//Vector v = DataUtils.getConceptEntityNamesInCodingScheme(codingSchemeName, version);
+		Vector v = DataUtils.getConceptEntityCodesInCodingScheme(codingSchemeName, version);
 		if (v == null || v.size() == 0) {
 			v = new Vector();
 			v.add("FDA");
 		}
+
+System.out.println("(*) getConceptEntityCodesInCodingScheme returns " + v.size() + " sources.");
+
 		_sourceList = new ArrayList();
 		_sourceList.add(new SelectItem(blank_str));
 		for (int i=0; i<v.size(); i++) {

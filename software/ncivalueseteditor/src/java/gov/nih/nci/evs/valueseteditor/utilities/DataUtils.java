@@ -295,8 +295,8 @@ public class DataUtils {
 			return supplementExtension.isSupplement(codingScheme, tagOrVersion);
 			//return ServiceUtility.isSupplement(codingScheme, tagOrVersion);
 		} catch (Exception ex) {
-			ex.printStackTrace();
-			System.out.println("DataUtils SupplementExtension.isSupplement throws exeption???");
+			//ex.printStackTrace();
+			_logger.warn("WARNING: DataUtils SupplementExtension.isSupplement throws exeption???");
 		}
 		return false;
 	}
@@ -670,6 +670,68 @@ public class DataUtils {
         }
         return v;
 	}
+
+
+    public static Vector getConceptEntityCodesInCodingScheme(String codingSchemeName, String version) {
+		ResolvedConceptReferencesIterator rcri = null;
+
+		//String scheme = "Terminology_Value_Set";
+		//
+
+        CodedNodeSet cns = null;
+        ResolvedConceptReferencesIterator iterator = null;
+		LocalNameList restrictToProperties = new LocalNameList();
+		SortOptionList sortCriteria = null;
+
+		Vector v = new Vector();
+
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            CodingSchemeVersionOrTag versionOrTag =
+                new CodingSchemeVersionOrTag();
+            if (version != null)
+                versionOrTag.setVersion(version);
+
+            if (lbSvc == null) {
+                _logger.warn("lbSvc = null");
+                return null;
+            }
+
+            cns = lbSvc.getCodingSchemeConcepts(codingSchemeName, versionOrTag);
+            if (cns == null) {
+                _logger.debug("cns = null");
+                return null;
+            }
+			boolean resolveConcepts = false;
+			try {
+
+				iterator =
+					cns.resolve(sortCriteria, null, null, null, resolveConcepts);
+                if (iterator == null) return null;
+
+                while (iterator.hasNext()) {
+					ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
+					v.add(rcr.getCode());
+				}
+				v = SortUtils.quickSort(v);
+				return v;
+
+			} catch (Exception e) {
+				_logger
+					.error("Method: SearchUtil.restrictToMatchingProperty");
+				_logger.error("* ERROR: cns.resolve throws exceptions.");
+				_logger.error("* " + e.getClass().getSimpleName() + ": "
+					+ e.getMessage());
+			}
+
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("Unable to resolve " + codingSchemeName);
+            return null;
+        }
+        return v;
+	}
+
 
     public static CodingScheme getCodingScheme(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag) throws LBException {

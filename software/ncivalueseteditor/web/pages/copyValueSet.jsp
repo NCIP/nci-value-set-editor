@@ -88,6 +88,7 @@
       
       Vector item_vec = DataUtils.getValueSetDefinitions();
       String selectValueSetReference = (String) request.getParameter("vsd_name");
+      
       String vsd_uri = "";
       if (selectValueSetReference == null) {
           selectValueSetReference = (String) request.getSession().getAttribute("selectValueSetReference");
@@ -108,6 +109,7 @@
 	      selectValueSetReference = (String) item.getLabel();
 	      uri_value = (String) item.getValue();
       }
+
  	     
       String message = (String) request.getAttribute("message");
       String requestContextPath = request.getContextPath();
@@ -147,17 +149,14 @@
  	   <%
 	   
  	     //Vector item_vec = DataUtils.getValueSetDefinitions();
- 	     
- 	     
- 	     
-
-	     
+     
  	     if (item_vec != null) {
  		    for (int i=0; i<item_vec.size(); i++) {
  		      SelectItem item = (SelectItem) item_vec.elementAt(i);
  		      String key = (String) item.getLabel();
  		      String value = (String) item.getValue();
- 		      if (value != null && value.compareTo(selectValueSetReference) == 0) {
+ 		      if (key != null && key.compareTo(selectValueSetReference) == 0) {
+ 		      
  		  %>
  			<option value="<%=value%>" selected><%=key%></option>
  		  <%  } else { %>
