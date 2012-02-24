@@ -637,13 +637,15 @@ System.out.println("(*) getConceptEntityCodesInCodingScheme returns " + v.size()
 
         String[] srcs = new String[vsd.getSourceCount()];
 
+System.out.println("saveCopyAction: vsd.getSourceCount(): " + vsd.getSourceCount());
+
+
         if (vsd.getSourceCount() > 0) {
 			for (int i=0; i<vsd.getSourceCount(); i++) {
 				Source source = sources[i];
 				_selectedSource = source.getContent();
 				item.setSources(_selectedSource);
-				//System.out.println("source: " + _selectedSource);
-
+				System.out.println("source: " + _selectedSource);
 				srcs[i] = _selectedSource;
 			}
 			item.set_vs_sources(srcs);
@@ -672,7 +674,6 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 	     .getExternalContext().getSessionMap().get("ComponentBean");
 
 	    String expression = "";
-
     	for (int i=0; i<entries.length; i++) {
 			DefinitionEntry entry = entries[i];
 
@@ -697,20 +698,19 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 
 		}
 		expression = expression.trim();
-
-
 		FacesContext.getCurrentInstance()
 			 .getExternalContext().getSessionMap().put("ComponentBean", componentBean);
 
-
 		item.setExpression(expression);
-
 		setExpression(expression);
 
         _cart.put(_uri, item);
         addValueSetObject(item);
 
         _new_vsd = false;
+
+        //sources???
+
 
 		return "save_copy";
 	}
@@ -721,6 +721,9 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 
 		DefinitionOperator operator = entry.getOperator();
 		System.out.println("operator: " + operator.toString());  //AND, OR, SUBTRACT
+
+		//KLO, 022412
+		ob.setOperator(operator.toString());
 
         java.lang.Long ruleOrder = entry.getRuleOrder();
         System.out.println("ruleOrder: " + ruleOrder);
@@ -843,8 +846,7 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 
         if(item != null) {
 
-        //if (_cart.containsKey(curr_uri)) {
-        	//item = _cart.get(curr_uri);
+
 			if (item.getCompListSize() > 1) {
 				if (expression == null || expression.compareTo("") == 0) {
 					String msg = "WARNING: Please complete the value set expression.";
