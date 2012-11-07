@@ -475,7 +475,7 @@ public class ComponentBean {
         String search_algorithm = (String) request.getParameter("search_algorithm");
         _algo = search_algorithm;
 
-        String code_enumeration = (String) request.getParameter("code_enumeration");
+        //String code_enumeration = (String) request.getParameter("code_enumeration");
         String selectProperty = (String) request.getParameter("selectProperty");
         _propertyName = selectProperty;
 
@@ -669,7 +669,7 @@ public String previewComponentSubsetAction() throws Exception {
 
         _algo = search_algorithm;
 
-        String code_enumeration = (String) request.getParameter("code_enumeration");
+        //String code_enumeration = (String) request.getParameter("code_enumeration");
         String selectProperty = (String) request.getParameter("selectProperty");
         _propertyName = selectProperty;
 
@@ -773,7 +773,7 @@ public String previewComponentSubsetAction() throws Exception {
 			vs_obj = vsb.getCurrentValueSet();
 			vs_obj = new ValueSetBean().copyValueSetObject(vs_obj);
 			ob = getComponentObject();
-			retval = vs_obj.addComponent(ob);
+			//retval = vs_obj.addComponent(ob);
 
 			vs_uri = vs_obj.getUri();
 
@@ -837,7 +837,7 @@ if (vs_obj == null) {
 
         // find vs_uri and component_label
 //		String vs_uri = vs_obj.getUri();
-String vs_uri = vsd_uri;
+//String vs_uri = vsd_uri;
 
 
 		String component_label = (String) request.getParameter("ComponentObjectLabel");
@@ -957,8 +957,8 @@ request.getSession().removeAttribute("component_obj");
 
 
 		String component_label = _label;
-        ValueSetObject existing_vs_obj = vsb.getValueSet(vs_uri);
-        ValueSetBean.ComponentObject component = existing_vs_obj.getComponent(component_label);
+        //ValueSetObject existing_vs_obj = vsb.getValueSet(vs_uri);
+        //ValueSetBean.ComponentObject component = existing_vs_obj.getComponent(component_label);
 
         ValueSetObject vs = vsb.getCurrentValueSet();
 

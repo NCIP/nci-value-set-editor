@@ -868,6 +868,7 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 			while (it.hasNext()) {
 				String key = (String) it.next();
 				ComponentObject ob = (ComponentObject) map.get(key);
+
 				System.out.println("(*) Label: " + ob.getLabel());
 				resolved_vs_key = resolved_vs_key + "$" + ob.getLabel();
 				System.out.println("\t Description: " + ob.getDescription());
@@ -883,7 +884,14 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 
 		_logger.debug("Resolving value set: convertToValueSetDefinition infixExpression: " + expression);
 
+        if (item == null) {
+			String msg = "WARNING: VALUE SET NOT FOUND ??? URI: " + curr_uri;
+			request.setAttribute("message", msg);
+			return "error";
+		}
+
         int componentCount = item.getCompListSize();
+
         if (componentCount == 0) {
 
 						String msg = "WARNING: No component subset has been defined.";
@@ -1016,12 +1024,21 @@ if (item == null) {
 			System.out.println("infixExpression is null???");
 		}
 
+
+        if (item == null) {
+				String msg = "WARNING: Value set not found. URL: " + vsd_uri;
+				request.setAttribute("message", msg);
+				return "error";
+		}
+
+
     	_logger.debug("infixExpression: " + infixExpression);
 
 				// To be implemented.
 
 		_logger.debug("Resolving value set: convertToValueSetDefinition infixExpression: " + infixExpression);
 				ValueSetDefinition vsd = convertToValueSetDefinition(item, infixExpression);
+
 
         int componentCount = item.getCompListSize();
         if (componentCount == 0) {
@@ -1067,7 +1084,7 @@ if (item == null) {
 
 		Vector cs_name_vec = DataUtils.parseData(codingSchemeNames);
 		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
-		Vector ref_vec = new Vector();
+		//Vector ref_vec = new Vector();
 		//String key = vsd_uri;
 		String cs_ref_key = "";
 		int lcv = 0;
@@ -1172,6 +1189,14 @@ if (item == null) {
         ValueSetObject item = null;
         if (_cart.containsKey(curr_uri)) {
         	item = _cart.get(curr_uri);
+
+ 		if (item == null) {
+ 			String msg = "ERROR: Unable to identify value set. URL: " + curr_uri;
+ 			request.setAttribute("message", msg);
+ 			return "error";
+		}
+
+
 			if (item.getCompListSize() > 1 && expression.compareTo("") == 0) {
 				String msg = "WARNING: Please complete the value set expression.";
 				request.setAttribute("message", msg);
@@ -1191,14 +1216,22 @@ if (item == null) {
 			while (it.hasNext()) {
 				String key = (String) it.next();
 				ComponentObject ob = (ComponentObject) map.get(key);
-				System.out.println("(*) Label: " + ob.getLabel());
-				System.out.println("\t Description: " + ob.getDescription());
-				System.out.println("\t Vocabulary: " + ob.getVocabulary());
-				System.out.println("\t Type: " + ob.getType());
-				System.out.println("\t MatchText: " + ob.getMatchText());
-				System.out.println("\t Algorithm: " + ob.getAlgorithm());
-				System.out.println("\n");
+				if (ob != null) {
+					System.out.println("(*) Label: " + ob.getLabel());
+					System.out.println("\t Description: " + ob.getDescription());
+					System.out.println("\t Vocabulary: " + ob.getVocabulary());
+					System.out.println("\t Type: " + ob.getType());
+					System.out.println("\t MatchText: " + ob.getMatchText());
+					System.out.println("\t Algorithm: " + ob.getAlgorithm());
+					System.out.println("\n");
+			    }
 			}
+		}
+
+		if (item == null) {
+			String msg = "ERROR: Unable to identify value set. URL: " + curr_uri;
+			request.setAttribute("message", msg);
+			return "error";
 		}
 
 		ValueSetDefinition vsd = convertToValueSetDefinition(item, expression);
@@ -1207,8 +1240,6 @@ if (item == null) {
 			request.setAttribute("message", msg);
 			return "error";
 		}
-
-
 
         try {
         	LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
@@ -1227,7 +1258,7 @@ if (item == null) {
 
 			response.setContentLength(sb.length());
 			ServletOutputStream ouputStream = response.getOutputStream();
-			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+			ouputStream.write(sb.toString().getBytes("UTF-8"), 0, sb.length());
 			ouputStream.flush();
 			ouputStream.close();
 
@@ -1986,7 +2017,7 @@ if (item == null) {
 
 
     // To be implemented
-    public ValueSetOperand ComponentObject2ValueSetOperand(ComponentObject obj) {
+    public ValueSetOperand componentObject2ValueSetOperand(ComponentObject obj) {
 		ValueSetOperand operand = new ValueSetOperand();
 
 
@@ -2117,7 +2148,7 @@ if (item == null) {
 			}
 		} else {
             System.out.println("ValueSetBean constructVSDMappings findSupportedCodingSchemes returns NULL??? ");
-
+            return mappings;
 		}
 
 		String conceptDomain = vs_obj.getConceptDomain();
@@ -2356,7 +2387,8 @@ String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
 
         int count = vs_obj.getCompListSize();
 
-        Long ruleOrderCount = new Long(0);
+        //Long ruleOrderCount = new Long(0);
+        //Long ruleOrderCount = Long.valueOf(0);
 
 		System.out.println("Component count: " + count);
 		System.out.println("expression: " + expression);
@@ -2553,7 +2585,8 @@ System.out.println("Calculating  " + operand_1.getLabel() + " " + operand_1.getT
 
 
 						  if(operand_1.getType().compareTo("EnumerationOfCodes") == 0) {
-							    Long ruleOrderCount = new Long(new_vsd.getDefinitionEntryCount());
+							    //Long ruleOrderCount = new Long(new_vsd.getDefinitionEntryCount());
+							    Long ruleOrderCount = Long.valueOf(new_vsd.getDefinitionEntryCount());
 								String codes = operand_1.getCodes();
 								String lines[] = codes.split("\\n");
 								for(int j = 0; j < lines.length; j++) {
@@ -2574,7 +2607,8 @@ System.out.println("Calculating  " + operand_1.getLabel() + " " + operand_1.getT
 								}
 
 						  } else if(operand_1.getType().compareTo("Code") == 0) {
-							    Long ruleOrderCount = new Long(new_vsd.getDefinitionEntryCount());
+							    //Long ruleOrderCount = new Long(new_vsd.getDefinitionEntryCount());
+							    Long ruleOrderCount = Long.valueOf(new_vsd.getDefinitionEntryCount());
 								String code = operand_1.getMatchText();
 								code = code.trim();
 								DefinitionEntry entry = new DefinitionEntry();
@@ -2592,12 +2626,14 @@ System.out.println("Calculating  " + operand_1.getLabel() + " " + operand_1.getT
 						  } else {
 							  vDefinitionEntry = componentObject2DefinitionEntry(operand_1);
 							  vDefinitionEntry.setOperator(DefinitionOperator.OR);
-							  vDefinitionEntry.setRuleOrder(new Long(new_vsd.getDefinitionEntryCount()));
+							  //vDefinitionEntry.setRuleOrder(new Long(new_vsd.getDefinitionEntryCount()));
+							  vDefinitionEntry.setRuleOrder(Long.valueOf(new_vsd.getDefinitionEntryCount()));
 							  new_vsd.addDefinitionEntry(vDefinitionEntry);
 						  }
 
 						  if(operand_2.getType().compareTo("EnumerationOfCodes") == 0) {
-							    Long ruleOrderCount = new Long(new_vsd.getDefinitionEntryCount());
+							    //Long ruleOrderCount = new Long(new_vsd.getDefinitionEntryCount());
+							    Long ruleOrderCount = Long.valueOf(new_vsd.getDefinitionEntryCount());
 								String codes = operand_2.getCodes();
 								String lines[] = codes.split("\\n");
 								for(int j = 0; j < lines.length; j++) {
@@ -2618,7 +2654,8 @@ System.out.println("Calculating  " + operand_1.getLabel() + " " + operand_1.getT
 								}
 
 						  } else if(operand_2.getType().compareTo("Code") == 0) {
-							    Long ruleOrderCount = new Long(new_vsd.getDefinitionEntryCount());
+							    //Long ruleOrderCount = new Long(new_vsd.getDefinitionEntryCount());
+							    Long ruleOrderCount = Long.valueOf(new_vsd.getDefinitionEntryCount());
 								String code = operand_2.getMatchText();
 								code = code.trim();
 								DefinitionEntry entry = new DefinitionEntry();
@@ -2637,7 +2674,8 @@ System.out.println("Calculating  " + operand_1.getLabel() + " " + operand_1.getT
 							  vDefinitionEntry = componentObject2DefinitionEntry(operand_2);
 
 							  vDefinitionEntry.setOperator(string2DefinitionOperator(operator));
-							  vDefinitionEntry.setRuleOrder(new Long (new_vsd.getDefinitionEntryCount()));
+							  //vDefinitionEntry.setRuleOrder(new Long (new_vsd.getDefinitionEntryCount()));
+							  vDefinitionEntry.setRuleOrder(Long.valueOf(new_vsd.getDefinitionEntryCount()));
 							  new_vsd.addDefinitionEntry(vDefinitionEntry);
 						  }
 
@@ -2661,7 +2699,8 @@ System.out.println("Calculating  " + operand_1.getLabel() + " " + operand_1.getT
 
 
                           if(operand_2.getType().compareTo("EnumerationOfCodes") == 0) {
-							    Long ruleOrderCount = new Long(new_vsd.getDefinitionEntryCount());
+							    //Long ruleOrderCount = new Long(new_vsd.getDefinitionEntryCount());
+							    Long ruleOrderCount = Long.valueOf(new_vsd.getDefinitionEntryCount());
 								String codes = operand_2.getCodes();
 								String lines[] = codes.split("\\n");
 								for(int j = 0; j < lines.length; j++) {
@@ -2679,7 +2718,8 @@ System.out.println("Calculating  " + operand_1.getLabel() + " " + operand_1.getT
 								}
 
 						  } else if(operand_2.getType().compareTo("Code") == 0) {
-							    Long ruleOrderCount = new Long(new_vsd.getDefinitionEntryCount());
+							    //Long ruleOrderCount = new Long(new_vsd.getDefinitionEntryCount());
+							    Long ruleOrderCount = Long.valueOf(new_vsd.getDefinitionEntryCount());
 								String code = operand_2.getMatchText();
 								code = code.trim();
 								DefinitionEntry entry = new DefinitionEntry();
@@ -2698,7 +2738,8 @@ System.out.println("Calculating  " + operand_1.getLabel() + " " + operand_1.getT
 
 							  vDefinitionEntry = componentObject2DefinitionEntry(operand_2);
 							  vDefinitionEntry.setOperator(string2DefinitionOperator(operator));
-							  vDefinitionEntry.setRuleOrder(new Long(new_vsd.getDefinitionEntryCount()));
+							  //vDefinitionEntry.setRuleOrder(new Long(new_vsd.getDefinitionEntryCount()));
+							  vDefinitionEntry.setRuleOrder(Long.valueOf(new_vsd.getDefinitionEntryCount()));
 							  new_vsd.addDefinitionEntry(vDefinitionEntry);
 						  }
 
@@ -2739,7 +2780,9 @@ System.out.println("Calculating  " + operand_1.getLabel() + " " + operand_1.getT
 
 			ComponentObject ob = (ComponentObject) final_ob;
 			ValueSetDefinition vsd = new ValueSetDefinition();
-			Long ruleOrderCount = new Long(0);
+			//Long ruleOrderCount = new Long(0);
+			Long ruleOrderCount = Long.valueOf(0);
+
 			if(ob.getType().compareTo("EnumerationOfCodes") == 0) {
 
 				String codes = ob.getCodes();
@@ -2929,6 +2972,7 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 			}
 		} catch (Exception ex)	{
 			sb.append("WARNING: Export to CVS action failed.");
+			ex.printStackTrace();
 		}
 
 
@@ -2946,7 +2990,7 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 
 		try {
 			ServletOutputStream ouputStream = response.getOutputStream();
-			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+			ouputStream.write(sb.toString().getBytes("UTF-8"), 0, sb.length());
 			ouputStream.flush();
 			ouputStream.close();
 		} catch (Exception ex) {
@@ -3026,7 +3070,8 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 				try {
 					reader.close();
 				} catch (Exception e) {
-					new StringBuffer("<error>" + e.getMessage() + "</error>");
+					buf = new StringBuffer("<error>" + e.getMessage() + "</error>");
+					e.printStackTrace();
 				}
 			}
 
@@ -3046,7 +3091,7 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
 
             response.setContentLength(buf.length());
             ServletOutputStream ouputStream = response.getOutputStream();
-            ouputStream.write(buf.toString().getBytes(), 0, buf.length());
+            ouputStream.write(buf.toString().getBytes("UTF-8"), 0, buf.length());
             ouputStream.flush();
             ouputStream.close();
 

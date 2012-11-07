@@ -247,7 +247,7 @@ public class OntologyBean {
                             version));
 
             MetadataPropertyList mdpl = lbsm.resolve();
-            Set<String> relas = new HashSet<String>();
+            //Set<String> relas = new HashSet<String>();
             int rela_count = 0;
             for (int i = 0; i < mdpl.getMetadataPropertyCount(); i++) {
                 MetadataProperty prop = mdpl.getMetadataProperty(i);
@@ -507,7 +507,7 @@ public class OntologyBean {
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
-        Vector w = new Vector();
+        //Vector w = new Vector();
 
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();

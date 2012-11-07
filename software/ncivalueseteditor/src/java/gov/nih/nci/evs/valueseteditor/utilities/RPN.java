@@ -104,7 +104,7 @@ public class RPN extends Stack
 	 * @param aNewPattern new substring to replace aOldPattern
 	 * @return a new string
 	 */
-	public static String Replace(
+	public static String replace(
           final String aInput,
           final String aOldPattern,
           final String aNewPattern
@@ -147,15 +147,15 @@ public class RPN extends Stack
         }
 
 
-        infixExpression = Replace(infixExpression, "&#8746;", "UNION");
-        infixExpression = Replace(infixExpression, "&#8745;", "INTERSECTION");
-        infixExpression = Replace(infixExpression, "/", "DIFFERENCE");
+        infixExpression = replace(infixExpression, "&#8746;", "UNION");
+        infixExpression = replace(infixExpression, "&#8745;", "INTERSECTION");
+        infixExpression = replace(infixExpression, "/", "DIFFERENCE");
 
 
-        infixExpression = Replace(infixExpression, " ", "^");
-	    infixExpression = Replace(infixExpression, "^INTERSECTION^", " INTERSECTION ");
-	    infixExpression = Replace(infixExpression, "^UNION^", " UNION ");
-	    infixExpression = Replace(infixExpression, "^DIFFERENCE^", " DIFFERENCE ");
+        infixExpression = replace(infixExpression, " ", "^");
+	    infixExpression = replace(infixExpression, "^INTERSECTION^", " INTERSECTION ");
+	    infixExpression = replace(infixExpression, "^UNION^", " UNION ");
+	    infixExpression = replace(infixExpression, "^DIFFERENCE^", " DIFFERENCE ");
 
 		char delim = ' ';
         ExpressionParser exprParse = new ExpressionParser(infixExpression, delim);
@@ -247,7 +247,7 @@ public class RPN extends Stack
         {
 			Object ob = pop();
 			String t = ob.toString();
-			t = Replace(t, "^", " ");
+			t = replace(t, "^", " ");
 
 			t = trimRight(t);
 			v.addElement(t);
@@ -396,6 +396,7 @@ public class RPN extends Stack
         }
     }
 
+/*
     public static void main(String[] args)
     {
 	    String pathname = "test.dat";
@@ -418,6 +419,7 @@ public class RPN extends Stack
 
 		}catch(Exception e){}
 	}
+*/
 }
 
 abstract class ExpressionItem

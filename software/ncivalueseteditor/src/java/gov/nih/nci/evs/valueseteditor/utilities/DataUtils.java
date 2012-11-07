@@ -226,9 +226,12 @@ public class DataUtils {
 
 
     public static boolean validateVSDURI(String uri) {
+		/*
 		if (valueSetDefinitionOnServer_uri_vec == null) {
 			Vector v = getValueSetDefinitions();
 		}
+		*/
+
 		if (valueSetDefinitionOnServer_uri_vec.contains(uri)) {
 			return false;
 		}
@@ -258,7 +261,7 @@ public class DataUtils {
         if (version != null)
             csvt.setVersion(version);
 
-		List list = new ArrayList();
+		//List list = new ArrayList();
 		try {
 			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
@@ -303,13 +306,13 @@ public class DataUtils {
 
 
     public static Vector getOntologyNames() throws Exception {
-
+        Vector v = new Vector();
         if (ontologyList != null) {
-
 			ontologyList = getOntologyList();
+		} else {
+			return v;
 		}
 
-		Vector v = new Vector();
 		for (int k=0; k<ontologyList.size(); k++) {
 			SelectItem item = (SelectItem) ontologyList.get(k);
 			v.add(item.getValue());
@@ -336,7 +339,7 @@ public class DataUtils {
 
 		ontologyList = new ArrayList();
 
-    	Map<String,String> hmap = new HashMap<String,String>();
+    	//Map<String,String> hmap = new HashMap<String,String>();
     	LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
     	CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
@@ -372,7 +375,7 @@ public class DataUtils {
        	        formalName2URI.put(cs.getCodingSchemeName(), uri);
 
 			} catch (Exception ex) {
-
+                ex.printStackTrace();
 			}
 
 
@@ -480,7 +483,7 @@ public class DataUtils {
                     if (tags == null)
                         return version;
 
-                    if (tags != null && tags.length > 0) {
+                    if (tags.length > 0) {
                         for (int j = 0; j < tags.length; j++) {
                             String version_tag = (String) tags[j];
 
@@ -528,8 +531,8 @@ public class DataUtils {
 		}
 
 
-        Vector cs_name_vec = new Vector();
-        Vector cs_version_vec = new Vector();
+        //Vector cs_name_vec = new Vector();
+        //Vector cs_version_vec = new Vector();
         HashSet hset = new HashSet();
 
         HashMap csnv2codesMap = new HashMap();
@@ -619,7 +622,7 @@ public class DataUtils {
 
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
-		LocalNameList restrictToProperties = new LocalNameList();
+		//LocalNameList restrictToProperties = new LocalNameList();
 		SortOptionList sortCriteria = null;
 
 		Vector v = new Vector();
@@ -680,7 +683,7 @@ public class DataUtils {
 
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
-		LocalNameList restrictToProperties = new LocalNameList();
+		//LocalNameList restrictToProperties = new LocalNameList();
 		SortOptionList sortCriteria = null;
 
 		Vector v = new Vector();
@@ -952,6 +955,7 @@ System.out.println(	"WARNING: DataUtils.getCodingSchemeURI cannot find coding sc
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return null;
             }
             CodingSchemeRenderingList csrl = null;
             try {
@@ -1113,7 +1117,7 @@ System.out.println(	"WARNING: DataUtils.getCodingSchemeURI cannot find coding sc
 						if (tags == null)
 							return "NOT ASSIGNED";
 
-						if (tags != null && tags.length > 0) {
+						if (tags.length > 0) {
 							tag_str = "";
 							for (int j = 0; j < tags.length; j++) {
 								String version_tag = (String) tags[j];
@@ -1133,9 +1137,12 @@ System.out.println(	"WARNING: DataUtils.getCodingSchemeURI cannot find coding sc
 							_codingSchemeTagHashMap = new HashMap();
 						}
 						String key = null;
+						/*
 						if (version == null) {
 							key = codingSchemeName + "$null";
-						} else {
+						} else
+						*/
+						{
 							key = codingSchemeName + "$" + version;
 						}
 						_codingSchemeTagHashMap.put(key, tag_str);

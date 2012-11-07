@@ -156,6 +156,11 @@ public class RemoteServerUtil {
 		try {
 			retval = lexevsService.registerSecurityToken(codingScheme,
 					securityToken);
+
+			if (retval == null) {
+				_logger.error("WARNING: Registration of SecurityToken failed.");
+			}
+
 			/*
 			if (retval != null && retval.equals(Boolean.TRUE)) { //
 				_logger.debug("Registration of SecurityToken was successful.");

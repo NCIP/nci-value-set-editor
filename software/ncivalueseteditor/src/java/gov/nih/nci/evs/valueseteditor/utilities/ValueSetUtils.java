@@ -460,6 +460,7 @@ public class ValueSetUtils //extends Stack
 
             if (itr == null) {
 				System.out.println("vds.resolveValueSetDefinition returns null???");
+				return;
 			}
 
 			int count = 0;
@@ -514,12 +515,14 @@ public class ValueSetUtils //extends Stack
 
 						  vDefinitionEntry = valueSetOperand2DefinitionEntry(operand_1);
 						  vDefinitionEntry.setOperator(DefinitionOperator.OR);
-						  vDefinitionEntry.setRuleOrder(new Long((long) 1));
+						  //vDefinitionEntry.setRuleOrder(new Long((long) 1));
+						  vDefinitionEntry.setRuleOrder(Long.valueOf((long) 1));
 						  new_vsd.addDefinitionEntry(vDefinitionEntry);
 
 						  vDefinitionEntry = valueSetOperand2DefinitionEntry(operand_2);
 						  vDefinitionEntry.setOperator(string2DefinitionOperator(operator));
-						  vDefinitionEntry.setRuleOrder(new Long((long) 2));
+						  //vDefinitionEntry.setRuleOrder(new Long((long) 2));
+						  vDefinitionEntry.setRuleOrder(Long.valueOf((long) 2));
 						  new_vsd.addDefinitionEntry(vDefinitionEntry);
 
                           String new_label = "(" + operand_1.getLabel() + " " + translateSetOperator(operator) + " " + operand_2.getLabel() + ")";
@@ -550,7 +553,8 @@ public class ValueSetUtils //extends Stack
 
 						  vDefinitionEntry = valueSetOperand2DefinitionEntry(operand_2);
 						  vDefinitionEntry.setOperator(string2DefinitionOperator(operator));
-						  vDefinitionEntry.setRuleOrder(new Long((long) (new_vsd.getDefinitionEntryCount() + 1)));
+						  //vDefinitionEntry.setRuleOrder(new Long((long) (new_vsd.getDefinitionEntryCount() + 1)));
+						  vDefinitionEntry.setRuleOrder(Long.valueOf((long) (new_vsd.getDefinitionEntryCount() + 1)));
 						  new_vsd.addDefinitionEntry(vDefinitionEntry);
 
                           String new_label = "(" + operand_1.getEntityDescription().getContent() + " " + translateSetOperator(operator) + " " + operand_2.getLabel() + ")";
@@ -594,12 +598,14 @@ public class ValueSetUtils //extends Stack
 
 						  vDefinitionEntry = valueSetOperand2DefinitionEntry(operand_1);
 						  vDefinitionEntry.setOperator(DefinitionOperator.OR);
-						  vDefinitionEntry.setRuleOrder(new Long((long) 1));
+						  //vDefinitionEntry.setRuleOrder(new Long((long) 1));
+						  vDefinitionEntry.setRuleOrder(Long.valueOf((long) 1));
 						  new_vsd.addDefinitionEntry(vDefinitionEntry);
 
 						  vDefinitionEntry = new DefinitionEntry();
 						  vDefinitionEntry.setOperator(string2DefinitionOperator(operator));
-						  vDefinitionEntry.setRuleOrder(new Long((long) 2));
+						  //vDefinitionEntry.setRuleOrder(new Long((long) 2));
+						  vDefinitionEntry.setRuleOrder(Long.valueOf((long) 2));
 
 						  ValueSetDefinitionReference valueSetDefinitionReference = new ValueSetDefinitionReference();
 						  valueSetDefinitionReference.setValueSetDefinitionURI(operand_2.getValueSetDefinitionURI());
@@ -625,7 +631,8 @@ public class ValueSetUtils //extends Stack
 						  valueSetDefinitionReference.setValueSetDefinitionURI(operand_1.getValueSetDefinitionURI());
 						  vDefinitionEntry.setValueSetDefinitionReference(valueSetDefinitionReference);
 						  vDefinitionEntry.setOperator(DefinitionOperator.OR);
-						  vDefinitionEntry.setRuleOrder(new Long((long) 1));
+						  //vDefinitionEntry.setRuleOrder(new Long((long) 1));
+						  vDefinitionEntry.setRuleOrder(Long.valueOf((long) 1));
 						  new_vsd.addDefinitionEntry(vDefinitionEntry);
 
 						  vDefinitionEntry = new DefinitionEntry();
@@ -634,7 +641,8 @@ public class ValueSetUtils //extends Stack
 						  valueSetDefinitionReference.setValueSetDefinitionURI(operand_2.getValueSetDefinitionURI());
 						  vDefinitionEntry.setValueSetDefinitionReference(valueSetDefinitionReference);
 						  vDefinitionEntry.setOperator(string2DefinitionOperator(operator));
-						  vDefinitionEntry.setRuleOrder(new Long((long) 2));
+						  //vDefinitionEntry.setRuleOrder(new Long((long) 2));
+						  vDefinitionEntry.setRuleOrder(Long.valueOf((long) 2));
 						  new_vsd.addDefinitionEntry(vDefinitionEntry);
 
 						  stack.push(new_vsd);
@@ -709,8 +717,8 @@ public class ValueSetUtils //extends Stack
       public static void dumpDefinitionEntry(String vsdURI, DefinitionEntry definitionEntry) {
 		  if (definitionEntry == null) return;
 
-          CodingSchemeReference csr = definitionEntry.getCodingSchemeReference();
-          String codingScheme = csr.getCodingScheme();
+          //CodingSchemeReference csr = definitionEntry.getCodingSchemeReference();
+          //String codingScheme = csr.getCodingScheme();
 
 		  // referenced VSD
  		  ValueSetDefinitionReference valueSetDefinitionReference = definitionEntry.getValueSetDefinitionReference();
@@ -785,7 +793,7 @@ public class ValueSetUtils //extends Stack
 
           CodingSchemeReference codingSchemeReference = new CodingSchemeReference();
 
-          String cs_name = operand.getCodingScheme();
+          //String cs_name = operand.getCodingScheme();
 
           codingSchemeReference.setCodingScheme(operand.getCodingScheme());
           de.setCodingSchemeReference(codingSchemeReference);
@@ -838,10 +846,12 @@ public class ValueSetUtils //extends Stack
 					break;
 
 				case Constant.ENTRY_TYPE_ASSOCIATION:
-                    entity_ref.setLeafOnly(new Boolean(operand.getLeafOnly()));
+                    //entity_ref.setLeafOnly(new Boolean(operand.getLeafOnly()));
+                    entity_ref.setLeafOnly(Boolean.valueOf(operand.getLeafOnly()));
                     entity_ref.setReferenceAssociation(operand.getReferenceAssociation());
                     entity_ref.setTargetToSource(new Boolean(operand.getTargetToSource()));
-                    entity_ref.setTransitiveClosure(new Boolean(operand.getTransitiveClosure()));
+                    //entity_ref.setTransitiveClosure(new Boolean(operand.getTransitiveClosure()));
+                    entity_ref.setTransitiveClosure(Boolean.valueOf(operand.getTransitiveClosure()));
                     de.setEntityReference(entity_ref);
 					break;
 
@@ -896,11 +906,11 @@ public class ValueSetUtils //extends Stack
 
 
       public static void exportValueSetDefinition(String serviceUrl, ValueSetDefinition vsd) {
-          LexEVSValueSetDefinitionServices service = RemoteServerUtil.getLexEVSValueSetDefinitionServices(serviceUrl);
+          // LexEVSValueSetDefinitionServices service = RemoteServerUtil.getLexEVSValueSetDefinitionServices(serviceUrl);
           // Dependant on the feature request:
           // [GF#30262] Export ValueSetDefinition to StringBuffer in LexGrid XML format through distributed API
 
-
+          return;
 	  }
 
 
@@ -942,6 +952,7 @@ public class ValueSetUtils //extends Stack
 
             if (itr == null) {
 				System.out.println("vds.resolveValueSetDefinition returns null???");
+				return;
 			}
 
 			int count = 0;
@@ -1128,6 +1139,7 @@ public class ValueSetUtils //extends Stack
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return null;
             }
 
             CodingSchemeRenderingList csrl = null;
@@ -1158,9 +1170,12 @@ public class ValueSetUtils //extends Stack
                 //if (formalname.compareTo("Terminology Value Set") != 0) {
 
 					Boolean isActive = null;
+					/*
 					if (csr == null) {
 						_logger.warn("\tcsr == null???");
-					} else if (csr.getRenderingDetail() == null) {
+					} else
+					*/
+					if (csr.getRenderingDetail() == null) {
 						_logger.warn("\tcsr.getRenderingDetail() == null");
 					} else if (csr.getRenderingDetail().getVersionStatus() == null) {
 						_logger
@@ -1260,8 +1275,8 @@ public class ValueSetUtils //extends Stack
 		  } catch (Exception ex) {
 				ex.printStackTrace();
 		  }
-
-          return null;
+		  Boolean retval = null;
+          return retval;
 	  }
 
 
@@ -1452,6 +1467,7 @@ public class ValueSetUtils //extends Stack
 
 				} catch(IOException e) {
 					//throw e;
+					e.printStackTrace();
 					System.out.println("buffer reader failed???");
 
 				} finally {
@@ -1459,6 +1475,7 @@ public class ValueSetUtils //extends Stack
 						reader.close();
 					} catch(Exception e) {
 						// ignored
+						e.printStackTrace();
 					}
 			    }
 			} else {
@@ -1550,9 +1567,12 @@ public class ValueSetUtils //extends Stack
                 String formalname = css.getFormalName();
 
                 Boolean isActive = null;
+                /*
                 if (csr == null) {
                     System.out.println("\tcsr == null???");
-                } else if (csr.getRenderingDetail() == null) {
+                } else
+                */
+                if (csr.getRenderingDetail() == null) {
                     System.out.println("\tcsr.getRenderingDetail() == null");
                 } else if (csr.getRenderingDetail().getVersionStatus() == null) {
                     System.out.println("\tcsr.getRenderingDetail().getVersionStatus() == null");
@@ -1587,7 +1607,7 @@ public class ValueSetUtils //extends Stack
 
                         list.addAbsoluteCodingSchemeVersionReference(csv_ref);
                     } catch (Exception ex) {
-
+                         ex.printStackTrace();
                     }
                 }
             }
