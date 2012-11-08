@@ -97,7 +97,7 @@ public class ApplicationProperties {
      * @throws Exception the exception
      */
     public static ApplicationProperties getInstance() throws Exception {
-        if (appProperties == null) {
+        //if (appProperties == null) {
             synchronized (ApplicationProperties.class) {
                 if (appProperties == null) {
                 	appProperties = new ApplicationProperties();
@@ -125,7 +125,7 @@ public class ApplicationProperties {
                             .getProperty(ApplicationProperties.NCIT_URL);
                 }
             }
-        }
+        //}
 
         return appProperties;
     }

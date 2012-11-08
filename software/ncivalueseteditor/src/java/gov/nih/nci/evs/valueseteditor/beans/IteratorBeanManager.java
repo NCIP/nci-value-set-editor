@@ -63,10 +63,11 @@ public class IteratorBeanManager extends Object {
         _iteratorBeanHashMap = new HashMap();
         _random = new Random();
     }
-
+/*
     public String createIteratorKey(Vector schemes, String matchText,
         String searchTarget, String matchAlgorithm, int maxReturn) {
         String maxReturn_str = Integer.toString(maxReturn);
+
         String key = matchText.trim();
         key = key + "|" + searchTarget + "|" + matchAlgorithm;
         for (int i = 0; i < schemes.size(); i++) {
@@ -79,6 +80,26 @@ public class IteratorBeanManager extends Object {
         key = key + "|" + randomNumber_str;
         return key;
     }
+*/
+
+    public String createIteratorKey(Vector schemes, String matchText,
+        String searchTarget, String matchAlgorithm, int maxReturn) {
+        String maxReturn_str = Integer.toString(maxReturn);
+        StringBuffer buf = new StringBuffer();
+        buf.append(matchText.trim());
+        buf.append("|" + searchTarget + "|" + matchAlgorithm);
+        for (int i = 0; i < schemes.size(); i++) {
+            String scheme = (String) schemes.elementAt(i);
+            buf.append("|" + scheme);
+        }
+        buf.append("|" + maxReturn_str);
+        int randomNumber = _random.nextInt();
+        String randomNumber_str = Integer.toString(randomNumber);
+        buf.append("|" + randomNumber_str);
+        return buf.toString();
+    }
+
+
 
     public boolean addIteratorBean(IteratorBean bean) {
         String key = bean.getKey();

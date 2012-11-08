@@ -560,11 +560,19 @@ public class DataUtils {
 
 			//}
 		}
-
+/*
 		Iterator it = csnv2codesMap.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
 			ArrayList alist = (ArrayList) csnv2codesMap.get(key);
+*/
+
+		Iterator it = csnv2codesMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry map_entry = (Entry) it.next();
+			String key = (String) map_entry.getKey();
+			ArrayList alist = (ArrayList) map_entry.getValue();
+
 			Vector u = parseData(key, "$");
 			String scheme = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);

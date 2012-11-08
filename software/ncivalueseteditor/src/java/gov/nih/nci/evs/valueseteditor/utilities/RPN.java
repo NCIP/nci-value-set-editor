@@ -269,6 +269,11 @@ public class RPN extends Stack
 		return s;
 	}
 
+    //testing...
+	public boolean equals(RPN rpn) {
+		return true;
+	}
+
 
 
     public void setInfixExpression(String infixExpression) throws

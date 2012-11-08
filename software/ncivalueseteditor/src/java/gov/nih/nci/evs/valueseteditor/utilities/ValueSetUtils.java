@@ -689,7 +689,8 @@ public class ValueSetUtils //extends Stack
 				  vDefinitionEntry = new DefinitionEntry();
 
 				  vDefinitionEntry.setOperator(DefinitionOperator.OR);
-				  vDefinitionEntry.setRuleOrder(new Long((long) 1));
+				  //vDefinitionEntry.setRuleOrder(new Long((long) 1));
+				  vDefinitionEntry.setRuleOrder(Long.valueOf((long) 1));
 				  final_vsd.addDefinitionEntry(vDefinitionEntry);
 
 				  System.out.println("\nInfix Expression: \n" + final_operand.getLabel());
@@ -849,7 +850,8 @@ public class ValueSetUtils //extends Stack
                     //entity_ref.setLeafOnly(new Boolean(operand.getLeafOnly()));
                     entity_ref.setLeafOnly(Boolean.valueOf(operand.getLeafOnly()));
                     entity_ref.setReferenceAssociation(operand.getReferenceAssociation());
-                    entity_ref.setTargetToSource(new Boolean(operand.getTargetToSource()));
+                    //entity_ref.setTargetToSource(new Boolean(operand.getTargetToSource()));
+                    entity_ref.setTargetToSource(Boolean.valueOf(operand.getTargetToSource()));
                     //entity_ref.setTransitiveClosure(new Boolean(operand.getTransitiveClosure()));
                     entity_ref.setTransitiveClosure(Boolean.valueOf(operand.getTransitiveClosure()));
                     de.setEntityReference(entity_ref);
@@ -861,11 +863,15 @@ public class ValueSetUtils //extends Stack
 				    valueSetDefinitionReference = new ValueSetDefinitionReference();
 				    Vector codes = operand.getCodes();
 				    String codes_str = "";
+				    StringBuffer buf = new StringBuffer();
 				    for (int i=0; i<codes.size(); i++) {
 						String s = (String) codes.elementAt(i);
-						codes_str = codes_str + s;
-						if (i < codes.size()-1) codes_str = codes_str + ";";
+						buf.append(s);
+						if (i < codes.size()-1) {
+							buf.append(";");
+						}
 					}
+					codes_str = buf.toString();
 				    String valueSetDefinitionURI = codes_str; // to be modified
 				    valueSetDefinitionReference.setValueSetDefinitionURI(valueSetDefinitionURI);
 				    de.setValueSetDefinitionReference(valueSetDefinitionReference);
@@ -1233,7 +1239,7 @@ public class ValueSetUtils //extends Stack
 			    //}
             }
         } catch (Exception e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             // return null;
         }
         return defaultAbsoluteCodingSchemeVersionReferenceList;
@@ -1362,6 +1368,7 @@ public class ValueSetUtils //extends Stack
 				} catch(IOException e) {
 					//throw e;
 					System.out.println("buffer reader failed???");
+					e.printStackTrace();
 
 				} finally {
 					try {
@@ -1481,8 +1488,6 @@ public class ValueSetUtils //extends Stack
 			} else {
 				System.out.println("reader == null???");
 			}
-
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			System.out.println("testExportResolvedValueSetDefinition exception???");

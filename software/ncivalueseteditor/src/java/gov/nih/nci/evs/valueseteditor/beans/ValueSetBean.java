@@ -5,6 +5,7 @@ import gov.nih.nci.evs.valueseteditor.utilities.*;
 import java.io.*;
 import java.util.*;
 import java.util.ResourceBundle;
+import java.util.Map.Entry;
 
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 
@@ -864,10 +865,16 @@ ComponentBean componentBean = (ComponentBean)FacesContext.getCurrentInstance()
 			System.out.println("DefaultCodingScheme: " + item.getCodingScheme());
 			System.out.println("Sources: " + item.getSources());
 			Map<String,ComponentObject> map = item.getCompList();
+			/*
 			Iterator it = map.keySet().iterator();
 			while (it.hasNext()) {
 				String key = (String) it.next();
 				ComponentObject ob = (ComponentObject) map.get(key);
+            */
+			Iterator it = map.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry entry = (Entry) it.next();
+				ComponentObject ob = (ComponentObject) entry.getValue();
 
 				System.out.println("(*) Label: " + ob.getLabel());
 				resolved_vs_key = resolved_vs_key + "$" + ob.getLabel();
@@ -988,10 +995,17 @@ if (item == null) {
 			System.out.println("DefaultCodingScheme: " + item.getCodingScheme());
 			System.out.println("Sources: " + item.getSources());
 			Map<String,ComponentObject> map = item.getCompList();
+			/*
 			Iterator it = map.keySet().iterator();
 			while (it.hasNext()) {
 				String key = (String) it.next();
 				ComponentObject ob = (ComponentObject) map.get(key);
+			*/
+			Iterator it = map.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry entry = (Entry) it.next();
+				ComponentObject ob = (ComponentObject) entry.getValue();
+
 				System.out.println("(*) Label: " + ob.getLabel());
 				resolved_vs_key = resolved_vs_key + "$" + ob.getLabel();
 				System.out.println("\t Description: " + ob.getDescription());
@@ -1087,6 +1101,7 @@ if (item == null) {
 		//Vector ref_vec = new Vector();
 		//String key = vsd_uri;
 		String cs_ref_key = "";
+		StringBuffer buf = new StringBuffer();
 		int lcv = 0;
 
         for (int i=0; i<cs_name_vec.size(); i++) {
@@ -1097,12 +1112,13 @@ if (item == null) {
 				//ref_vec.add(cs_name + "$" + version);
 				//key = key + "|" + cs_name + "$" + version;
 				if (lcv > 0) {
-					cs_ref_key = cs_ref_key + "|";
+					buf.append("|");
 				}
-				cs_ref_key = cs_ref_key + cs_name + "$" + version;
+				buf.append(cs_name + "$" + version);
 				lcv++;
 		    }
 		}
+		cs_ref_key = buf.toString();
 
         ResolvedConceptReferencesIterator iterator = ValueSetUtils.resolveValueSetDefinition(vsd, csvList, referencedVSDs);
 
@@ -1212,10 +1228,17 @@ if (item == null) {
 			System.out.println("Sources: " + item.getSources());
 
 			Map<String,ComponentObject> map = item.getCompList();
+			/*
 			Iterator it = map.keySet().iterator();
 			while (it.hasNext()) {
 				String key = (String) it.next();
 				ComponentObject ob = (ComponentObject) map.get(key);
+			*/
+			Iterator it = map.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry entry = (Entry) it.next();
+				ComponentObject ob = (ComponentObject) entry.getValue();
+
 				if (ob != null) {
 					System.out.println("(*) Label: " + ob.getLabel());
 					System.out.println("\t Description: " + ob.getDescription());
@@ -2234,10 +2257,16 @@ String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
 		}
 
 		Map<String,ComponentObject> map = vs_obj.getCompList();
+		/*
 		Iterator it = map.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
 			ComponentObject ob = (ComponentObject) map.get(key);
+        */
+		Iterator it = map.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry entry = (Entry) it.next();
+			ComponentObject ob = (ComponentObject) entry.getValue();
 
 			if (ob.getType().compareTo("ValueSetReference") != 0) {
 				String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
@@ -2270,10 +2299,17 @@ String cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
 		}
 
 		Map<String,ComponentObject> map = vs_obj.getCompList();
+		/*
 		Iterator it = map.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
 			ComponentObject ob = (ComponentObject) map.get(key);
+        */
+
+		Iterator it = map.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry entry = (Entry) it.next();
+			ComponentObject ob = (ComponentObject) entry.getValue();
 
 			if (ob.getType().compareTo("ValueSetReference") != 0) {
 				String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
@@ -2465,14 +2501,17 @@ cs_name = DataUtils.getCodingSchemeName(vs_obj.getCodingScheme(), null);
 		List list = new ArrayList();
 		if (expression == null) {
 			Map<String,ComponentObject> map = vs_obj.getCompList();
+			/*
 			Iterator it = map.keySet().iterator();
 			while (it.hasNext()) {
 				String key = (String) it.next();
-
-				System.out.println("translateValueSetExpression key: " + key);
-
-
 				ComponentObject ob = (ComponentObject) map.get(key);
+			*/
+			Iterator it = map.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry entry = (Entry) it.next();
+				ComponentObject ob = (ComponentObject) entry.getValue();
+
 				list.add(ob);
 			}
 			return list;
@@ -3048,8 +3087,8 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
             StringBuffer buf = null;
             InputStream reader = null;
 
-    	String codingSchemeNames = FacesUtil.getRequestParameter("codingSchemeNames");
-    	_logger.debug("codingSchemeNames: " + codingSchemeNames);
+			String codingSchemeNames = FacesUtil.getRequestParameter("codingSchemeNames");
+			_logger.debug("codingSchemeNames: " + codingSchemeNames);
 
             try {
 	    		reader = vsd_service.exportValueSetResolution(vsd, null, csvList, null, false);
@@ -3066,6 +3105,7 @@ String cs_name = DataUtils.getCodingSchemeName(ob.getVocabulary(), null);
             } catch (Exception e) {
 				buf = new StringBuffer("<error>The VSD export service is not supported by your current LexEVS setup.</error>");
 				buf.append("<!-- " + e.getMessage() + " -->");
+				e.printStackTrace();
 			} finally {
 				try {
 					reader.close();
