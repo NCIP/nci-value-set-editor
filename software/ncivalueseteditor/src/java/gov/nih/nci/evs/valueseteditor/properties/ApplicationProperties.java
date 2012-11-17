@@ -69,6 +69,8 @@ public class ApplicationProperties {
     private static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
     private static final String APP_BUILD_TAG = "APP_BUILD_TAG";
 
+    private static final String EHCACHE_XML_PATHNAME = "EHCACHE_XML_PATHNAME";
+
     private static final String NCIT_URL = "NCIT_URL";
 
     // Private Variables
@@ -97,9 +99,9 @@ public class ApplicationProperties {
      * @throws Exception the exception
      */
     public static ApplicationProperties getInstance() throws Exception {
-        //if (appProperties == null) {
+        if (appProperties == null) {
             synchronized (ApplicationProperties.class) {
-                if (appProperties == null) {
+                //if (appProperties == null) {
                 	appProperties = new ApplicationProperties();
                     loadProperties();
 
@@ -116,6 +118,7 @@ public class ApplicationProperties {
                     _lg_config_file =
                     	ApplicationProperties
                             .getProperty(ApplicationProperties.LG_CONFIG_FILE);
+
                     _app_build_tag =
                     	ApplicationProperties
                             .getProperty(ApplicationProperties.APP_BUILD_TAG);
@@ -123,9 +126,9 @@ public class ApplicationProperties {
                     _ncit_url =
                     	ApplicationProperties
                             .getProperty(ApplicationProperties.NCIT_URL);
-                }
+               // }
             }
-        //}
+        }
 
         return appProperties;
     }

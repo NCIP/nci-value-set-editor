@@ -84,6 +84,8 @@ public class RemoteServerUtil {
 	 * @return
 	 * @throws Exception
 	 */
+
+
 	public static LexBIGService createLexBIGService() { //throws Exception {
 		String url = null;
 		try {
@@ -95,17 +97,25 @@ public class RemoteServerUtil {
 		return null;
 	}
 
+
 	/**
 	 * @param serviceUrl
 	 * @return
 	 */
 	private static LexBIGService createLexBIGService(String serviceUrl) {
 		try {
-			if (serviceUrl == null || serviceUrl.compareTo("") == 0) {
+			if (serviceUrl == null || serviceUrl.compareTo("") == 0 || serviceUrl.compareTo("null") == 0) {
 				String lg_config_file = ApplicationProperties.getLgconfigfile();
-				System.setProperty(ApplicationProperties.LG_CONFIG_FILE,
-						lg_config_file);
-				LexBIGService lbSvc = new LexBIGServiceImpl();
+
+				System.setProperty(ApplicationProperties.LG_CONFIG_FILE, lg_config_file);
+                LexBIGService lbSvc = null;
+                try {
+					//lbSvc = new LexBIGServiceImpl();
+					lbSvc = LexBIGServiceImpl.defaultInstance();
+				} catch (Exception ex) {
+					System.out.println("(*) createLexBIGService exception ???");
+				}
+
 				return lbSvc;
 			}
 			if (_debug) {
@@ -242,3 +252,4 @@ public class RemoteServerUtil {
 
 
 } // End of RemoteServerUtil
+

@@ -39,6 +39,13 @@
              <value>@lg.config.file@</value>
         </ConfigurableItem>
 
+
+        <ConfigurableItem>
+                 <name>EHCACHE_XML_PATHNAME</name>
+                 <value>@ehcache.xml.file@</value>
+        </ConfigurableItem>
+        
+        
     </ConfigurableItems>
 
     <SecurityTokenHolders>

@@ -164,7 +164,9 @@ public class PropertyFileParser {
         NodeList nl = ele.getElementsByTagName(tagName);
         if (nl != null && nl.getLength() > 0) {
             Element el = (Element) nl.item(0);
-            textVal = el.getFirstChild().getNodeValue();
+            if (el != null && el.getFirstChild() != null) {
+            	textVal = el.getFirstChild().getNodeValue();
+			}
         }
         if (textVal == null) return null;
         return textVal.trim();
