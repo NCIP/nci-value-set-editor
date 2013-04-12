@@ -1,3 +1,10 @@
+<%--L
+  Copyright Northrop Grumman Information Technology.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/nci-value-set-editor/LICENSE.txt for details.
+L--%>
+
 <div class="bluebar">
   <div id="quicklinksholder">
     <ul id="quicklinks"
