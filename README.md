@@ -1,8 +1,10 @@
-Welcome to the nci-value-set-editor Project!
+Welcome to the NCI EVS Value Set Editor Project!
 ==============================
 
-EVS Value Set Editor provides a means for users to extract subsets of the universe of concepts comprised 
-of all terminologies hosted by NCICB’s terminology server. 
+The NCI EVS Value Set Editor is used to create and maintain CTS 2 value set and pick list definitions for
+loading into the LexEVS terminology server, which resolves the definitions against referenced terminologies. 
+This initial prototype release is used internally to generate all value sets published by EVS, but will need
+further development to reach a broader user community.  
 
 The key capabilities of EVS Value Set Editor include the following:
 * Create a new value set (i.e., LexEVS value set definition) from scratch.
@@ -14,14 +16,14 @@ The key capabilities of EVS Value Set Editor include the following:
 *	Export the value set definition to a file in LexGrid XML format.  Such files can be reviewed and published through the terminology server
 
 
-nci-value-set-editor is developed in Java and requires Apache Ant for building.
+NCI EVS Value Set Editor is developed in Java and requires Apache Ant for building.
 
-nci-value-set-editor is distributed under the BSD 3-Clause License.
+NCI EVS Value Set Editor is distributed under the BSD 3-Clause License.
 Please see the NOTICE and LICENSE files for details.
 
-You will find more details about nci-value-set-editor in the following links:
+You will find more details about NCI EVS Value Set Editor in the following links:
 
  * [Code Repository] (https://github.com/NCIP/nci-value-set-editor)
  * [Issue Tracker] (https://tracker.nci.nih.gov/browse/NCIVSA) 
  
-Please join us in further developing and improving nci-value-set-editor.
+Please join us in further developing and improving NCI EVS Value Set Editor.
